@@ -64,7 +64,7 @@ func runToast(window *app.Window) error {
 						// 	msg.Color = theme.Color.Surface
 						// 	return msg.Layout(gtx)
 						// })
-						theme.Window.Invalidate()
+						theme.Reload()
 					}
 
 					return layout.UniformInset(unit.Dp(20)).Layout(gtx, func(gtx layout.Context) layout.Dimensions {

@@ -9,7 +9,6 @@
 package widget
 
 import (
-	"gioui.org/app"
 	"gioui.org/layout"
 	"gioui.org/op"
 	"gioui.org/op/clip"
@@ -20,7 +19,7 @@ import (
 	"math"
 )
 
-func drawInk(gtx layout.Context, c widget.Press, highlightColor color.NRGBA, window *app.Window) {
+func drawInk(gtx layout.Context, c widget.Press, highlightColor color.NRGBA) {
 	// duration is the number of seconds for the
 	// completed animation: expand while fading in, then
 	// out.
@@ -81,7 +80,8 @@ func drawInk(gtx layout.Context, c widget.Press, highlightColor color.NRGBA, win
 
 	// Animate only ended presses, and presses that are fading in.
 	if !c.End.IsZero() || sizet <= 1.0 {
-		window.Invalidate()
+		// window.Invalidate()
+		gtx.Execute(op.InvalidateCmd{})
 	}
 
 	if sizet > 1.0 {

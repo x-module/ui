@@ -71,7 +71,6 @@ func (t *Theme) Button(txt string) Button {
 		clickable:      clickable,
 		HighlightColor: t.Color.PrimaryHighlight,
 		isEnabled:      true,
-		window:         t.Window,
 	}
 }
 
@@ -191,7 +190,7 @@ func (b Button) buttonStyleLayout(gtx layout.Context, w layout.Widget) layout.Di
 
 			paint.Fill(gtx.Ops, background)
 			for _, c := range b.clickable.History() {
-				drawInk(gtx, c, b.HighlightColor, b.window)
+				drawInk(gtx, c, b.HighlightColor)
 			}
 
 			return layout.Dimensions{Size: gtx.Constraints.Min}

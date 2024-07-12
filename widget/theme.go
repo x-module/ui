@@ -9,7 +9,8 @@
 package widget
 
 import (
-	"gioui.org/app"
+	"gioui.org/layout"
+	"gioui.org/op"
 	"gioui.org/unit"
 	"gioui.org/widget/material"
 	values2 "github.com/x-module/ui/values"
@@ -20,17 +21,19 @@ type Theme struct {
 	Color    *values2.Color
 	Base     *material.Theme
 	Styles   *values2.WidgetStyles
-	Window   *app.Window
 	TextSize unit.Sp
-
-	Toast *Toast
+	Toast    *Toast
 }
 
-func NewTheme(window *app.Window) *Theme {
+// Reload 如新加载页面
+func (t *Theme) Reload(gtx layout.Context) {
+	gtx.Execute(op.InvalidateCmd{})
+}
+
+func NewTheme() *Theme {
 	th := &Theme{
 		Color:    values2.NewColor().DefaultThemeColors(),
 		Base:     material.NewTheme(),
-		Window:   window,
 		Styles:   values2.DefaultWidgetStyles(),
 		TextSize: values2.TextSize16,
 	}

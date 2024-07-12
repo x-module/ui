@@ -105,7 +105,8 @@ func (t *Toast) handleToastDisplay(gtx layout.Context) {
 	select {
 	case <-t.timer.C:
 		t.timer = nil
-		t.theme.Window.Invalidate()
+		// t.theme.Window.Invalidate()
+		t.theme.Reload(gtx)
 	default:
 	}
 }
