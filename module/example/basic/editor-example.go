@@ -3,11 +3,11 @@ package main
 import (
 	// "image"
 
+	widget2 "github.com/x-module/ui/widget"
 	"image/color"
 	"regexp"
 
 	"github.com/x-module/ui/module/editor"
-	"github.com/x-module/ui/module/theme"
 	"github.com/x-module/ui/module/view"
 	"github.com/x-module/ui/module/widget"
 
@@ -38,7 +38,7 @@ func (vw *EditorExample) Title() string {
 	return "Editor Example"
 }
 
-func (vw *EditorExample) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (vw *EditorExample) Layout(gtx layout.Context, th *widget2.Theme) layout.Dimensions {
 	return layout.Flex{
 		Axis:      layout.Vertical,
 		Alignment: layout.Middle,

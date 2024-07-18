@@ -12,39 +12,39 @@ type Label struct {
 }
 
 func (t *Theme) H1(txt string) Label {
-	return t.labelWithDefaultColor(Label{material.H1(t.Base, txt)})
+	return t.labelWithDefaultColor(Label{material.H1(t.Theme, txt)})
 }
 
 func (t *Theme) H2(txt string) Label {
-	return Label{material.H2(t.Base, txt)}
+	return Label{material.H2(t.Theme, txt)}
 }
 
 func (t *Theme) H3(txt string) Label {
-	return t.labelWithDefaultColor(Label{material.H2(t.Base, txt)})
+	return t.labelWithDefaultColor(Label{material.H2(t.Theme, txt)})
 }
 
 func (t *Theme) H4(txt string) Label {
-	return t.labelWithDefaultColor(Label{material.H4(t.Base, txt)})
+	return t.labelWithDefaultColor(Label{material.H4(t.Theme, txt)})
 }
 
 func (t *Theme) H5(txt string) Label {
-	return t.labelWithDefaultColor(Label{material.H5(t.Base, txt)})
+	return t.labelWithDefaultColor(Label{material.H5(t.Theme, txt)})
 }
 
 func (t *Theme) H6(txt string) Label {
-	return t.labelWithDefaultColor(Label{material.H6(t.Base, txt)})
+	return t.labelWithDefaultColor(Label{material.H6(t.Theme, txt)})
 }
 
 func (t *Theme) Body1(txt string) Label {
-	return t.labelWithDefaultColor(Label{material.Body1(t.Base, txt)})
+	return t.labelWithDefaultColor(Label{material.Body1(t.Theme, txt)})
 }
 
 func (t *Theme) Body2(txt string) Label {
-	return t.labelWithDefaultColor(Label{material.Body2(t.Base, txt)})
+	return t.labelWithDefaultColor(Label{material.Body2(t.Theme, txt)})
 }
 
 func (t *Theme) Caption(txt string) Label {
-	return t.labelWithDefaultColor(Label{material.Caption(t.Base, txt)})
+	return t.labelWithDefaultColor(Label{material.Caption(t.Theme, txt)})
 }
 
 func (t *Theme) ErrorLabel(txt string) Label {
@@ -54,7 +54,7 @@ func (t *Theme) ErrorLabel(txt string) Label {
 }
 
 func (t *Theme) Label(size unit.Sp, txt string) Label {
-	return t.labelWithDefaultColor(Label{material.Label(t.Base, size, txt)})
+	return t.labelWithDefaultColor(Label{material.Label(t.Theme, size, txt)})
 }
 
 func (t *Theme) labelWithDefaultColor(l Label) Label {

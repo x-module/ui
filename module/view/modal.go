@@ -1,13 +1,11 @@
 package view
 
 import (
+	widget2 "github.com/x-module/ui/widget"
 	"image"
 	"image/color"
 	"math"
 	"time"
-
-	"github.com/x-module/ui/module/misc"
-	"github.com/x-module/ui/module/theme"
 
 	"gioui.org/io/event"
 	"gioui.org/io/pointer"
@@ -19,6 +17,7 @@ import (
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 	cmp "gioui.org/x/component"
+	"github.com/x-module/ui/module/misc"
 	"golang.org/x/exp/shiny/materialdesign/icons"
 )
 
@@ -99,7 +98,7 @@ func (m *ModalView) update(gtx layout.Context) bool {
 	return m.closed
 }
 
-func (m *ModalView) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (m *ModalView) Layout(gtx layout.Context, th *widget2.Theme) layout.Dimensions {
 	m.update(gtx)
 	if !m.anim.Visible() {
 		return layout.Dimensions{}
@@ -171,7 +170,7 @@ func (m *ModalView) Layout(gtx layout.Context, th *theme.Theme) layout.Dimension
 	return dims
 }
 
-func (m *ModalView) layoutView(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (m *ModalView) layoutView(gtx layout.Context, th *widget2.Theme) layout.Dimensions {
 	if m.MaxWidth == 0 {
 		m.MaxWidth = defaultMaxWidth
 	}
@@ -209,7 +208,7 @@ func (m *ModalView) layoutView(gtx layout.Context, th *theme.Theme) layout.Dimen
 	})
 }
 
-func (m *ModalView) layoutHeader(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (m *ModalView) layoutHeader(gtx layout.Context, th *widget2.Theme) layout.Dimensions {
 	return layout.Flex{
 		Axis: layout.Horizontal,
 	}.Layout(gtx,

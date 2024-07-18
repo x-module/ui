@@ -1,11 +1,11 @@
 package navi
 
 import (
+	widget2 "github.com/x-module/ui/widget"
 	"image"
 	"image/color"
 
 	"github.com/x-module/ui/module/misc"
-	"github.com/x-module/ui/module/theme"
 	"github.com/x-module/ui/module/view"
 
 	"gioui.org/gesture"
@@ -58,7 +58,7 @@ type Tab struct {
 	actionBar *ActionBar
 }
 
-func (tb *Tabbar) Layout(gtx C, th *theme.Theme) D {
+func (tb *Tabbar) Layout(gtx C, th *widget2.Theme) D {
 	if tb.arrowBtn.Clicked(gtx) {
 		tb.vm.NavBack()
 	}
@@ -149,7 +149,7 @@ func (tb *Tabbar) Layout(gtx C, th *theme.Theme) D {
 
 }
 
-func (tb *Tabbar) layoutActions(gtx C, th *theme.Theme, tab *Tab) D {
+func (tb *Tabbar) layoutActions(gtx C, th *widget2.Theme, tab *Tab) D {
 	if tab == nil || len(tab.vw.Actions()) <= 0 {
 		return layout.Dimensions{}
 	}
@@ -201,7 +201,7 @@ func (tab *Tab) IsSelected() bool {
 	return tab.isSelected
 }
 
-func (tab *Tab) Layout(gtx C, th *theme.Theme) D {
+func (tab *Tab) Layout(gtx C, th *widget2.Theme) D {
 	tab.Update(gtx)
 
 	macro := op.Record(gtx.Ops)
@@ -262,7 +262,7 @@ func (tab *Tab) Layout(gtx C, th *theme.Theme) D {
 	return dims
 }
 
-func (tab *Tab) layoutBackground(gtx C, th *theme.Theme) D {
+func (tab *Tab) layoutBackground(gtx C, th *widget2.Theme) D {
 	if !tab.isSelected && !tab.hovering {
 		return layout.Dimensions{Size: gtx.Constraints.Min}
 	}

@@ -2,9 +2,8 @@ package view
 
 import (
 	"fmt"
+	widget2 "github.com/x-module/ui/widget"
 	"net/url"
-
-	"github.com/x-module/ui/module/theme"
 
 	"gioui.org/layout"
 	"gioui.org/widget"
@@ -37,7 +36,7 @@ type ViewAction struct {
 
 type View interface {
 	Actions() []ViewAction
-	Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions
+	Layout(gtx layout.Context, th *widget2.Theme) layout.Dimensions
 	OnNavTo(intent Intent) error
 	ID() ViewID
 	Location() url.URL
@@ -95,6 +94,7 @@ type ViewManager interface {
 
 	// Reset resets internal states of the VM
 	Reset()
+	GetTheme() *widget2.Theme
 }
 
 func BuildURL(target ViewID, params map[string]interface{}) url.URL {

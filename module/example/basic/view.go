@@ -9,8 +9,8 @@ import (
 	"github.com/x-module/ui/module/misc"
 	"github.com/x-module/ui/module/page"
 	"github.com/x-module/ui/module/tabview"
-	"github.com/x-module/ui/module/theme"
 	"github.com/x-module/ui/module/view"
+	widget2 "github.com/x-module/ui/widget"
 	"golang.org/x/exp/shiny/materialdesign/icons"
 
 	"gioui.org/font"
@@ -70,7 +70,7 @@ func (vw *ExampleView) Actions() []view.ViewAction {
 	}
 }
 
-func (vw *ExampleView) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (vw *ExampleView) Layout(gtx layout.Context, th *widget2.Theme) layout.Dimensions {
 	vw.Update(gtx)
 	vw.Padding = unit.Dp(30)
 	return vw.PageStyle.Layout(gtx, th, func(gtx C) D {
@@ -163,13 +163,13 @@ func (vw *ExampleView) Layout(gtx layout.Context, th *theme.Theme) layout.Dimens
 						{
 							menu.MenuOption{
 								OnClicked: func() error { return nil },
-								Layout: func(gtx C, th *theme.Theme) D {
+								Layout: func(gtx C, th *widget2.Theme) D {
 									return material.Label(th.Theme, th.TextSize, "Item 1").Layout(gtx)
 								},
 							},
 							menu.MenuOption{
 								OnClicked: func() error { return nil },
-								Layout: func(gtx C, th *theme.Theme) D {
+								Layout: func(gtx C, th *widget2.Theme) D {
 									return material.Label(th.Theme, th.TextSize, "Item 2").Layout(gtx)
 								},
 							},
@@ -177,13 +177,13 @@ func (vw *ExampleView) Layout(gtx layout.Context, th *theme.Theme) layout.Dimens
 						{
 							menu.MenuOption{
 								OnClicked: func() error { return nil },
-								Layout: func(gtx C, th *theme.Theme) D {
+								Layout: func(gtx C, th *widget2.Theme) D {
 									return material.Label(th.Theme, th.TextSize, "Item 3").Layout(gtx)
 								},
 							},
 							menu.MenuOption{
 								OnClicked: func() error { return nil },
-								Layout: func(gtx C, th *theme.Theme) D {
+								Layout: func(gtx C, th *widget2.Theme) D {
 									return material.Label(th.Theme, th.TextSize, "Item 4").Layout(gtx)
 								},
 							},
@@ -223,23 +223,23 @@ func (vw *ExampleView) buildTabItems() []*tabview.TabItem {
 	}
 
 	var tabItems []*tabview.TabItem
-	tabItems = append(tabItems, tabview.SimpleTabItem(inset, "Tab 1", func(gtx C, th *theme.Theme) D {
+	tabItems = append(tabItems, tabview.SimpleTabItem(inset, "Tab 1", func(gtx C, th *widget2.Theme) D {
 		return vw.layoutTab(gtx, th, "Tab one")
 	}))
 
-	tabItems = append(tabItems, tabview.SimpleTabItem(inset, "A long tab name", func(gtx C, th *theme.Theme) D {
+	tabItems = append(tabItems, tabview.SimpleTabItem(inset, "A long tab name", func(gtx C, th *widget2.Theme) D {
 		return vw.layoutTab(gtx, th, "Tab two")
 	}))
 
-	tabItems = append(tabItems, tabview.SimpleTabItem(inset, "Tab 3", func(gtx C, th *theme.Theme) D {
+	tabItems = append(tabItems, tabview.SimpleTabItem(inset, "Tab 3", func(gtx C, th *widget2.Theme) D {
 		return vw.layoutTab(gtx, th, "Tab three")
 	}))
 
-	tabItems = append(tabItems, tabview.SimpleTabItem(inset, "Tab 4", func(gtx C, th *theme.Theme) D {
+	tabItems = append(tabItems, tabview.SimpleTabItem(inset, "Tab 4", func(gtx C, th *widget2.Theme) D {
 		return vw.layoutTab(gtx, th, "Tab four")
 	}))
 
-	tabItems = append(tabItems, tabview.SimpleTabItem(inset, "Tab 5", func(gtx C, th *theme.Theme) D {
+	tabItems = append(tabItems, tabview.SimpleTabItem(inset, "Tab 5", func(gtx C, th *widget2.Theme) D {
 		return vw.layoutTab(gtx, th, "Tab five")
 	}))
 
@@ -247,7 +247,7 @@ func (vw *ExampleView) buildTabItems() []*tabview.TabItem {
 
 }
 
-func (va *ExampleView) layoutTab(gtx C, th *theme.Theme, content string) D {
+func (va *ExampleView) layoutTab(gtx C, th *widget2.Theme, content string) D {
 	return layout.Center.Layout(gtx, func(gtx C) D {
 		label := material.Label(th.Theme, th.TextSize*0.9, content)
 		label.Font.Typeface = font.Typeface("Go Mono")

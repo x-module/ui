@@ -1,9 +1,9 @@
 package menu
 
 import (
+	widget2 "github.com/x-module/ui/widget"
 	"time"
 
-	"github.com/x-module/ui/module/theme"
 	"github.com/x-module/ui/module/widget"
 
 	"gioui.org/layout"
@@ -26,7 +26,7 @@ func NewDropdownMenu(options [][]MenuOption) *DropdownMenu {
 	return m
 }
 
-func (m *DropdownMenu) Layout(gtx C, th *theme.Theme) D {
+func (m *DropdownMenu) Layout(gtx C, th *widget2.Theme) D {
 	m.Update(gtx)
 
 	return m.layout(gtx, th, func(gtx C, w layout.Widget) D {

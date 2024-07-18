@@ -3,11 +3,9 @@ package list
 import (
 	"gioui.org/op/paint"
 	"gioui.org/unit"
+	"github.com/x-module/ui/widget"
 	"image"
 	"image/color"
-
-	"github.com/x-module/ui/module/misc"
-	"github.com/x-module/ui/module/theme"
 
 	"gioui.org/gesture"
 	"gioui.org/io/event"
@@ -15,6 +13,7 @@ import (
 	"gioui.org/layout"
 	"gioui.org/op"
 	"gioui.org/op/clip"
+	"github.com/x-module/ui/module/misc"
 )
 
 type InteractiveLabel struct {
@@ -71,7 +70,7 @@ func (l *InteractiveLabel) Update(gtx layout.Context) bool {
 	return clicked
 }
 
-func (l *InteractiveLabel) layoutBackground(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (l *InteractiveLabel) layoutBackground(gtx layout.Context, th *widget.Theme) layout.Dimensions {
 	if !l.isSelected && !l.hovering {
 		return layout.Dimensions{Size: gtx.Constraints.Min}
 	}
@@ -98,7 +97,7 @@ func (l *InteractiveLabel) layoutBackground(gtx layout.Context, th *theme.Theme)
 	return layout.Dimensions{Size: gtx.Constraints.Min}
 }
 
-func (l *InteractiveLabel) Layout(gtx C, th *theme.Theme, w func(gtx C, textColor color.NRGBA) D) D {
+func (l *InteractiveLabel) Layout(gtx C, th *widget.Theme, w func(gtx C, textColor color.NRGBA) D) D {
 	l.Update(gtx)
 
 	contentColor := th.Palette.Fg

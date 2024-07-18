@@ -1,14 +1,13 @@
 package view
 
 import (
+	"github.com/x-module/ui/widget"
 	"net/url"
-
-	"github.com/x-module/ui/module/theme"
 
 	"gioui.org/layout"
 )
 
-type Widget func(gtx layout.Context, th *theme.Theme) layout.Dimensions
+type Widget func(gtx layout.Context, th *widget.Theme) layout.Dimensions
 
 type BaseView struct {
 	location *url.URL
@@ -55,7 +54,7 @@ func (base *BaseView) Location() url.URL {
 	return *base.location
 }
 
-func (base *BaseView) Layout(gtx C, th *theme.Theme) D {
+func (base *BaseView) Layout(gtx C, th *widget.Theme) D {
 	return layout.Dimensions{}
 }
 
@@ -72,7 +71,7 @@ func (sv *SimpleView) Location() url.URL {
 	return *sv.BaseView.location
 }
 
-func (sv *SimpleView) Layout(gtx C, th *theme.Theme) D {
+func (sv *SimpleView) Layout(gtx C, th *widget.Theme) D {
 	return sv.w(gtx, th)
 }
 
@@ -89,7 +88,7 @@ func (v EmptyView) Actions() []ViewAction {
 	return nil
 }
 
-func (v EmptyView) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (v EmptyView) Layout(gtx layout.Context, th *widget.Theme) layout.Dimensions {
 	return layout.Dimensions{Size: gtx.Constraints.Max}
 }
 

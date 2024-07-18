@@ -13,7 +13,7 @@ type CheckBoxStyle struct {
 }
 
 func (t *Theme) CheckBox(checkBox *widget.Bool, label string) CheckBoxStyle {
-	cb := CheckBoxStyle{material.CheckBox(t.Base, checkBox, label)}
+	cb := CheckBoxStyle{material.CheckBox(t.Theme, checkBox, label)}
 	cb.Color = t.Color.Text
 	cb.IconColor = t.Color.Primary
 	return cb

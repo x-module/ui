@@ -1,11 +1,11 @@
 package navi
 
 import (
+	widget2 "github.com/x-module/ui/widget"
 	"image"
 
 	"github.com/x-module/ui/module/menu"
 	"github.com/x-module/ui/module/misc"
-	"github.com/x-module/ui/module/theme"
 	"github.com/x-module/ui/module/view"
 	"golang.org/x/exp/shiny/materialdesign/icons"
 
@@ -47,7 +47,7 @@ func (ab *ActionBar) SetActions(actions []view.ViewAction, maxVisibleActions int
 	ab.overflowMenu = &overflowMenu{actionBar: ab}
 }
 
-func (ab *ActionBar) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (ab *ActionBar) Layout(gtx layout.Context, th *widget2.Theme) layout.Dimensions {
 	width := 0
 	visibleActionItems := 0
 
@@ -112,7 +112,7 @@ var actionButtonInset = layout.Inset{
 	Left:   unit.Dp(2),
 }
 
-func (ab *ActionBar) layoutAction(gtx layout.Context, th *theme.Theme, state *widget.Clickable, action view.ViewAction) layout.Dimensions {
+func (ab *ActionBar) layoutAction(gtx layout.Context, th *widget2.Theme, state *widget.Clickable, action view.ViewAction) layout.Dimensions {
 	return actionButtonInset.Layout(gtx, func(gtx C) D {
 		if state.Clicked(gtx) {
 			action.OnClicked(gtx)
@@ -126,7 +126,7 @@ func (om *overflowMenu) actionForIndex(index int) view.ViewAction {
 	return om.actionBar.actions[offset+index]
 }
 
-func (om *overflowMenu) update(gtx C, th *theme.Theme) {
+func (om *overflowMenu) update(gtx C, th *widget2.Theme) {
 	if om.DropdownMenu != nil {
 		om.DropdownMenu.Background = misc.WithAlpha(th.Fg, th.HoverAlpha)
 	}
@@ -142,7 +142,7 @@ func (om *overflowMenu) update(gtx C, th *theme.Theme) {
 				action.OnClicked(gtx)
 				return nil
 			},
-			Layout: func(gtx C, th *theme.Theme) D {
+			Layout: func(gtx C, th *widget2.Theme) D {
 				return layout.Flex{
 					Axis:    layout.Horizontal,
 					Spacing: layout.SpaceEnd,
@@ -166,7 +166,7 @@ func (om *overflowMenu) update(gtx C, th *theme.Theme) {
 	om.lastMenuSize = om.actionBar.overflowedItems
 }
 
-func (om *overflowMenu) Layout(gtx C, th *theme.Theme, pos image.Point) D {
+func (om *overflowMenu) Layout(gtx C, th *widget2.Theme, pos image.Point) D {
 	om.update(gtx, th)
 	if om.lastMenuSize == 0 {
 		return D{}

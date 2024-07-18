@@ -1,6 +1,7 @@
 package view
 
 import (
+	widget2 "github.com/x-module/ui/widget"
 	"image"
 	"image/color"
 	"net/url"
@@ -18,7 +19,6 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"github.com/x-module/ui/module/misc"
-	"github.com/x-module/ui/module/theme"
 )
 
 // A link between views, as anchor in HTML.
@@ -129,7 +129,7 @@ func NewLink(link *Link, style string) *LinkStyle {
 	}
 }
 
-func (ls *LinkStyle) Layout(gtx C, th *theme.Theme) D {
+func (ls *LinkStyle) Layout(gtx C, th *widget2.Theme) D {
 	textColorMacro := op.Record(gtx.Ops)
 	paint.ColorOp{Color: ls.Color}.Add(gtx.Ops)
 	textColor := textColorMacro.Stop()
@@ -185,7 +185,7 @@ func (ls *LinkStyle) Layout(gtx C, th *theme.Theme) D {
 
 }
 
-func (ls *LinkStyle) layoutBackground(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (ls *LinkStyle) layoutBackground(gtx layout.Context, th *widget2.Theme) layout.Dimensions {
 	var fill color.NRGBA
 	if ls.state.hovering {
 		fill = misc.WithAlpha(th.Palette.Fg, th.HoverAlpha)

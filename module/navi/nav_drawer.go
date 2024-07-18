@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
+	widget2 "github.com/x-module/ui/widget"
 	"image/color"
 	"log"
 	"slices"
 
 	"github.com/x-module/ui/module/misc"
-	"github.com/x-module/ui/module/theme"
 	"github.com/x-module/ui/module/view"
 
 	"gioui.org/font"
@@ -66,7 +66,7 @@ func (nv *NavDrawer) RemoveSection(index int) {
 	nv.listItems = slices.Delete(nv.listItems, index, index)
 }
 
-func (nv *NavDrawer) Layout(gtx C, th *theme.Theme) D {
+func (nv *NavDrawer) Layout(gtx C, th *widget2.Theme) D {
 	if nv.SectionInset == (layout.Inset{}) {
 		nv.SectionInset = layout.Inset{
 			// Bottom: unit.Dp(5),
@@ -129,7 +129,7 @@ func (nv *NavDrawer) OnItemSelected(gtx C, item *NavItemStyle) {
 	}
 }
 
-func (ns NaviDrawerStyle) Layout(gtx C, th *theme.Theme) D {
+func (ns NaviDrawerStyle) Layout(gtx C, th *widget2.Theme) D {
 	if ns.Inset == (layout.Inset{}) {
 		ns.Inset = layout.Inset{
 			Top:    unit.Dp(20),

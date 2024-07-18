@@ -1,10 +1,9 @@
 package list
 
 import (
+	widget2 "github.com/x-module/ui/widget"
 	"image/color"
 	"sync"
-
-	"github.com/x-module/ui/module/theme"
 
 	"gioui.org/layout"
 	"gioui.org/unit"
@@ -20,7 +19,7 @@ type (
 type ListContent interface {
 	SetSelected(selected bool)
 	// text should be rendered using contentColor
-	Layout(gtx layout.Context, th *theme.Theme, contentColor color.NRGBA) layout.Dimensions
+	Layout(gtx layout.Context, th *widget2.Theme, contentColor color.NRGBA) layout.Dimensions
 }
 
 type SelectableList struct {
@@ -69,7 +68,7 @@ func (sl *SelectableList) refresh() {
 	sl.newItems = nil
 }
 
-func (sl *SelectableList) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (sl *SelectableList) Layout(gtx layout.Context, th *widget2.Theme) layout.Dimensions {
 	sl.Update(gtx)
 
 	return material.List(th.Theme, sl.listState).Layout(gtx, len(sl.listItems), func(gtx C, index int) D {
@@ -161,7 +160,7 @@ func (li *ListItem) isSelected() bool {
 	return li.label.IsSelected()
 }
 
-func (li *ListItem) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (li *ListItem) Layout(gtx layout.Context, th *widget2.Theme) layout.Dimensions {
 	li.Update(gtx)
 	return layout.Inset{
 		Top:    unit.Dp(4),
@@ -175,6 +174,6 @@ func (li *ListItem) Layout(gtx layout.Context, th *theme.Theme) layout.Dimension
 	})
 }
 
-func (li *ListItem) layoutContent(gtx layout.Context, th *theme.Theme, contentColor color.NRGBA) layout.Dimensions {
+func (li *ListItem) layoutContent(gtx layout.Context, th *widget2.Theme, contentColor color.NRGBA) layout.Dimensions {
 	return li.content.Layout(gtx, th, contentColor)
 }

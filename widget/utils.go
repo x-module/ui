@@ -80,7 +80,6 @@ func drawInk(gtx layout.Context, c widget.Press, highlightColor color.NRGBA) {
 
 	// Animate only ended presses, and presses that are fading in.
 	if !c.End.IsZero() || sizet <= 1.0 {
-		// window.Invalidate()
 		gtx.Execute(op.InvalidateCmd{})
 	}
 

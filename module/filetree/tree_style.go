@@ -3,6 +3,7 @@ package filetree
 import (
 	"errors"
 	"fmt"
+	widget2 "github.com/x-module/ui/widget"
 	"image/color"
 	"log"
 	"slices"
@@ -18,7 +19,6 @@ import (
 	"github.com/x-module/ui/module/menu"
 	"github.com/x-module/ui/module/misc"
 	"github.com/x-module/ui/module/navi"
-	"github.com/x-module/ui/module/theme"
 	"github.com/x-module/ui/module/view"
 	"golang.org/x/exp/shiny/materialdesign/icons"
 )
@@ -79,7 +79,7 @@ func (tn *FileTreeNav) Title() string {
 	return tn.title
 }
 
-func (tn *FileTreeNav) Layout(gtx C, th *theme.Theme) D {
+func (tn *FileTreeNav) Layout(gtx C, th *widget2.Theme) D {
 	return tn.root.Layout(gtx, th)
 }
 
@@ -140,7 +140,7 @@ func (eitem *EntryNavItem) OnSelect(gtx C) view.Intent {
 
 }
 
-func (eitem *EntryNavItem) Layout(gtx layout.Context, th *theme.Theme, textColor color.NRGBA) D {
+func (eitem *EntryNavItem) Layout(gtx layout.Context, th *widget2.Theme, textColor color.NRGBA) D {
 	eitem.update(gtx)
 
 	return layout.Flex{
@@ -172,7 +172,7 @@ func (eitem *EntryNavItem) Layout(gtx layout.Context, th *theme.Theme, textColor
 	)
 }
 
-func (eitem *EntryNavItem) layoutEditArea(gtx C, th *theme.Theme) D {
+func (eitem *EntryNavItem) layoutEditArea(gtx C, th *widget2.Theme) D {
 	macro := op.Record(gtx.Ops)
 	dims := material.Editor(th.Theme, eitem.nameEditor, "").Layout(gtx)
 	call := macro.Stop()

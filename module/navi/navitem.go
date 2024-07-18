@@ -3,6 +3,7 @@ package navi
 import (
 	"fmt"
 	"github.com/x-module/ui/module/misc"
+	widget2 "github.com/x-module/ui/widget"
 	"image"
 	"image/color"
 
@@ -16,7 +17,6 @@ import (
 
 	"github.com/x-module/ui/module/list"
 	"github.com/x-module/ui/module/menu"
-	"github.com/x-module/ui/module/theme"
 	"github.com/x-module/ui/module/view"
 )
 
@@ -33,14 +33,14 @@ var NavItemPadding = layout.Inset{
 
 type NavSection interface {
 	Title() string
-	Layout(gtx C, th *theme.Theme) D
+	Layout(gtx C, th *widget2.Theme) D
 	Attach(d *NavDrawer)
 }
 
 type NavItem interface {
 	OnSelect(gtx layout.Context) view.Intent
 	Icon() *widget.Icon
-	Layout(gtx layout.Context, th *theme.Theme, textColor color.NRGBA) D
+	Layout(gtx layout.Context, th *widget2.Theme, textColor color.NRGBA) D
 	// when there's menu options, a context menu should be attached to this navItem.
 	// The returned boolean value suggest the position of the popup menu should be at
 	// fixed position or not. NavItemStyle should place a clickable icon to guide user interactions.
@@ -87,7 +87,7 @@ func (n *NavItemStyle) Update(gtx C) bool {
 	return false
 }
 
-func (n *NavItemStyle) layoutRoot(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (n *NavItemStyle) layoutRoot(gtx layout.Context, th *widget2.Theme) layout.Dimensions {
 	macro := op.Record(gtx.Ops)
 	dims := layout.Inset{Bottom: unit.Dp(0)}.Layout(gtx, func(gtx C) D {
 		return n.label.Layout(gtx, th, func(gtx C, color color.NRGBA) D {
@@ -143,7 +143,7 @@ func (n *NavItemStyle) layoutRoot(gtx layout.Context, th *theme.Theme) layout.Di
 	return dims
 }
 
-func (n *NavItemStyle) Layout(gtx C, th *theme.Theme) D {
+func (n *NavItemStyle) Layout(gtx C, th *widget2.Theme) D {
 	if n.label == nil {
 		n.label = &list.InteractiveLabel{}
 	}
@@ -221,7 +221,7 @@ func (item simpleNavItem) Icon() *widget.Icon {
 	return item.icon
 }
 
-func (item simpleNavItem) Layout(gtx C, th *theme.Theme, textColor color.NRGBA) D {
+func (item simpleNavItem) Layout(gtx C, th *widget2.Theme, textColor color.NRGBA) D {
 	label := material.Label(th.Theme, th.TextSize, item.name)
 	label.Color = textColor
 	label.TextSize = unit.Sp(16) // todo
@@ -240,7 +240,7 @@ func (ss simpleItemSection) Title() string {
 	return ""
 }
 
-func (ss simpleItemSection) Layout(gtx C, th *theme.Theme) D {
+func (ss simpleItemSection) Layout(gtx C, th *widget2.Theme) D {
 	return ss.item.Layout(gtx, th)
 }
 

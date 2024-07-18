@@ -2,7 +2,7 @@ package page
 
 import (
 	"github.com/x-module/ui/module/misc"
-	"github.com/x-module/ui/module/theme"
+	"github.com/x-module/ui/widget"
 
 	"gioui.org/layout"
 	"gioui.org/unit"
@@ -18,7 +18,7 @@ type Labelpair struct {
 	value string
 }
 
-func (p Labelpair) Layout(gtx C, th *theme.Theme) D {
+func (p Labelpair) Layout(gtx C, th *widget.Theme) D {
 	return layout.Flex{
 		Axis: layout.Horizontal,
 	}.Layout(gtx,
@@ -44,7 +44,7 @@ type RowItem struct {
 	Alignment layout.Alignment
 }
 
-func (item RowItem) Layout(gtx C, th *theme.Theme, labelDesc string, w layout.Widget) D {
+func (item RowItem) Layout(gtx C, th *widget.Theme, labelDesc string, w layout.Widget) D {
 	return layout.Flex{
 		Axis:      layout.Horizontal,
 		Alignment: item.Alignment,
@@ -61,7 +61,7 @@ func (item RowItem) Layout(gtx C, th *theme.Theme, labelDesc string, w layout.Wi
 	)
 }
 
-func (s Section) Layout(gtx C, th *theme.Theme, w layout.Widget) D {
+func (s Section) Layout(gtx C, th *widget.Theme, w layout.Widget) D {
 	return layout.Flex{
 		Axis: layout.Vertical,
 	}.Layout(gtx,

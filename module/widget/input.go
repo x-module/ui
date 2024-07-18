@@ -1,6 +1,7 @@
 package widget
 
 import (
+	widget2 "github.com/x-module/ui/widget"
 	"image"
 	"image/color"
 	"strconv"
@@ -18,7 +19,6 @@ import (
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/module/misc"
-	"github.com/x-module/ui/module/theme"
 )
 
 type state uint8
@@ -133,7 +133,7 @@ func (in *TextField) init() {
 	}
 }
 
-func (in *TextField) update(gtx layout.Context, th *theme.Theme) {
+func (in *TextField) update(gtx layout.Context, th *widget2.Theme) {
 	disabled := gtx.Source == (input.Source{})
 	for {
 		ev, ok := in.click.Update(gtx.Source)
@@ -216,7 +216,7 @@ func (in *TextField) update(gtx layout.Context, th *theme.Theme) {
 	}
 }
 
-func (in *TextField) Layout(gtx layout.Context, th *theme.Theme, hint string) layout.Dimensions {
+func (in *TextField) Layout(gtx layout.Context, th *widget2.Theme, hint string) layout.Dimensions {
 	in.init()
 	in.update(gtx, th)
 	gtx.Constraints.Min.X = gtx.Constraints.Max.X
@@ -234,7 +234,7 @@ func (in *TextField) Layout(gtx layout.Context, th *theme.Theme, hint string) la
 	return dims
 }
 
-func (in *TextField) layout(gtx layout.Context, th *theme.Theme, hint string) layout.Dimensions {
+func (in *TextField) layout(gtx layout.Context, th *widget2.Theme, hint string) layout.Dimensions {
 	if in.LabelOption.Alignment != Left && in.LabelOption.Alignment != Right {
 		return in.layout2(gtx, th, hint)
 	}
@@ -274,7 +274,7 @@ func (in *TextField) layout(gtx layout.Context, th *theme.Theme, hint string) la
 	)
 }
 
-func (in *TextField) layout2(gtx layout.Context, th *theme.Theme, hint string) layout.Dimensions {
+func (in *TextField) layout2(gtx layout.Context, th *widget2.Theme, hint string) layout.Dimensions {
 	return layout.Flex{
 		Axis: layout.Vertical,
 	}.Layout(gtx,

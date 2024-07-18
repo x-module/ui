@@ -1,7 +1,7 @@
 package menu
 
 import (
-	"github.com/x-module/ui/module/theme"
+	"github.com/x-module/ui/widget"
 
 	"gioui.org/io/pointer"
 	"gioui.org/layout"
@@ -27,7 +27,7 @@ func NewContextMenu(options [][]MenuOption, absPosition bool) *ContextMenu {
 	return m
 }
 
-func (m *ContextMenu) Layout(gtx C, th *theme.Theme) D {
+func (m *ContextMenu) Layout(gtx C, th *widget.Theme) D {
 	m.Update(gtx)
 
 	return m.layout(gtx, th, m.contextArea.Layout)

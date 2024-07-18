@@ -3,6 +3,7 @@ package view
 import (
 	"errors"
 	"fmt"
+	"github.com/x-module/ui/widget"
 	"log"
 	"net/url"
 	"slices"
@@ -22,6 +23,12 @@ type defaultViewManager struct {
 	// title of the window
 	currentTitle string
 	mu           sync.Mutex
+
+	theme *widget.Theme
+}
+
+func (vm *defaultViewManager) GetTheme() *widget.Theme {
+	return vm.theme
 }
 
 func (vm *defaultViewManager) CurrentView() View {
@@ -257,8 +264,9 @@ func (vm *defaultViewManager) Reset() {
 	vm.Invalidate()
 }
 
-func DefaultViewManager(window *app.Window) ViewManager {
+func DefaultViewManager(window *app.Window, theme *widget.Theme) ViewManager {
 	return &defaultViewManager{
 		window: window,
+		theme:  theme,
 	}
 }

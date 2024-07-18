@@ -1,10 +1,9 @@
 package misc
 
 import (
+	widget2 "github.com/x-module/ui/widget"
 	"image"
 	"image/color"
-
-	"github.com/x-module/ui/module/theme"
 
 	"gioui.org/layout"
 	"gioui.org/text"
@@ -24,7 +23,7 @@ type Icon struct {
 	Size  unit.Dp
 }
 
-func (i Icon) Layout(gtx C, th *theme.Theme) D {
+func (i Icon) Layout(gtx C, th *widget2.Theme) D {
 	if i.Size <= 0 {
 		i.Size = unit.Dp(18)
 	}
@@ -38,7 +37,7 @@ func (i Icon) Layout(gtx C, th *theme.Theme) D {
 	return i.Icon.Layout(gtx, i.Color)
 }
 
-func IconButton(th *theme.Theme, icon *widget.Icon, button *widget.Clickable, description string) material.IconButtonStyle {
+func IconButton(th *widget2.Theme, icon *widget.Icon, button *widget.Clickable, description string) material.IconButtonStyle {
 	return material.IconButtonStyle{
 		Background:  th.Palette.Bg,
 		Color:       WithAlpha(th.Palette.Fg, 0xb6),
@@ -50,7 +49,7 @@ func IconButton(th *theme.Theme, icon *widget.Icon, button *widget.Clickable, de
 	}
 }
 
-func LayoutErrorLabel(gtx C, th *theme.Theme, err error) D {
+func LayoutErrorLabel(gtx C, th *widget2.Theme, err error) D {
 	if err != nil {
 		return layout.Inset{
 			Top:    unit.Dp(10),

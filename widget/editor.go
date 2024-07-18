@@ -4,6 +4,7 @@ package widget
 
 import (
 	"fmt"
+	"github.com/x-module/ui/widget/values"
 	"image/color"
 
 	"gioui.org/layout"
@@ -11,8 +12,6 @@ import (
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 	"golang.org/x/exp/shiny/materialdesign/icons"
-
-	"github.com/planetdecred/godcr/ui/values"
 )
 
 type RestoreEditor struct {
@@ -100,7 +99,7 @@ func (t *Theme) Editor(editor *widget.Editor, hint string) Editor {
 	errorLabel := t.Caption("")
 	errorLabel.Color = t.Color.Danger
 
-	m := material.Editor(t.Base, editor, hint)
+	m := material.Editor(t.Theme, editor, hint)
 	m.TextSize = t.TextSize
 	m.Color = t.Color.Text
 	m.Hint = hint

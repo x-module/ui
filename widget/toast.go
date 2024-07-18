@@ -1,11 +1,11 @@
 package widget
 
 import (
+	"github.com/x-module/ui/widget/values"
 	"sync"
 	"time"
 
 	"gioui.org/layout"
-	"github.com/planetdecred/godcr/ui/values"
 )
 
 // type (
@@ -105,8 +105,7 @@ func (t *Toast) handleToastDisplay(gtx layout.Context) {
 	select {
 	case <-t.timer.C:
 		t.timer = nil
-		// t.theme.Window.Invalidate()
-		t.theme.Reload(gtx)
+		t.theme.Window.Invalidate()
 	default:
 	}
 }

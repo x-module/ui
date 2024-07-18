@@ -1,11 +1,10 @@
 package page
 
 import (
+	widget2 "github.com/x-module/ui/widget"
 	"image"
 	"image/color"
 	"reflect"
-
-	"github.com/x-module/ui/module/theme"
 
 	"gioui.org/layout"
 	"gioui.org/op/clip"
@@ -34,7 +33,7 @@ type PageStyle struct {
 	listState *widget.List
 }
 
-func (p *PageStyle) Layout(gtx C, th *theme.Theme, items ...layout.Widget) D {
+func (p *PageStyle) Layout(gtx C, th *widget2.Theme, items ...layout.Widget) D {
 	if reflect.ValueOf(p.MaxWidth).IsZero() {
 		p.MaxWidth = unit.Dp(maxWidth)
 	}

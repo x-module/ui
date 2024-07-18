@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/x-module/ui/module/filetree"
 	"github.com/x-module/ui/module/navi"
-	"github.com/x-module/ui/module/theme"
 	"github.com/x-module/ui/module/view"
+	widget2 "github.com/x-module/ui/widget"
 
 	"gioui.org/app"
 	"gioui.org/layout"
@@ -29,12 +29,12 @@ func (hv *HomeView) update(gtx C) {
 	// handle events and states update
 }
 
-func (hv *HomeView) Layout(gtx C, th *theme.Theme) layout.Dimensions {
+func (hv *HomeView) Layout(gtx C, th *widget2.Theme) layout.Dimensions {
 	hv.update(gtx)
 	return hv.LayoutMain(gtx, th)
 }
 
-func (hv *HomeView) LayoutMain(gtx C, th *theme.Theme) layout.Dimensions {
+func (hv *HomeView) LayoutMain(gtx C, th *widget2.Theme) layout.Dimensions {
 	dims := layout.Flex{
 		Axis:      layout.Horizontal,
 		Alignment: layout.Start,

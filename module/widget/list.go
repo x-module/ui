@@ -5,7 +5,7 @@ import (
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 	gvlayout "github.com/x-module/ui/module/layout"
-	"github.com/x-module/ui/module/theme"
+	widget2 "github.com/x-module/ui/widget"
 )
 
 // WrapList holds the persistent state for a wrappable layout.List that has a
@@ -22,7 +22,7 @@ type WrapListStyle struct {
 	material.AnchorStrategy
 }
 
-func List(th *theme.Theme, state *WrapList) *WrapListStyle {
+func List(th *widget2.Theme, state *WrapList) *WrapListStyle {
 	return &WrapListStyle{
 		state:          state,
 		ScrollbarStyle: material.Scrollbar(th.Theme, &state.Scrollbar),

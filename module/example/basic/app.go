@@ -1,10 +1,9 @@
 package main
 
 import (
+	"github.com/x-module/ui/widget"
 	"image/color"
 	"os"
-
-	"github.com/x-module/ui/module/theme"
 
 	"gioui.org/app"
 	"gioui.org/layout"
@@ -20,7 +19,7 @@ type (
 
 type UI struct {
 	window *app.Window
-	theme  *theme.Theme
+	theme  *widget.Theme
 	vm     *HomeView
 }
 
@@ -53,7 +52,7 @@ func main() {
 
 	go func() {
 		w := &app.Window{}
-		th := theme.NewTheme("./fonts", nil, false)
+		th := widget.NewTheme("./fonts", nil, false)
 		th.TextSize = unit.Sp(14)
 		th.Bg2 = color.NRGBA{R: 225, G: 225, B: 225, A: 255}
 

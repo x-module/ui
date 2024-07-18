@@ -4,7 +4,7 @@ package widget
 
 import (
 	"gioui.org/app"
-	values2 "github.com/x-module/ui/values"
+	"github.com/x-module/ui/widget/values"
 	"image"
 	"image/color"
 
@@ -48,29 +48,30 @@ type IconButtonStyle struct {
 
 type IconButton struct {
 	IconButtonStyle
-	colorStyle *values2.ColorStyle
+	colorStyle *values.ColorStyle
 }
 
 func (t *Theme) Button(txt string) Button {
 	clickable := new(widget.Clickable)
-	buttonStyle := material.Button(t.Base, clickable, txt)
-	buttonStyle.TextSize = values2.TextSize16
+	buttonStyle := material.Button(t.Theme, clickable, txt)
+	buttonStyle.TextSize = values.TextSize16
 	buttonStyle.Background = t.Color.Primary
-	buttonStyle.CornerRadius = values2.MarginPadding8
+	buttonStyle.CornerRadius = values.MarginPadding8
 	buttonStyle.Inset = layout.Inset{
-		Top:    values2.MarginPadding10,
-		Right:  values2.MarginPadding16,
-		Bottom: values2.MarginPadding10,
-		Left:   values2.MarginPadding16,
+		Top:    values.MarginPadding10,
+		Right:  values.MarginPadding16,
+		Bottom: values.MarginPadding10,
+		Left:   values.MarginPadding16,
 	}
 
 	return Button{
 		th:             t,
 		ButtonStyle:    buttonStyle,
-		label:          t.Label(values2.TextSize16, txt),
+		label:          t.Label(values.TextSize16, txt),
 		clickable:      clickable,
 		HighlightColor: t.Color.PrimaryHighlight,
 		isEnabled:      true,
+		window:         t.Window,
 	}
 }
 
@@ -92,7 +93,7 @@ func (t *Theme) DangerButton(text string) Button {
 }
 
 func (t *Theme) ButtonLayout() ButtonLayout {
-	return ButtonLayout{material.ButtonLayout(t.Base, new(widget.Clickable))}
+	return ButtonLayout{material.ButtonLayout(t.Theme, new(widget.Clickable))}
 }
 
 func (t *Theme) IconButton(icon *widget.Icon) IconButton {
@@ -107,7 +108,7 @@ func (t *Theme) IconButton(icon *widget.Icon) IconButton {
 	}
 }
 
-func (t *Theme) IconButtonWithStyle(ibs IconButtonStyle, colorStyle *values2.ColorStyle) IconButton {
+func (t *Theme) IconButtonWithStyle(ibs IconButtonStyle, colorStyle *values.ColorStyle) IconButton {
 	return IconButton{
 		ibs,
 		colorStyle,
@@ -219,7 +220,7 @@ func (bl ButtonLayout) Layout(gtx layout.Context, w layout.Widget) layout.Dimens
 // TODO: Test to ensure this works!
 // TODO: Doesn't work, if ib.colorStyle was nil before this method is called,
 // it is temporarily changed but when ib.Layout is called, it returns to nil.
-func (ib IconButton) ChangeColorStyle(colorStyle *values2.ColorStyle) {
+func (ib IconButton) ChangeColorStyle(colorStyle *values.ColorStyle) {
 	// ib.colorStyle = colorStyle ? TODO SA4005: ineffective assignment to field IconButton.colorStyle lint error
 }
 
@@ -256,7 +257,7 @@ func (t *Theme) TextAndIconButton(text string, icon *widget.Icon) TextAndIconBut
 }
 
 func (b TextAndIconButton) Layout(gtx layout.Context) layout.Dimensions {
-	btnLayout := material.ButtonLayout(b.theme.Base, b.Button)
+	btnLayout := material.ButtonLayout(b.theme.Theme, b.Button)
 	btnLayout.Background = b.BackgroundColor
 
 	return btnLayout.Layout(gtx, func(gtx C) D {
@@ -279,7 +280,7 @@ func (b TextAndIconButton) Layout(gtx layout.Context) layout.Dimensions {
 
 			layLabel := layout.Rigid(func(gtx C) D {
 				return layout.Inset{Left: textIconSpacer}.Layout(gtx, func(gtx C) D {
-					l := material.Label(b.theme.Base, unit.Sp(14), b.text)
+					l := material.Label(b.theme.Theme, unit.Sp(14), b.text)
 					l.Color = b.Color
 					l.TextSize = unit.Sp(14)
 					return l.Layout(gtx)

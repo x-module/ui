@@ -1,10 +1,9 @@
 package misc
 
 import (
+	"github.com/x-module/ui/widget"
 	"image"
 	"image/color"
-
-	"github.com/x-module/ui/module/theme"
 
 	"gioui.org/layout"
 	"gioui.org/op/clip"
@@ -19,7 +18,7 @@ type DividerStyle struct {
 	Axis      layout.Axis
 }
 
-func (d *DividerStyle) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (d *DividerStyle) Layout(gtx layout.Context, th *widget.Theme) layout.Dimensions {
 	if (d.Axis == layout.Horizontal && gtx.Constraints.Min.X == 0) ||
 		(d.Axis == layout.Vertical && gtx.Constraints.Min.Y == 0) {
 		return D{}

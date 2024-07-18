@@ -1,12 +1,10 @@
 package menu
 
 import (
+	widget2 "github.com/x-module/ui/widget"
 	"image"
 	"image/color"
 	"log"
-
-	"github.com/x-module/ui/module/misc"
-	"github.com/x-module/ui/module/theme"
 
 	"gioui.org/io/event"
 	"gioui.org/io/key"
@@ -19,6 +17,7 @@ import (
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 	"gioui.org/x/component"
+	"github.com/x-module/ui/module/misc"
 )
 
 type (
@@ -50,7 +49,7 @@ type Menu struct {
 }
 
 type MenuOption struct {
-	Layout    func(gtx C, th *theme.Theme) D
+	Layout    func(gtx C, th *widget2.Theme) D
 	OnClicked func() error
 }
 
@@ -67,7 +66,7 @@ func newMenu(options [][]MenuOption) Menu {
 	return m
 }
 
-func (m *Menu) buildMenus(th *theme.Theme) []layout.Widget {
+func (m *Menu) buildMenus(th *widget2.Theme) []layout.Widget {
 	if len(m.options) <= 0 || (len(m.optionStates) > 0 && len(m.optionStates) == len(m.menuItems)) {
 		return nil
 	}
@@ -106,7 +105,7 @@ func (m *Menu) buildMenus(th *theme.Theme) []layout.Widget {
 	return menuItems
 }
 
-func (m *Menu) layout(gtx C, th *theme.Theme, surface func(gtx C, w layout.Widget) D) D {
+func (m *Menu) layout(gtx C, th *widget2.Theme, surface func(gtx C, w layout.Widget) D) D {
 	if len(m.options) <= 0 {
 		return D{}
 	}
@@ -129,7 +128,7 @@ func (m *Menu) layout(gtx C, th *theme.Theme, surface func(gtx C, w layout.Widge
 }
 
 // layoutOptions renders the menu option list.
-func (m *Menu) layoutOptions(gtx C, th *theme.Theme) D {
+func (m *Menu) layoutOptions(gtx C, th *widget2.Theme) D {
 	var fakeOps op.Ops
 	originalOps := gtx.Ops
 	gtx.Ops = &fakeOps
@@ -242,7 +241,7 @@ func (m *Menu) update(gtx C) {
 
 }
 
-func (m *Menu) layoutOption(gtx C, th *theme.Theme, state *widget.Clickable, opt *MenuOption) D {
+func (m *Menu) layoutOption(gtx C, th *widget2.Theme, state *widget.Clickable, opt *MenuOption) D {
 	if state.Clicked(gtx) {
 		opt.OnClicked()
 		m.requestDismiss = true

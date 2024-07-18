@@ -3,8 +3,8 @@ package filetree
 import (
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/module/menu"
-	"github.com/x-module/ui/module/theme"
 	"github.com/x-module/ui/module/view"
+	"github.com/x-module/ui/widget"
 )
 
 // Default operation for file tree nodes.
@@ -21,7 +21,7 @@ func DefaultFileMenuOptions(vm view.ViewManager) MenuOptionFunc {
 						return nil
 					},
 
-					Layout: func(gtx C, th *theme.Theme) D {
+					Layout: func(gtx C, th *widget.Theme) D {
 						return material.Label(th.Theme, th.TextSize, "Copy").Layout(gtx)
 					},
 				},
@@ -32,7 +32,7 @@ func DefaultFileMenuOptions(vm view.ViewManager) MenuOptionFunc {
 						return nil
 					},
 
-					Layout: func(gtx C, th *theme.Theme) D {
+					Layout: func(gtx C, th *widget.Theme) D {
 						return material.Label(th.Theme, th.TextSize, "Cut").Layout(gtx)
 					},
 				},
@@ -43,7 +43,7 @@ func DefaultFileMenuOptions(vm view.ViewManager) MenuOptionFunc {
 						return nil
 					},
 
-					Layout: func(gtx C, th *theme.Theme) D {
+					Layout: func(gtx C, th *widget.Theme) D {
 						return material.Label(th.Theme, th.TextSize, "Paste").Layout(gtx)
 					},
 				},
@@ -56,7 +56,7 @@ func DefaultFileMenuOptions(vm view.ViewManager) MenuOptionFunc {
 						return nil
 					},
 
-					Layout: func(gtx C, th *theme.Theme) D {
+					Layout: func(gtx C, th *widget.Theme) D {
 						return material.Label(th.Theme, th.TextSize, "Rename").Layout(gtx)
 					},
 				},
@@ -66,7 +66,7 @@ func DefaultFileMenuOptions(vm view.ViewManager) MenuOptionFunc {
 						return item.Remove()
 					},
 
-					Layout: func(gtx C, th *theme.Theme) D {
+					Layout: func(gtx C, th *widget.Theme) D {
 						return material.Label(th.Theme, th.TextSize, "Delete").Layout(gtx)
 					},
 				},
@@ -82,7 +82,7 @@ func DefaultFileMenuOptions(vm view.ViewManager) MenuOptionFunc {
 						return item.CreateChild(gtx, FileNode)
 					},
 
-					Layout: func(gtx C, th *theme.Theme) D {
+					Layout: func(gtx C, th *widget.Theme) D {
 						return material.Label(th.Theme, th.TextSize, "New File").Layout(gtx)
 					},
 				},
@@ -93,7 +93,7 @@ func DefaultFileMenuOptions(vm view.ViewManager) MenuOptionFunc {
 						return item.CreateChild(gtx, FolderNode)
 					},
 
-					Layout: func(gtx C, th *theme.Theme) D {
+					Layout: func(gtx C, th *widget.Theme) D {
 						return material.Label(th.Theme, th.TextSize, "New Folder").Layout(gtx)
 					},
 				},
