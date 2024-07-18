@@ -1,7 +1,6 @@
 package navi
 
 import (
-	"fmt"
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
 	widget2 "github.com/x-module/ui/widget"
@@ -111,8 +110,6 @@ func (nv *NavDrawer) Layout(gtx C, th *widget2.Theme) D {
 }
 
 func (nv *NavDrawer) OnItemSelected(gtx C, item *NavItemStyle) {
-	fmt.Println("selected..........")
-	fmt.Println("selected..........")
 	if item != nv.selectedItem {
 		if nv.selectedItem != nil {
 			nv.selectedItem.Unselect()

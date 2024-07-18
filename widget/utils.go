@@ -13,7 +13,9 @@ import (
 	"gioui.org/op"
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
+	"gioui.org/unit"
 	"gioui.org/widget"
+	"github.com/x-module/ui/widget/values"
 	"image"
 	"image/color"
 	"math"
@@ -133,4 +135,21 @@ func MustIcon(ic *widget.Icon, err error) *widget.Icon {
 		panic(err)
 	}
 	return ic
+}
+func UniformPadding(gtx layout.Context, body layout.Widget) layout.Dimensions {
+	width := gtx.Constraints.Max.X
+
+	padding := values.MarginPadding24
+
+	if (width - 2*gtx.Dp(padding)) > gtx.Dp(MaxWidth) {
+		paddingValue := float32(width-gtx.Dp(MaxWidth)) / 2
+		padding = unit.Dp(paddingValue)
+	}
+
+	return layout.Inset{
+		Top:    values.MarginPadding24,
+		Right:  padding,
+		Bottom: values.MarginPadding24,
+		Left:   padding,
+	}.Layout(gtx, body)
 }
