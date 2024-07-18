@@ -81,7 +81,8 @@ func (l *InteractiveLabel) layoutBackground(gtx layout.Context, th *theme.Theme)
 		fill = misc.WithAlpha(th.Palette.Fg, th.HoverAlpha)
 	} else if l.isSelected {
 		// fill = misc.WithAlpha(th.Palette.Bg, th.SelectedAlpha)
-		fill = misc.WithAlpha(color.NRGBA{R: 243, G: 245, B: 246, A: 255}, 255)
+		// fill = misc.WithAlpha(color.NRGBA{R: 243, G: 245, B: 246, A: 255}, 255)
+		fill = misc.WithAlpha(th.Bg2, 255)
 	}
 	rr := gtx.Dp(unit.Dp(0))
 	rect := clip.RRect{
