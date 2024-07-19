@@ -92,6 +92,9 @@ func NewTheme(window *app.Window) *Theme {
 	// 	options = append(options, text.NoSystemFonts())
 	// }
 	// th.Shaper = text.NewShaper(options...)
+
+	color := values.NewColor().DefaultThemeColors()
+	color.DarkThemeColors()
 	t := &Theme{
 		Theme:         th,
 		HoverAlpha:    uint8(DefaultHover),
@@ -99,7 +102,7 @@ func NewTheme(window *app.Window) *Theme {
 		Bg2:           th.Bg,
 
 		// 	===============new =================
-		Color:    values.NewColor().DefaultThemeColors(),
+		Color:    color,
 		Window:   window,
 		Styles:   values.DefaultWidgetStyles(),
 		TextSize: values.TextSize16,

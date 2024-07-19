@@ -68,15 +68,14 @@ func (nv *NavDrawer) RemoveSection(index int) {
 func (nv *NavDrawer) Layout(gtx C, th *widget2.Theme) D {
 	if nv.SectionInset == (layout.Inset{}) {
 		nv.SectionInset = layout.Inset{
-			// Bottom: unit.Dp(5),
+			Bottom: unit.Dp(5),
 		}
 	}
-
 	return material.List(th.Theme, nv.listState).Layout(gtx, len(nv.listItems), func(gtx C, index int) D {
 		rect := clip.Rect{
 			Max: gtx.Constraints.Max,
 		}
-		paint.FillShape(gtx.Ops, th.Bg, rect.Op())
+		paint.FillShape(gtx.Ops, th.Color.Surface, rect.Op())
 		item := nv.listItems[index]
 		dims := nv.SectionInset.Layout(gtx, func(gtx C) D {
 			return layout.Flex{

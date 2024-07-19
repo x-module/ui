@@ -1,7 +1,6 @@
 package navi
 
 import (
-	"fmt"
 	"github.com/x-module/ui/module/misc"
 	widget2 "github.com/x-module/ui/widget"
 	"image"
@@ -175,10 +174,6 @@ func (n *NavItemStyle) Layout(gtx C, th *widget2.Theme) D {
 				Left:   unit.Dp(10),
 				Right:  unit.Dp(0),
 			}.Layout(gtx, func(gtx C) D {
-
-				fmt.Println("======444==============")
-				fmt.Println("======444==============")
-				fmt.Println("======444==============")
 				return n.childList.Layout(gtx, len(n.children), func(gtx C, index int) D {
 					return n.children[index].Layout(gtx, th)
 				})
