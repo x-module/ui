@@ -3,7 +3,6 @@
 package widget
 
 import (
-	"gioui.org/app"
 	"github.com/x-module/ui/widget/values"
 	"image"
 	"image/color"
@@ -29,7 +28,6 @@ type Button struct {
 	HighlightColor     color.NRGBA
 
 	Margin layout.Inset
-	window *app.Window
 }
 
 type ButtonLayout struct {
@@ -71,7 +69,6 @@ func (t *Theme) Button(txt string) Button {
 		clickable:      clickable,
 		HighlightColor: t.Color.PrimaryHighlight,
 		isEnabled:      true,
-		window:         t.Window,
 	}
 }
 

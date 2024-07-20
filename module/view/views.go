@@ -1,6 +1,7 @@
 package view
 
 import (
+	widget2 "gioui.org/widget"
 	"github.com/x-module/ui/widget"
 	"net/url"
 
@@ -20,20 +21,23 @@ type EmptyView struct {
 // A helper view which implements the View interface.
 type SimpleView struct {
 	BaseView
-	id            ViewID
-	title         string
-	w             Widget
+	id    ViewID
+	title string
+	w     Widget
+	*widget.Theme
 	intentHandler func(intent Intent) error
 }
 
-func (base *BaseView) ID() ViewID { return ViewID{} }
+func (base *BaseView) ID() ViewID          { return ViewID{} }
+func (base *BaseView) Icon() *widget2.Icon { return nil }
 
 func (base *BaseView) Title() string { return "Base" }
 
 func (base *BaseView) Actions() []ViewAction {
 	return nil
 }
-
+func (base *BaseView) Initialize()  {}
+func (base *BaseView) Action(gtx C) {}
 func (base *BaseView) OnNavTo(intent Intent) error {
 	loc := intent.Location()
 	base.location = &loc
@@ -54,7 +58,7 @@ func (base *BaseView) Location() url.URL {
 	return *base.location
 }
 
-func (base *BaseView) Layout(gtx C, th *widget.Theme) D {
+func (base *BaseView) Layout(gtx C) D {
 	return layout.Dimensions{}
 }
 
@@ -71,8 +75,8 @@ func (sv *SimpleView) Location() url.URL {
 	return *sv.BaseView.location
 }
 
-func (sv *SimpleView) Layout(gtx C, th *widget.Theme) D {
-	return sv.w(gtx, th)
+func (sv *SimpleView) Layout(gtx C) D {
+	return sv.w(gtx, sv.Theme)
 }
 
 func Simple(id ViewID, title string, w Widget, intentHandler func(intent Intent) error) View {

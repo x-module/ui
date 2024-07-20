@@ -200,7 +200,7 @@ func (m *ModalView) layoutView(gtx layout.Context, th *widget2.Theme) layout.Dim
 						Left:  unit.Dp(5),
 						Right: unit.Dp(5),
 					}.Layout(gtx, func(gtx C) D {
-						return m.View.Layout(gtx, th)
+						return m.View.Layout(gtx)
 					})
 				})
 			}),

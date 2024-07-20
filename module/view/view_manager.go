@@ -36,13 +36,16 @@ type ViewAction struct {
 
 type View interface {
 	Actions() []ViewAction
-	Layout(gtx layout.Context, th *widget2.Theme) layout.Dimensions
+	Layout(gtx layout.Context) layout.Dimensions
 	OnNavTo(intent Intent) error
 	ID() ViewID
 	Location() url.URL
 	Title() string
+	Icon() *widget.Icon
 	// set the view to finished state and do some cleanup ops.
 	OnFinish()
+	Initialize()
+	Action(gtx layout.Context)
 	Finished() bool
 }
 
