@@ -59,7 +59,6 @@ type Theme struct {
 
 	// 	===============new =================
 	Color    *values.Color
-	Base     *material.Theme
 	Styles   *values.WidgetStyles
 	Window   *app.Window
 	TextSize unit.Sp

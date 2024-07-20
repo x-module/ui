@@ -51,7 +51,7 @@ func runCard(window *app.Window) error {
 			theme.Card().Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 				margin := layout.UniformInset(unit.Dp(10))
 				return margin.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-					return material.H5(theme.Base, "Hello, Gio!").Layout(gtx)
+					return material.H5(theme.Theme, "Hello, Gio!").Layout(gtx)
 				})
 			})
 			e.Frame(gtx.Ops)

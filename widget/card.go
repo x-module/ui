@@ -48,7 +48,7 @@ func BottomRadius(radius int) CornerRadius {
 }
 
 const (
-	defaultRadius = 14
+	defaultRadius = 10
 )
 
 func (t *Theme) Card() Card {
