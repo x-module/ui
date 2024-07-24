@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"github.com/x-module/ui/theme"
 	"image"
 
 	"gioui.org/layout"
@@ -9,8 +10,6 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-
-	"github.com/chapar-rest/chapar/ui/chapartheme"
 )
 
 type BadgeInput struct {
@@ -57,7 +56,7 @@ func (b *BadgeInput) GetValues() map[string]string {
 	return values
 }
 
-func (b *BadgeInput) itemLayout(gtx layout.Context, theme *chapartheme.Theme, item *BadgeInputItem) layout.Dimensions {
+func (b *BadgeInput) itemLayout(gtx layout.Context, theme *theme.Theme, item *BadgeInputItem) layout.Dimensions {
 	return layout.UniformInset(unit.Dp(2)).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		return layout.Background{}.Layout(gtx,
 			func(gtx layout.Context) layout.Dimensions {
@@ -96,7 +95,7 @@ func (b *BadgeInput) itemLayout(gtx layout.Context, theme *chapartheme.Theme, it
 	})
 }
 
-func (b *BadgeInput) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.Dimensions {
+func (b *BadgeInput) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	for i := range b.Items {
 		if b.Items[i].closeButton.Clicked(gtx) {
 			b.Items = append(b.Items[:i], b.Items[i+1:]...)

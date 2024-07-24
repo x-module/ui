@@ -15,8 +15,7 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-	"github.com/chapar-rest/chapar/ui/chapartheme"
-	"github.com/chapar-rest/chapar/ui/widgets"
+	theme2 "github.com/x-module/ui/theme"
 	"image"
 	"image/color"
 	"sync"
@@ -25,7 +24,7 @@ import (
 type Modal struct {
 	sync.Mutex
 	visible   bool
-	theme     *chapartheme.Theme
+	theme     *theme2.Theme
 	content   layout.Widget
 	closeIcon *IconButton
 	title     string
@@ -33,7 +32,7 @@ type Modal struct {
 	width     int
 }
 
-func NewModal(th *chapartheme.Theme) *Modal {
+func NewModal(th *theme2.Theme) *Modal {
 	bkColor := color.NRGBA{}
 	hoveredColor := Hovered(bkColor)
 	iconSize := unit.Dp(16)
@@ -121,7 +120,7 @@ func (m *Modal) Layout(gtx layout.Context) layout.Dimensions {
 
 					})
 				}),
-				widgets.DrawLineFlex(m.theme.SeparatorColor, unit.Dp(1), unit.Dp(m.width)),
+				DrawLineFlex(m.theme.SeparatorColor, unit.Dp(1), unit.Dp(m.width)),
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 					return layout.Inset{Left: 30, Right: 30, Bottom: 30, Top: 30}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 						return m.content(gtx)

@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"github.com/x-module/ui/theme"
 	"image"
 	"image/color"
 
@@ -11,8 +12,6 @@ import (
 	"gioui.org/op/paint"
 	"gioui.org/unit"
 	"gioui.org/widget"
-
-	"github.com/chapar-rest/chapar/ui/chapartheme"
 )
 
 type IconButton struct {
@@ -29,7 +28,7 @@ type IconButton struct {
 	OnClick func()
 }
 
-func (ib *IconButton) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.Dimensions {
+func (ib *IconButton) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	if ib.BackgroundColor == (color.NRGBA{}) {
 		ib.BackgroundColor = theme.Palette.Bg
 	}

@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"github.com/x-module/ui/theme"
 	"image"
 	"image/color"
 
@@ -8,8 +9,6 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-
-	"github.com/chapar-rest/chapar/ui/chapartheme"
 )
 
 const (
@@ -71,7 +70,7 @@ func (t *TextField) SetOnIconClick(f func()) {
 	t.onIconClick = f
 }
 
-func (t *TextField) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.Dimensions {
+func (t *TextField) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	borderColor := theme.BorderColor
 	if gtx.Source.Focused(&t.textEditor) {
 		borderColor = theme.BorderColorFocused
@@ -129,7 +128,7 @@ func (t *TextField) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.
 						}
 					}
 
-					b := Button(theme.Material(), clk, t.Icon, IconPositionStart, "")
+					b := Button(theme, clk, t.Icon, IconPositionStart, "", 0)
 					b.Inset = layout.Inset{Left: unit.Dp(8), Right: unit.Dp(2), Top: unit.Dp(2), Bottom: unit.Dp(2)}
 					return b.Layout(gtx, theme)
 				})

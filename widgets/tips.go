@@ -14,7 +14,7 @@ import (
 	"gioui.org/op/paint"
 	"gioui.org/unit"
 	"gioui.org/widget/material"
-	"github.com/chapar-rest/chapar/ui/chapartheme"
+	theme2 "github.com/x-module/ui/theme"
 	"image"
 	"image/color"
 	"sync"
@@ -24,10 +24,10 @@ type Tips struct {
 	sync.Mutex
 	visible bool
 	message string
-	theme   *chapartheme.Theme
+	theme   *theme2.Theme
 }
 
-func NewTips(th *chapartheme.Theme) *Tips {
+func NewTips(th *theme2.Theme) *Tips {
 	return &Tips{
 		theme: th,
 	}

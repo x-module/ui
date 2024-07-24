@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"github.com/x-module/ui/theme"
 	"image"
 	"time"
 
@@ -10,8 +11,6 @@ import (
 	"gioui.org/op/paint"
 	"gioui.org/unit"
 	"gioui.org/widget/material"
-
-	"github.com/chapar-rest/chapar/ui/chapartheme"
 )
 
 type Notification struct {
@@ -19,9 +18,9 @@ type Notification struct {
 	EndAt time.Time
 }
 
-func (n *Notification) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.Dimensions {
-	//fmt.Println("==========n.EndAt == (time.Time{})==========:", n.EndAt == (time.Time{}))
-	//fmt.Println("========== time.Now().After(n.EndAt)===========:", time.Now().After(n.EndAt))
+func (n *Notification) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
+	// fmt.Println("==========n.EndAt == (time.Time{})==========:", n.EndAt == (time.Time{}))
+	// fmt.Println("========== time.Now().After(n.EndAt)===========:", time.Now().After(n.EndAt))
 
 	if n.Text == "" || n.EndAt == (time.Time{}) || time.Now().After(n.EndAt) {
 		return layout.Dimensions{}

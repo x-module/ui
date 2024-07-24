@@ -4,12 +4,11 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
+	"github.com/x-module/ui/theme"
 	"golang.org/x/exp/shiny/materialdesign/icons"
-
-	"github.com/chapar-rest/chapar/ui/chapartheme"
 )
 
-func MaterialIcons(name string, theme *chapartheme.Theme) material.LabelStyle {
+func MaterialIcons(name string, theme *theme.Theme) material.LabelStyle {
 	l := material.Label(theme.Material(), unit.Sp(24), "")
 	l.Font.Typeface = "MaterialIcons"
 	l.Text = name

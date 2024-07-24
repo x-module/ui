@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"github.com/x-module/ui/theme"
 	"image"
 	"image/color"
 	"math"
@@ -15,8 +16,6 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-
-	"github.com/chapar-rest/chapar/ui/chapartheme"
 )
 
 type ButtonStyle struct {
@@ -32,12 +31,14 @@ type ButtonStyle struct {
 	Inset        layout.Inset
 	Button       *widget.Clickable
 	shaper       *text.Shaper
+	width        unit.Dp
 }
 
 type ButtonLayoutStyle struct {
 	Background   color.NRGBA
 	CornerRadius unit.Dp
 	Button       *widget.Clickable
+	width        unit.Dp
 }
 
 type IconButtonStyle struct {
@@ -52,7 +53,7 @@ type IconButtonStyle struct {
 	Description string
 }
 
-func Button(th *material.Theme, button *widget.Clickable, icon *widget.Icon, iconPosition int, txt string) ButtonStyle {
+func Button(th *theme.Theme, button *widget.Clickable, icon *widget.Icon, iconPosition int, txt string, width unit.Dp) ButtonStyle {
 	b := ButtonStyle{
 		Text:         txt,
 		Icon:         icon,
@@ -67,6 +68,7 @@ func Button(th *material.Theme, button *widget.Clickable, icon *widget.Icon, ico
 		},
 		Button: button,
 		shaper: th.Shaper,
+		width:  width,
 	}
 	b.Font.Typeface = th.Face
 	return b
@@ -76,11 +78,12 @@ func Button(th *material.Theme, button *widget.Clickable, icon *widget.Icon, ico
 func (b *ButtonStyle) SetBackground(background color.NRGBA) {
 	b.Background = background
 }
-func (b ButtonStyle) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.Dimensions {
+func (b ButtonStyle) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	return ButtonLayoutStyle{
 		Background:   b.Background,
 		CornerRadius: b.CornerRadius,
 		Button:       b.Button,
+		width:        b.width,
 	}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		iconDims := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 			if b.Icon != nil {
@@ -113,7 +116,10 @@ func (b ButtonStyle) Layout(gtx layout.Context, theme *chapartheme.Theme) layout
 }
 
 func (b ButtonLayoutStyle) Layout(gtx layout.Context, w layout.Widget) layout.Dimensions {
-	min := gtx.Constraints.Min
+	minWidth := gtx.Constraints.Min
+	if b.width > 0 {
+		minWidth.X = gtx.Dp(b.width)
+	}
 	return b.Button.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		semantic.Button.Add(gtx.Ops)
 		return layout.Background{}.Layout(gtx,
@@ -134,7 +140,7 @@ func (b ButtonLayoutStyle) Layout(gtx layout.Context, w layout.Widget) layout.Di
 				return layout.Dimensions{Size: gtx.Constraints.Min}
 			},
 			func(gtx layout.Context) layout.Dimensions {
-				gtx.Constraints.Min = min
+				gtx.Constraints.Min = minWidth
 				return layout.Center.Layout(gtx, w)
 			},
 		)

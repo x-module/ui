@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"github.com/x-module/ui/theme"
 	"image"
 	"image/color"
 
@@ -10,8 +11,6 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-
-	"github.com/chapar-rest/chapar/ui/chapartheme"
 )
 
 // Prompt is a modal dialog that prompts the user for a response.
@@ -118,12 +117,12 @@ func (p *Prompt) Result() (string, bool) {
 	return p.result, false
 }
 
-func (p *Prompt) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.Dimensions {
+func (p *Prompt) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 	if !p.Visible {
 		return layout.Dimensions{}
 	}
 
-	textColor := theme.ContrastFg
+	textColor := th.ContrastFg
 	switch p.Type {
 	case ModalTypeErr:
 		textColor = color.NRGBA{R: 0xFF, G: 0xFF, B: 0xFF, A: 0xFF}
@@ -146,14 +145,14 @@ func (p *Prompt) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.Dim
 				}.Layout(gtx,
 					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 						return layout.Inset{Bottom: unit.Dp(8)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-							h := material.H6(theme.Material(), p.Title)
+							h := material.H6(th.Material(), p.Title)
 							h.Color = textColor
 							return h.Layout(gtx)
 						})
 					}),
 					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 						return layout.Inset{Bottom: unit.Dp(8)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-							b := material.Body1(theme.Material(), p.Content)
+							b := material.Body1(th.Material(), p.Content)
 							b.Color = textColor
 							return b.Layout(gtx)
 						})
@@ -169,7 +168,7 @@ func (p *Prompt) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.Dim
 							items = append(
 								items,
 								layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-									return material.CheckBox(theme.Material(), p.rememberBool, "Don't ask again").Layout(gtx)
+									return material.CheckBox(th.Material(), p.rememberBool, "Don't ask again").Layout(gtx)
 								}),
 								layout.Rigid(layout.Spacer{Width: unit.Dp(4)}.Layout),
 							)
@@ -185,10 +184,10 @@ func (p *Prompt) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.Dim
 							items = append(
 								items,
 								layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-									btn := Button(theme.Material(), &p.options[i].Button, nil, IconPositionStart, p.options[i].Text)
-									btn.Background = chapartheme.White
-									btn.Color = chapartheme.Black
-									return btn.Layout(gtx, theme)
+									btn := Button(th, &p.options[i].Button, nil, IconPositionStart, p.options[i].Text, 0)
+									btn.Background = theme.White
+									btn.Color = theme.Black
+									return btn.Layout(gtx, th)
 								}),
 								layout.Rigid(layout.Spacer{Width: unit.Dp(4)}.Layout),
 							)

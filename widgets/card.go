@@ -12,16 +12,16 @@ import (
 	"gioui.org/layout"
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
-	"github.com/chapar-rest/chapar/ui/chapartheme"
+	theme2 "github.com/x-module/ui/theme"
 	"image"
 	"image/color"
 )
 
 type Card struct {
-	theme *chapartheme.Theme
+	theme *theme2.Theme
 }
 
-func NewCard(theme *chapartheme.Theme) *Card {
+func NewCard(theme *theme2.Theme) *Card {
 	return &Card{
 		theme: theme,
 	}
@@ -51,7 +51,7 @@ func (c *Card) Layout(gtx layout.Context, children layout.Widget) layout.Dimensi
 				}},
 				NW: tl, NE: tr, SE: br, SW: bl,
 			}.Push(gtx.Ops).Pop()
-			return fill(gtx, Hovered(c.theme.Palette.Bg))
+			return fill(gtx, c.theme.Dark.Bg)
 		}),
 		layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 			return layout.UniformInset(20).Layout(gtx, children)

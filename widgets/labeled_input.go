@@ -5,8 +5,7 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-
-	"github.com/chapar-rest/chapar/ui/chapartheme"
+	"github.com/x-module/ui/theme"
 )
 
 type LabeledInput struct {
@@ -18,7 +17,7 @@ type LabeledInput struct {
 	Hint           string
 }
 
-func (l *LabeledInput) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.Dimensions {
+func (l *LabeledInput) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	return layout.Flex{
 		Axis:      layout.Horizontal,
 		Alignment: layout.Middle,

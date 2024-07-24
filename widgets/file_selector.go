@@ -2,11 +2,8 @@ package widgets
 
 import (
 	"fmt"
-
 	"gioui.org/layout"
-
-	"github.com/chapar-rest/chapar/ui/chapartheme"
-	"github.com/chapar-rest/chapar/ui/explorer"
+	"github.com/x-module/ui/theme"
 )
 
 // FileSelector is a widget that allows the user to select a file. it handles the file selection and display the file name.
@@ -17,13 +14,13 @@ type FileSelector struct {
 
 	extensions []string
 
-	explorer     *explorer.Explorer
+	explorer     *Explorer
 	onSelectFile func()
 
 	changed bool
 }
 
-func NewFileSelector(filename string, explorer *explorer.Explorer, extensions ...string) *FileSelector {
+func NewFileSelector(filename string, explorer *Explorer, extensions ...string) *FileSelector {
 	bf := &FileSelector{
 		FileName:   filename,
 		textField:  NewTextField(filename, "File"),
@@ -39,7 +36,7 @@ func NewFileSelector(filename string, explorer *explorer.Explorer, extensions ..
 	return bf
 }
 
-func (b *FileSelector) SetExplorer(explorer *explorer.Explorer) {
+func (b *FileSelector) SetExplorer(explorer *Explorer) {
 	b.explorer = explorer
 }
 
@@ -48,7 +45,7 @@ func (b *FileSelector) handleExplorerSelect() {
 		return
 	}
 
-	b.explorer.ChoseFile(func(result explorer.Result) {
+	b.explorer.ChoseFile(func(result Result) {
 		if result.Error != nil {
 			fmt.Println("failed to get file", result.Error)
 			return
@@ -108,7 +105,7 @@ func (b *FileSelector) updateIcon() {
 	}
 }
 
-func (b *FileSelector) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.Dimensions {
+func (b *FileSelector) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	gtx.Constraints.Max.Y = gtx.Dp(32)
 	gtx.Constraints.Max.X = gtx.Dp(200)
 	return b.textField.Layout(gtx, theme)

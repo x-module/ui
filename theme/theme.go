@@ -17,10 +17,17 @@ var (
 	LightPurple = color.NRGBA{R: 0x9c, G: 0x27, B: 0xb0, A: 0xff}
 )
 
+type Dark struct {
+	// drawn.
+	Bg color.NRGBA
+	// Fg is a color suitable for drawing on top of Bg.
+	Fg color.NRGBA
+}
+
 type Theme struct {
 	*material.Theme
-	isDark bool
-
+	isDark                bool
+	Dark                  Dark
 	LoaderColor           color.NRGBA
 	BorderColor           color.NRGBA
 	BorderColorFocused    color.NRGBA
@@ -52,6 +59,10 @@ func New(material *material.Theme, isDark bool) *Theme {
 		Theme:            material,
 		SideBarBgColor:   rgb(0x202224),
 		SideBarTextColor: rgb(0xffffff),
+		Dark: Dark{
+			Fg: color.NRGBA{R: 201, G: 201, B: 201, A: 255},
+			Bg: color.NRGBA{R: 24, G: 24, B: 24, A: 255},
+		},
 	}
 
 	t.Theme.TextSize = unit.Sp(14)

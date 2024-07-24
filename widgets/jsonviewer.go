@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"fmt"
+	"github.com/x-module/ui/theme"
 	"strings"
 
 	"gioui.org/font"
@@ -10,8 +11,6 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-
-	"github.com/chapar-rest/chapar/ui/chapartheme"
 )
 
 type JsonViewer struct {
@@ -44,7 +43,7 @@ func (j *JsonViewer) SetData(data string) {
 	}
 }
 
-func (j *JsonViewer) Layout(gtx layout.Context, theme *chapartheme.Theme) layout.Dimensions {
+func (j *JsonViewer) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	border := widget.Border{
 		Color:        theme.BorderColor,
 		Width:        unit.Dp(1),

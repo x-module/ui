@@ -5,11 +5,10 @@ import (
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-
-	"github.com/chapar-rest/chapar/ui/chapartheme"
+	"github.com/x-module/ui/theme"
 )
 
-func SaveButtonLayout(gtx layout.Context, theme *chapartheme.Theme, clickable *widget.Clickable) layout.Dimensions {
+func SaveButtonLayout(gtx layout.Context, theme *theme.Theme, clickable *widget.Clickable) layout.Dimensions {
 	border := widget.Border{
 		Color:        theme.BorderColor,
 		Width:        unit.Dp(1),
