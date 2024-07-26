@@ -56,12 +56,15 @@ type Theme struct {
 
 func New(material *material.Theme, isDark bool) *Theme {
 	t := &Theme{
-		Theme:            material,
-		SideBarBgColor:   rgb(0x202224),
+		Theme: material,
+		// SideBarBgColor:   rgb(0x202224),
+		SideBarBgColor: color.NRGBA{R: 24, G: 24, B: 24, A: 255},
+
 		SideBarTextColor: rgb(0xffffff),
 		Dark: Dark{
-			Fg: color.NRGBA{R: 201, G: 201, B: 201, A: 255},
-			Bg: color.NRGBA{R: 24, G: 24, B: 24, A: 255},
+			// Fg: color.NRGBA{R: 201, G: 201, B: 201, A: 255},
+			Fg: color.NRGBA{R: 24, G: 24, B: 24, A: 255},
+			Bg: color.NRGBA{R: 1, G: 1, B: 1, A: 255},
 		},
 	}
 

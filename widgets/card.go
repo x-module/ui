@@ -51,7 +51,7 @@ func (c *Card) Layout(gtx layout.Context, children layout.Widget) layout.Dimensi
 				}},
 				NW: tl, NE: tr, SE: br, SW: bl,
 			}.Push(gtx.Ops).Pop()
-			return fill(gtx, c.theme.Dark.Bg)
+			return fill(gtx, c.theme.Dark.Fg)
 		}),
 		layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 			return layout.UniformInset(20).Layout(gtx, children)

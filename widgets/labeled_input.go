@@ -17,6 +17,48 @@ type LabeledInput struct {
 	Hint           string
 }
 
+func NewLabeledInput(label string, hint string) *LabeledInput {
+	return &LabeledInput{
+		Label: label,
+		Editor: &widget.Editor{
+			SingleLine: true,
+			Submit:     true,
+		},
+		Hint:           hint,
+		SpaceBetween:   3,
+		MinEditorWidth: unit.Dp(300),
+		MinLabelWidth:  unit.Dp(50),
+	}
+}
+
+func (l *LabeledInput) SetText(text string) *LabeledInput {
+	l.Editor.SetText(text)
+	return l
+
+}
+
+func (l *LabeledInput) SetSpaceBetween(space int) *LabeledInput {
+	l.SpaceBetween = space
+	return l
+}
+func (l *LabeledInput) SetMinEditorWidth(width unit.Dp) *LabeledInput {
+	l.MinEditorWidth = width
+	return l
+}
+func (l *LabeledInput) SetMinLabelWidth(width unit.Dp) *LabeledInput {
+	l.MinLabelWidth = width
+	return l
+}
+
+func (l *LabeledInput) SetEditor(editor *widget.Editor) *LabeledInput {
+	l.Editor = editor
+	return l
+}
+
+// 获取editer的当前值
+func (l *LabeledInput) GetText() string {
+	return l.Editor.Text()
+}
 func (l *LabeledInput) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	return layout.Flex{
 		Axis:      layout.Horizontal,

@@ -52,6 +52,7 @@ type DropDownOption struct {
 func NewDropDownOption(text string) *DropDownOption {
 	return &DropDownOption{
 		Text:      text,
+		Value:     text,
 		isDivider: false,
 	}
 }
