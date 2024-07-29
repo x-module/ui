@@ -14,8 +14,25 @@ import (
 )
 
 type Notification struct {
-	Text  string
-	EndAt time.Time
+	Text   string
+	EndAt  time.Time
+	Width  unit.Dp
+	Height unit.Dp
+}
+
+func NewNotification() *Notification {
+	return &Notification{
+		Width:  unit.Dp(220),
+		Height: unit.Dp(40),
+	}
+}
+
+func (n *Notification) SetWidth(width unit.Dp) {
+	n.Width = width
+}
+
+func (n *Notification) SetHeight(height unit.Dp) {
+	n.Height = height
 }
 
 func (n *Notification) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
@@ -26,9 +43,9 @@ func (n *Notification) Layout(gtx layout.Context, theme *theme.Theme) layout.Dim
 		return layout.Dimensions{}
 	}
 	// set max width for the notification
-	gtx.Constraints.Max.X = gtx.Dp(300)
+	gtx.Constraints.Max.X = gtx.Dp(n.Width)
 	// set max height for the notification
-	gtx.Constraints.Max.Y = gtx.Dp(40)
+	gtx.Constraints.Max.Y = gtx.Dp(n.Height)
 
 	macro := op.Record(gtx.Ops)
 	dim := layout.Background{}.Layout(gtx,

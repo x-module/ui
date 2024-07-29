@@ -20,10 +20,17 @@ func (t *Theme) Scrollbar(state *widget.Scrollbar) ScrollbarStyle {
 	return ScrollbarStyle{material.Scrollbar(t.Theme, state)}
 }
 
+//c.Gray1 = argb(0x99FFFFFF)
+//c.Gray2 = rgb(0x3D3D3D)
+//c.Gray3 = rgb(0x8997a5)
+//c.Gray4 = rgb(0x121212)
+//c.Gray5 = rgb(0x363636)
+//c.Surface = rgb(0x252525)
+
 func (t *Theme) List(state *widget.List) ListStyle {
 	list := ListStyle{material.List(t.Theme, state)}
-	list.Indicator.Color = t.Color.Gray3
-	list.Indicator.HoverColor = t.Color.Gray2
+	//list.Indicator.Color = t.Color.Gray3
+	//list.Indicator.HoverColor = t.Color.Gray2
 	return list
 }
 

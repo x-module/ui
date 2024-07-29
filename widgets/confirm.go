@@ -95,7 +95,8 @@ func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
 	}
 	if c.visible {
 		// 绘制全屏半透明遮罩层
-		paint.Fill(gtx.Ops, color.NRGBA{R: 0, G: 0, B: 0, A: 240})
+		//paint.Fill(gtx.Ops, color.NRGBA{R: 0, G: 0, B: 0, A: 240})
+		paint.Fill(gtx.Ops, c.theme.Dark.Fg)
 	}
 
 	for c.cancelClickable.Clicked(gtx) {

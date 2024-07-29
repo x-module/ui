@@ -35,7 +35,7 @@ type Prompt struct {
 	Title   string
 	Content string
 	Type    string
-	Visible bool
+	visible bool
 
 	rememberBool *widget.Bool
 
@@ -60,20 +60,24 @@ func NewPrompt(title, content, modalType string, options ...Option) *Prompt {
 	}
 }
 
+func (c *Prompt) Visible() bool {
+	return c.visible
+}
+
 func (p *Prompt) SetOptions(options ...Option) {
 	p.options = options
 }
 
 func (p *Prompt) Show() {
-	p.Visible = true
+	p.visible = true
 }
 
 func (p *Prompt) Hide() {
-	p.Visible = false
+	p.visible = false
 }
 
 func (p *Prompt) IsVisible() bool {
-	return p.Visible
+	return p.visible
 }
 
 func (p *Prompt) WithRememberBool() {
@@ -93,7 +97,7 @@ func (p *Prompt) submit() {
 		return
 	}
 
-	if !p.Visible {
+	if !p.visible {
 		return
 	}
 
@@ -118,7 +122,7 @@ func (p *Prompt) Result() (string, bool) {
 }
 
 func (p *Prompt) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
-	if !p.Visible {
+	if !p.visible {
 		return layout.Dimensions{}
 	}
 
