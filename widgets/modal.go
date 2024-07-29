@@ -59,6 +59,9 @@ func NewModal(th *theme2.Theme) *Modal {
 func (t *Modal) SetWidth(width int) {
 	t.width = width
 }
+func (t *Modal) Visible() bool {
+	return t.visible
+}
 func (t *Modal) SetTitle(title string) {
 	t.title = title
 }
@@ -122,8 +125,10 @@ func (m *Modal) Layout(gtx layout.Context) layout.Dimensions {
 				}),
 				DrawLineFlex(m.theme.SeparatorColor, unit.Dp(1), unit.Dp(m.width)),
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-					return layout.Inset{Left: 30, Right: 30, Bottom: 30, Top: 30}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-						return m.content(gtx)
+					return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+						return layout.Inset{Left: 30, Right: 30, Bottom: 30, Top: 30}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+							return m.content(gtx)
+						})
 					})
 				}),
 			)

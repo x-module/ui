@@ -14,7 +14,7 @@ import (
 	"gioui.org/op/paint"
 	"gioui.org/unit"
 	"gioui.org/widget/material"
-	theme2 "github.com/x-module/ui/theme"
+	"github.com/x-module/ui/theme"
 	"image"
 	"image/color"
 	"sync"
@@ -24,10 +24,10 @@ type Tips struct {
 	sync.Mutex
 	visible bool
 	message string
-	theme   *theme2.Theme
+	theme   *theme.Theme
 }
 
-func NewTips(th *theme2.Theme) *Tips {
+func NewTips(th *theme.Theme) *Tips {
 	return &Tips{
 		theme: th,
 	}
@@ -39,6 +39,10 @@ func (t *Tips) Notify(message string) {
 }
 func (t *Tips) Close() {
 	t.visible = false
+}
+
+func (t *Tips) Visible() bool {
+	return t.visible
 }
 
 func (t *Tips) Layout(gtx layout.Context) layout.Dimensions {
