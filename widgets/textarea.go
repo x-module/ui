@@ -12,48 +12,42 @@ import (
 )
 
 type TextArea struct {
-	textEditor  *widget.Editor
-	theme       *material.Theme
-	Text        string
+	textEditor  widget.Editor
 	Placeholder string
-
-	size image.Point
-
-	onTextChange func(text string)
-	borderColor  color.NRGBA
+	size        image.Point
+	borderColor color.NRGBA
 }
 
 func NewTextArea(text, placeholder string) *TextArea {
-	// clickable = new(widget.Clickable)
-
 	t := &TextArea{
-		textEditor:  &widget.Editor{},
-		Text:        text,
+		textEditor:  widget.Editor{},
 		Placeholder: placeholder,
 	}
+
 	t.textEditor.SetText(text)
-	t.textEditor.SingleLine = false
+	t.textEditor.SingleLine = true
 	return t
 }
 
-func (t *TextArea) SetText(text string) {
-	t.textEditor.SetText(text)
-}
+// 可能存在bug，弃用，如需要可程序new一个对象
+// func (t *TextArea) SetText(text string) {
+// 	t.textEditor.SetText(text)
+// }
 
 func (t *TextArea) SetMinWidth(width int) {
 	t.size.X = width
+}
+func (t *TextArea) Text() string {
+	return t.textEditor.Text()
 }
 
 func (t *TextArea) SetBorderColor(color color.NRGBA) {
 	t.borderColor = color
 }
 
-func (t *TextArea) SetOnTextChange(f func(text string)) {
-	t.onTextChange = f
-}
-
 func (t *TextArea) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	borderColor := theme.BorderColor
+
 	if gtx.Source.Focused(&t.textEditor) {
 		borderColor = theme.BorderColorFocused
 	}
@@ -65,30 +59,29 @@ func (t *TextArea) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensi
 		CornerRadius: cornerRadius,
 	}
 
-	for {
-		event, ok := t.textEditor.Update(gtx)
-		if !ok {
-			break
-		}
-		if _, ok := event.(widget.ChangeEvent); ok {
-			if t.onTextChange != nil {
-				t.onTextChange(t.textEditor.Text())
-			}
-		}
-	}
+	leftPadding := unit.Dp(8)
 
 	return border.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		if t.size.X == 0 {
-			t.size.X = gtx.Constraints.Max.X
+			t.size.X = gtx.Constraints.Min.X
 		}
+
 		gtx.Constraints.Min = t.size
-		return layout.UniformInset(4).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-			return layout.UniformInset(8).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-				// 设置 Editor 的高度
+		return layout.Inset{
+			Top:    4,
+			Bottom: 4,
+			Left:   leftPadding,
+			Right:  4,
+		}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+			inputLayout := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
 				gtx.Constraints.Min.Y = gtx.Dp(unit.Dp(100))  // 设置最小高度为 100dp
 				gtx.Constraints.Max.Y = gtx.Constraints.Min.Y // 限制最大高度与最小高度相同
-				return material.Editor(theme.Material(), t.textEditor, t.Placeholder).Layout(gtx)
+				return material.Editor(theme.Material(), &t.textEditor, t.Placeholder).Layout(gtx)
 			})
+			widgets := []layout.FlexChild{inputLayout}
+
+			spacing := layout.SpaceBetween
+			return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle, Spacing: spacing}.Layout(gtx, widgets...)
 		})
 	})
 }
