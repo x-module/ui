@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"gioui.org/layout"
 	"gioui.org/unit"
+	"github.com/gen2brain/dlgs"
 	"github.com/x-module/ui/theme"
 )
 
-// FileSelector is a widget that allows the user to select a file. it handles the file selection and display the file name.
+// DirSelector is a widget that allows the user to select a file. it handles the file selection and display the file name.
 // TODO replace binary file with this widget
-type FileSelector struct {
+type DirSelector struct {
 	textField *TextField
 	FileName  string
 
@@ -22,8 +23,8 @@ type FileSelector struct {
 	width   unit.Dp
 }
 
-func NewFileSelector(filename string, explorer *Explorer, extensions ...string) *FileSelector {
-	bf := &FileSelector{
+func NewDirSelector(filename string, explorer *Explorer, extensions ...string) *DirSelector {
+	bf := &DirSelector{
 		FileName:   filename,
 		textField:  NewTextField(filename, "File"),
 		explorer:   explorer,
@@ -40,34 +41,29 @@ func NewFileSelector(filename string, explorer *Explorer, extensions ...string) 
 }
 
 // 设置width
-func (b *FileSelector) SetWidth(width unit.Dp) {
+func (b *DirSelector) SetWidth(width unit.Dp) {
 	b.width = width
 }
 
-func (b *FileSelector) SetExplorer(explorer *Explorer) {
+func (b *DirSelector) SetExplorer(explorer *Explorer) {
 	b.explorer = explorer
 }
 
-func (b *FileSelector) handleExplorerSelect() {
-	if b.explorer == nil {
+func (b *DirSelector) handleExplorerSelect() {
+	dir, _, err := dlgs.File("Select Directory", "", true)
+	if err != nil {
+		fmt.Println("Error:", err)
 		return
 	}
-
-	b.explorer.ChoseFile(func(result Result) {
-		if result.Error != nil {
-			fmt.Println("failed to get file", result.Error)
-			return
-		}
-		if result.FilePath == "" {
-			return
-		}
-
-		b.SetFileName(result.FilePath)
-		b.changed = true
-	}, b.extensions...)
+	fmt.Println("Selected Directory:", dir)
+	if dir == "" {
+		return
+	}
+	b.SetFileName(dir)
+	b.changed = true
 }
 
-func (b *FileSelector) SetOnSelectFile(f func()) {
+func (b *DirSelector) SetOnSelectFile(f func()) {
 	b.onSelectFile = f
 	b.textField.SetOnIconClick(func() {
 		if b.FileName != "" {
@@ -81,31 +77,31 @@ func (b *FileSelector) SetOnSelectFile(f func()) {
 	})
 }
 
-func (b *FileSelector) SetFileName(name string) {
+func (b *DirSelector) SetFileName(name string) {
 	b.FileName = name
 	b.textField.SetText(name)
 	b.updateIcon()
 	b.changed = true
 }
 
-func (b *FileSelector) Changed() bool {
+func (b *DirSelector) Changed() bool {
 	out := b.changed
 	b.changed = false
 	return out
 }
 
-func (b *FileSelector) RemoveFile() {
+func (b *DirSelector) RemoveFile() {
 	b.FileName = ""
 	b.textField.SetText("")
 	b.updateIcon()
 	b.changed = true
 }
 
-func (b *FileSelector) GetFilePath() string {
+func (b *DirSelector) GetFilePath() string {
 	return b.FileName
 }
 
-func (b *FileSelector) updateIcon() {
+func (b *DirSelector) updateIcon() {
 	if b.FileName != "" {
 		b.textField.SetIcon(DeleteIcon, IconPositionEnd)
 	} else {
@@ -113,7 +109,7 @@ func (b *FileSelector) updateIcon() {
 	}
 }
 
-func (b *FileSelector) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
+func (b *DirSelector) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	gtx.Constraints.Max.Y = gtx.Dp(32)
 	gtx.Constraints.Max.X = gtx.Dp(b.width)
 	return b.textField.Layout(gtx, theme)
