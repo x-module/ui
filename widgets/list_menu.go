@@ -51,10 +51,10 @@ func NewListMenu(th *theme.Theme, label string, options []*ListMenuOption) *List
 			Activation:       pointer.ButtonPrimary,
 			AbsolutePosition: true,
 		},
-		//menuState: component.MenuState{
+		// menuState: component.MenuState{
 		//	OptionList: layout.List{Axis: layout.Vertical},
 		//	Options:    []func(gtx layout.Context) layout.Dimensions{},
-		//},
+		// },
 	}
 	return listMenu
 }
@@ -82,22 +82,24 @@ func (l *ListMenu) Layout(gtx layout.Context) layout.Dimensions {
 			return layout.Stack{}.Layout(gtx,
 				layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 					return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-						label := Button(l.theme, new(widget.Clickable), nil, 1, "tudou", l.labelWidth)
+						label := Button(l.theme, new(widget.Clickable), nil, 1, l.Label, l.labelWidth)
 						label.SetBackground(l.theme.Dark.Bg)
 						return label.Layout(gtx, l.theme)
 					})
 				}),
 				layout.Expanded(func(gtx layout.Context) layout.Dimensions {
 					return l.menuContextArea.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-						offset := layout.Inset{
-							Top:  unit.Dp(30),
-							Left: unit.Dp(2),
-						}
-						return offset.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-							gtx.Constraints.Min = image.Point{}
-							menu := component.Menu(l.theme.Material(), &l.menuState)
-							menu.SurfaceStyle.Fill = l.theme.MenuBgColor
-							return menu.Layout(gtx)
+						return layout.E.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+							offset := layout.Inset{
+								Top:  unit.Dp(30),
+								Left: unit.Dp(2),
+							}
+							return offset.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+								gtx.Constraints.Min = image.Point{}
+								menu := component.Menu(l.theme.Material(), &l.menuState)
+								menu.SurfaceStyle.Fill = l.theme.MenuBgColor
+								return menu.Layout(gtx)
+							})
 						})
 					})
 				}),

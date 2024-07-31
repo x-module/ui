@@ -110,7 +110,7 @@ func (b *DirSelector) updateIcon() {
 }
 
 func (b *DirSelector) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
-	gtx.Constraints.Max.Y = gtx.Dp(32)
+	// gtx.Constraints.Max.Y = gtx.Dp(42)
 	gtx.Constraints.Max.X = gtx.Dp(b.width)
 	return b.textField.Layout(gtx, theme)
 }

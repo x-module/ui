@@ -114,7 +114,7 @@ func (b *FileSelector) updateIcon() {
 }
 
 func (b *FileSelector) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
-	gtx.Constraints.Max.Y = gtx.Dp(32)
+	// gtx.Constraints.Max.Y = gtx.Dp(32)
 	gtx.Constraints.Max.X = gtx.Dp(b.width)
 	return b.textField.Layout(gtx, theme)
 }

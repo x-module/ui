@@ -107,8 +107,8 @@ func (t *TextField) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimens
 
 		gtx.Constraints.Min = t.size
 		return layout.Inset{
-			Top:    4,
-			Bottom: 4,
+			Top:    8,
+			Bottom: 8,
 			Left:   leftPadding,
 			Right:  4,
 		}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
