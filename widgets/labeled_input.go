@@ -60,6 +60,10 @@ func (l *LabeledInput) GetText() string {
 	return l.Editor.Text()
 }
 func (l *LabeledInput) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
+	borderColor := theme.BorderColor
+	if gtx.Source.Focused(l.Editor) {
+		borderColor = theme.BorderColorFocused
+	}
 	return layout.Flex{
 		Axis:      layout.Horizontal,
 		Alignment: layout.Middle,
@@ -77,7 +81,7 @@ func (l *LabeledInput) Layout(gtx layout.Context, theme *theme.Theme) layout.Dim
 				gtx.Constraints.Min.X = gtx.Constraints.Max.X
 			}
 			return widget.Border{
-				Color:        theme.BorderColor,
+				Color:        borderColor,
 				Width:        unit.Dp(1),
 				CornerRadius: unit.Dp(4),
 			}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
