@@ -70,10 +70,10 @@ func (t *TextField) SetOnIconClick(f func()) {
 	t.onIconClick = f
 }
 
-func (t *TextField) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
-	borderColor := theme.BorderColor
+func (t *TextField) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+	borderColor := th.BorderColor
 	if gtx.Source.Focused(&t.textEditor) {
-		borderColor = theme.BorderColorFocused
+		borderColor = th.BorderColorFocused
 	}
 
 	cornerRadius := unit.Dp(4)
@@ -113,7 +113,11 @@ func (t *TextField) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimens
 			Right:  4,
 		}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 			inputLayout := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
-				return material.Editor(theme.Material(), &t.textEditor, t.Placeholder).Layout(gtx)
+				editor := material.Editor(th.Material(), &t.textEditor, t.Placeholder)
+				editor.Color = th.TextColor
+				editor.HintColor = theme.LightBlue
+				editor.SelectionColor = th.TextSelectionColor
+				return editor.Layout(gtx)
 			})
 			widgets := []layout.FlexChild{inputLayout}
 
@@ -128,9 +132,9 @@ func (t *TextField) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimens
 						}
 					}
 
-					b := Button(theme, clk, t.Icon, IconPositionStart, "", 0)
+					b := Button(th, clk, t.Icon, IconPositionStart, "", 0)
 					b.Inset = layout.Inset{Left: unit.Dp(8), Right: unit.Dp(2), Top: unit.Dp(2), Bottom: unit.Dp(2)}
-					return b.Layout(gtx, theme)
+					return b.Layout(gtx, th)
 				})
 
 				if t.IconPosition == IconPositionEnd {

@@ -9,7 +9,6 @@ import (
 	"gioui.org/layout"
 	"gioui.org/unit"
 	"gioui.org/widget"
-	"gioui.org/widget/material"
 	"gioui.org/x/component"
 )
 
@@ -233,7 +232,7 @@ func (c *DropDown) box(gtx layout.Context, theme *theme2.Theme, text string, max
 			return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle, Spacing: layout.SpaceBetween}.Layout(gtx,
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 					return layout.Inset{Top: unit.Dp(4), Bottom: unit.Dp(4)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-						return material.Label(theme.Material(), theme.TextSize, text).Layout(gtx)
+						return Label(theme, text).Layout(gtx)
 					})
 				}),
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {

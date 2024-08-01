@@ -59,7 +59,7 @@ func (f *FlatButton) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimen
 	axis := layout.Horizontal
 	labelLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 		return layout.Inset{Right: unit.Dp(f.MarginRight)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-			l := material.Label(theme.Material(), unit.Sp(12), f.Text)
+			l := material.Label(theme.Material(), unit.Sp(11), f.Text)
 			l.Color = f.TextColor
 			return l.Layout(gtx)
 		})
@@ -70,6 +70,7 @@ func (f *FlatButton) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimen
 	if f.Icon != nil {
 		iconLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 			return layout.UniformInset(f.SpaceBetween).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+				gtx.Constraints.Min.X = gtx.Dp(20)
 				return f.Icon.Layout(gtx, f.TextColor)
 			})
 		})

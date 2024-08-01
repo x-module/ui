@@ -3,6 +3,7 @@
 package widgets
 
 import (
+	"gioui.org/font"
 	"gioui.org/unit"
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/theme"
@@ -50,10 +51,18 @@ func ErrorLabel(th theme.Theme, txt string) material.LabelStyle {
 	return label
 }
 func Label(th *theme.Theme, txt string) material.LabelStyle {
-	return labelWithDefaultColor(material.Label(th.Material(), unit.Sp(14), txt))
+	label := material.Label(th.Material(), th.TextSize, txt)
+	label.Color = th.TextColor
+	return label
 }
-func DefaultLabel(th *theme.Theme, txt string) material.LabelStyle {
-	return material.Label(th.Material(), unit.Sp(14), txt)
+func BoldLabel(th *theme.Theme, txt string) material.LabelStyle {
+	label := material.Label(th.Material(), th.TextSize, txt)
+	label.Color = th.TextColor
+	label.Font.Weight = font.Bold
+	return label
+}
+func BlueLabel(th *theme.Theme, txt string) material.LabelStyle {
+	return labelWithDefaultColor(material.Label(th.Material(), unit.Sp(14), txt))
 }
 func SizeLabel(th theme.Theme, txt string, size unit.Sp) material.LabelStyle {
 	return labelWithDefaultColor(material.Label(th.Material(), size, txt))

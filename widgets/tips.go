@@ -16,7 +16,6 @@ import (
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/theme"
 	"image"
-	"image/color"
 	"sync"
 )
 
@@ -53,7 +52,7 @@ func (t *Tips) Layout(gtx layout.Context) layout.Dimensions {
 		// 绘制全屏半透明遮罩层
 		// fill := color.NRGBA{R: 0, G: 0, B: 0, A: 240} // 半透明黑色
 		// paint.FillShape(gtx.Ops, fill, clip.Rect{Max: gtx.Constraints.Max}.Op())
-		paint.Fill(gtx.Ops, color.NRGBA{R: 0, G: 0, B: 0, A: 240})
+		paint.Fill(gtx.Ops, t.theme.Palette.Bg)
 	}
 	// Define the size of the Tips
 	width := gtx.Dp(250)

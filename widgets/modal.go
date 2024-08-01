@@ -110,7 +110,7 @@ func (m *Modal) Layout(gtx layout.Context) layout.Dimensions {
 							return layout.Stack{Alignment: layout.N}.Layout(gtx,
 								layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 									label := material.Label(m.theme.Material(), unit.Sp(16), m.title)
-									label.Color = m.theme.Material().Palette.Fg
+									label.Color = m.theme.Palette.Fg
 									return label.Layout(gtx)
 								}),
 								layout.Expanded(func(gtx layout.Context) layout.Dimensions {

@@ -16,7 +16,6 @@ import (
 	"gioui.org/widget"
 	"gioui.org/x/component"
 	"github.com/x-module/ui/theme"
-	"image"
 	"image/color"
 )
 
@@ -45,7 +44,7 @@ func NewListMenu(th *theme.Theme, label string, options []*ListMenuOption) *List
 	listMenu := &ListMenu{
 		theme:      th,
 		Label:      label,
-		labelWidth: unit.Dp(100),
+		labelWidth: unit.Dp(200),
 		options:    options,
 		menuContextArea: component.ContextArea{
 			Activation:       pointer.ButtonPrimary,
@@ -83,7 +82,7 @@ func (l *ListMenu) Layout(gtx layout.Context) layout.Dimensions {
 				layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 					return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 						label := Button(l.theme, new(widget.Clickable), nil, 1, l.Label, l.labelWidth)
-						label.SetBackground(l.theme.Dark.Bg)
+						// label.SetBackground(l.theme.Dark.Bg)
 						return label.Layout(gtx, l.theme)
 					})
 				}),
@@ -95,7 +94,8 @@ func (l *ListMenu) Layout(gtx layout.Context) layout.Dimensions {
 								Left: unit.Dp(2),
 							}
 							return offset.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-								gtx.Constraints.Min = image.Point{}
+								gtx.Constraints.Max.X = gtx.Dp(l.menuWidth)
+								gtx.Constraints.Min = gtx.Constraints.Max
 								menu := component.Menu(l.theme.Material(), &l.menuState)
 								menu.SurfaceStyle.Fill = l.theme.MenuBgColor
 								return menu.Layout(gtx)
@@ -109,12 +109,12 @@ func (l *ListMenu) Layout(gtx layout.Context) layout.Dimensions {
 }
 
 // updateMenuItems creates or updates menu items based on options and calculates minWidth.
-func (c *ListMenu) updateMenuItems() {
-	c.menuState.Options = c.menuState.Options[:0]
-	for _, opt := range c.options {
+func (l *ListMenu) updateMenuItems() {
+	l.menuState.Options = l.menuState.Options[:0]
+	for _, opt := range l.options {
 		opt := opt
-		c.menuState.Options = append(c.menuState.Options, func(gtx layout.Context) layout.Dimensions {
-			itm := component.MenuItem(c.theme.Material(), &opt.clickable, opt.Text)
+		l.menuState.Options = append(l.menuState.Options, func(gtx layout.Context) layout.Dimensions {
+			itm := component.MenuItem(l.theme.Material(), &opt.clickable, opt.Text)
 			if opt.Icon != nil {
 				itm.Icon = opt.Icon
 				itm.IconColor = opt.IconColor

@@ -1,9 +1,9 @@
 /**
  * Created by Goland
- * @file   Confirm.go
+ * @file   Action.go
  * @author 李锦 <lijin@cavemanstudio.net>
  * @date   2024/7/22 18:56
- * @desc   Confirm.go
+ * @desc   Action.go
  */
 
 package widgets
@@ -21,25 +21,23 @@ import (
 	"image/color"
 )
 
-type Confirm struct {
-	visible          bool
-	theme            *theme2.Theme
-	closeIcon        *IconButton
-	title            string
-	message          string
-	height           int
-	width            int
-	cancelClickable  widget.Clickable
-	confirmClickable widget.Clickable
-	cancelFunc       func()
-	confirmFunc      func()
+type Action struct {
+	visible         bool
+	theme           *theme2.Theme
+	closeIcon       *IconButton
+	title           string
+	message         string
+	height          int
+	width           int
+	actionClickable widget.Clickable
+	actionFunc      func()
 }
 
-func NewConfirm(th *theme2.Theme) *Confirm {
+func NewAction(th *theme2.Theme) *Action {
 	bkColor := color.NRGBA{}
 	hoveredColor := Hovered(bkColor)
 	iconSize := unit.Dp(6)
-	modal := &Confirm{
+	modal := &Action{
 		theme:  th,
 		height: 130,
 		width:  300,
@@ -60,36 +58,32 @@ func NewConfirm(th *theme2.Theme) *Confirm {
 	return modal
 }
 
-func (c *Confirm) Confirm(fun func()) {
-	c.confirmFunc = fun
+func (c *Action) Action(fun func()) {
+	c.actionFunc = fun
 }
-func (c *Confirm) Cancel(fun func()) {
-	c.cancelFunc = fun
-}
-
-func (c *Confirm) SetWidth(width int) {
+func (c *Action) SetWidth(width int) {
 	c.width = width
 }
-func (c *Confirm) Visible() bool {
+func (c *Action) Visible() bool {
 	return c.visible
 }
-func (c *Confirm) SetTitle(title string) {
+func (c *Action) SetTitle(title string) {
 	c.title = title
 }
 
-func (c *Confirm) SetHeight(height int) {
+func (c *Action) SetHeight(height int) {
 	c.height = height
 }
 
-func (c *Confirm) Message(message string) {
+func (c *Action) Message(message string) {
 	c.message = message
 	c.visible = true
 }
-func (c *Confirm) Close() {
+func (c *Action) Close() {
 	c.visible = false
 }
 
-func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
+func (c *Action) Layout(gtx layout.Context) layout.Dimensions {
 	if !c.visible {
 		return layout.Dimensions{}
 	}
@@ -99,17 +93,10 @@ func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
 		// paint.Fill(gtx.Ops, c.theme.Palette.Bg)
 	}
 
-	for c.cancelClickable.Clicked(gtx) {
+	for c.actionClickable.Clicked(gtx) {
 		c.visible = false
-		if c.cancelFunc != nil {
-			c.cancelFunc()
-		}
-	}
-
-	for c.confirmClickable.Clicked(gtx) {
-		c.visible = false
-		if c.confirmFunc != nil {
-			c.confirmFunc()
+		if c.actionFunc != nil {
+			c.actionFunc()
 		}
 	}
 
@@ -119,7 +106,7 @@ func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
 		Top: unit.Dp(0),
 	}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-			// Set the size of the Confirm
+			// Set the size of the Action
 			gtx.Constraints = layout.Exact(image.Point{X: width, Y: height})
 			rc := clip.RRect{
 				Rect: image.Rectangle{Max: image.Point{
@@ -129,7 +116,7 @@ func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
 				NW: 10, NE: 10, SE: 10, SW: 10,
 			}
 			paint.FillShape(gtx.Ops, c.theme.Palette.Fg, rc.Op(gtx.Ops))
-			// Center the text inside the Confirm
+			// Center the text inside the Action
 			return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 					return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
@@ -156,23 +143,10 @@ func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
 				}),
 				DrawLineFlex(c.theme.SeparatorColor, unit.Dp(1), unit.Dp(c.width)),
 				layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
-					return layout.Flex{Axis: layout.Horizontal}.Layout(gtx,
-						layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-							but := Button(c.theme, &c.cancelClickable, nil, 1, "取消", unit.Dp(50))
-							but.Background = c.theme.ConfirmButtonColor
-							but.width = unit.Dp(150)
-							return but.Layout(gtx, c.theme)
-						}),
-						layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-							return DrawLine(gtx, c.theme.SeparatorColor, unit.Dp(35), unit.Dp(1))
-						}),
-						layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-							but := Button(c.theme, &c.confirmClickable, nil, 1, "确认", unit.Dp(50))
-							but.Background = c.theme.ConfirmButtonColor
-							but.width = unit.Dp(150)
-							return but.Layout(gtx, c.theme)
-						}),
-					)
+					but := Button(c.theme, &c.actionClickable, nil, 1, "确 定", unit.Dp(50))
+					but.Background = c.theme.ConfirmButtonColor
+					but.width = unit.Dp(300)
+					return but.Layout(gtx, c.theme)
 				}),
 			)
 

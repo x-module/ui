@@ -14,7 +14,6 @@ import (
 	"gioui.org/op"
 	"gioui.org/unit"
 	"gioui.org/widget"
-	"gioui.org/widget/material"
 )
 
 type Tabs struct {
@@ -147,7 +146,7 @@ func (tabs *Tabs) Clickable(gtx layout.Context, button *widget.Clickable, w layo
 					}},
 					NW: tl, NE: tr, SE: br, SW: bl,
 				}.Push(gtx.Ops).Pop()
-				//defer clip.Rect{Max: gtx.Constraints.Min}.Push(gtx.Ops).Pop()
+				// defer clip.Rect{Max: gtx.Constraints.Min}.Push(gtx.Ops).Pop()
 				if button.Hovered() {
 					paint.Fill(gtx.Ops, Hovered(color.NRGBA{}))
 				}
@@ -212,7 +211,7 @@ func (tabs *Tabs) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensio
 						return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle}.Layout(gtx,
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 								return layout.UniformInset(unit.Dp(12)).Layout(gtx,
-									material.Label(theme.Material(), unit.Sp(13), ellipticalTruncate(t.Title, tabs.maxTitleWidth)).Layout,
+									Label(theme, ellipticalTruncate(t.Title, tabs.maxTitleWidth)).Layout,
 								)
 							}),
 							layout.Rigid(layout.Spacer{Width: unit.Dp(2)}.Layout),
@@ -252,9 +251,9 @@ func (tabs *Tabs) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensio
 					})
 				} else {
 					dims = tabs.Clickable(gtx, &t.btn, func(gtx layout.Context) layout.Dimensions {
-						//return layout.UniformInset(unit.Dp(12)).Layout(gtx,
+						// return layout.UniformInset(unit.Dp(12)).Layout(gtx,
 						return layout.Inset{Top: unit.Dp(8), Bottom: unit.Dp(8), Left: unit.Dp(12), Right: unit.Dp(12)}.Layout(gtx,
-							material.Label(theme.Material(), unit.Sp(13), t.Title).Layout,
+							Label(theme, t.Title).Layout,
 						)
 					})
 				}

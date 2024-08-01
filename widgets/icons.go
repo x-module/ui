@@ -12,6 +12,7 @@ func MaterialIcons(name string, theme *theme.Theme) material.LabelStyle {
 	l := material.Label(theme.Material(), unit.Sp(24), "")
 	l.Font.Typeface = "MaterialIcons"
 	l.Text = name
+	l.Color = theme.TextColor
 	return l
 }
 

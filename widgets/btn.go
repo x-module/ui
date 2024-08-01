@@ -58,9 +58,9 @@ func Button(th *theme.Theme, button *widget.Clickable, icon *widget.Icon, iconPo
 		Text:         txt,
 		Icon:         icon,
 		IconPosition: iconPosition,
-		Color:        th.Palette.ContrastFg,
+		Color:        th.TextColor,
 		CornerRadius: 4,
-		Background:   th.Palette.ContrastBg,
+		Background:   th.Palette.Bg,
 		TextSize:     th.TextSize * 14.0 / 16.0,
 		Inset: layout.Inset{
 			Top: 8, Bottom: 8,

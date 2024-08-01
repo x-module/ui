@@ -13,7 +13,7 @@ var (
 	LightGreen  = color.NRGBA{R: 0x8b, G: 0xc3, B: 0x4a, A: 0xff}
 	LightRed    = color.NRGBA{R: 0xff, G: 0x73, B: 0x73, A: 0xff}
 	LightYellow = color.NRGBA{R: 0xff, G: 0xe0, B: 0x73, A: 0xff}
-	LightBlue   = color.NRGBA{R: 0x45, G: 0x89, B: 0xf5, A: 0xff}
+	LightBlue   = color.NRGBA{R: 49, G: 128, B: 242, A: 255}
 	LightPurple = color.NRGBA{R: 0x9c, G: 0x27, B: 0xb0, A: 0xff}
 )
 
@@ -27,8 +27,11 @@ type Dark struct {
 
 type Theme struct {
 	*material.Theme
-	isDark                bool
-	Dark                  Dark
+	isDark bool
+	Dark   Dark
+
+	ConfirmButtonColor color.NRGBA
+
 	LoaderColor           color.NRGBA
 	BorderColor           color.NRGBA
 	BorderColorFocused    color.NRGBA
@@ -84,13 +87,18 @@ func (t *Theme) Switch(isDark bool) *material.Theme {
 	t.isDark = isDark
 
 	if isDark {
-		t.Theme.Palette.Fg = rgb(0xd7dade)
+		// rgb(43, 45, 48)
+		t.Theme.Palette.Fg = color.NRGBA{R: 44, G: 44, B: 48, A: 255}
+		t.Theme.Palette.Bg = color.NRGBA{R: 28, G: 28, B: 30, A: 255}
+		t.TextColor = color.NRGBA{R: 188, G: 190, B: 195, A: 255}
+		t.TextSelectionColor = rgb(0x6380ad)
 		t.LoaderColor = rgb(0xd7dade)
-		t.Theme.Palette.Bg = rgb(0x202224)
-		t.Theme.Palette.ContrastBg = rgb(0x202224)
-		t.Theme.Palette.ContrastFg = rgb(0xffffff)
+		t.Theme.Palette.ContrastBg = color.NRGBA{R: 30, G: 31, B: 34, A: 255}
+		t.Theme.Palette.ContrastFg = color.NRGBA{R: 43, G: 45, B: 48, A: 255}
+		t.ConfirmButtonColor = color.NRGBA{R: 33, G: 33, B: 33, A: 255}
+
 		t.BorderColorFocused = rgb(0xffffff)
-		t.TextColor = rgb(0x8b8e95)
+		// rgb(188, 190, 195)
 		t.BorderColor = rgb(0x6c6f76)
 		t.TabInactiveColor = rgb(0x4589f5)
 		t.SendButtonBgColor = rgb(0x4589f5)
@@ -103,7 +111,7 @@ func (t *Theme) Switch(isDark bool) *material.Theme {
 		t.RequestMethodColor = rgb(0x8bc34a)
 		t.DropDownMenuBgColor = rgb(0x2b2d31)
 		t.MenuBgColor = rgb(0x2b2d31)
-		t.TextSelectionColor = rgb(0x6380ad)
+
 		t.NotificationBgColor = rgb(0x4589f5)
 		t.NotificationTextColor = rgb(0xffffff)
 		t.ResponseStatusColor = rgb(0x8bc34a)

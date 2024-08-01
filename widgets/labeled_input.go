@@ -59,10 +59,10 @@ func (l *LabeledInput) SetEditor(editor *widget.Editor) *LabeledInput {
 func (l *LabeledInput) GetText() string {
 	return l.Editor.Text()
 }
-func (l *LabeledInput) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
-	borderColor := theme.BorderColor
+func (l *LabeledInput) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+	borderColor := th.BorderColor
 	if gtx.Source.Focused(l.Editor) {
-		borderColor = theme.BorderColorFocused
+		borderColor = th.BorderColorFocused
 	}
 	return layout.Flex{
 		Axis:      layout.Horizontal,
@@ -71,7 +71,7 @@ func (l *LabeledInput) Layout(gtx layout.Context, theme *theme.Theme) layout.Dim
 		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 			return layout.Inset{Right: unit.Dp(l.SpaceBetween)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 				gtx.Constraints.Min.X = gtx.Dp(l.MinLabelWidth)
-				return material.Label(theme.Material(), theme.TextSize, l.Label).Layout(gtx)
+				return Label(th, l.Label).Layout(gtx)
 			})
 		}),
 		layout.Rigid(func(gtx layout.Context) layout.Dimensions {
@@ -86,8 +86,10 @@ func (l *LabeledInput) Layout(gtx layout.Context, theme *theme.Theme) layout.Dim
 				CornerRadius: unit.Dp(4),
 			}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 				return layout.UniformInset(unit.Dp(8)).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-					editor := material.Editor(theme.Material(), l.Editor, l.Hint)
-					editor.SelectionColor = theme.TextSelectionColor
+					editor := material.Editor(th.Material(), l.Editor, l.Hint)
+					editor.Color = th.TextColor
+					editor.HintColor = theme.LightBlue
+					editor.SelectionColor = th.TextSelectionColor
 					return editor.Layout(gtx)
 				})
 			})

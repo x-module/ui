@@ -45,11 +45,11 @@ func (t *TextArea) SetBorderColor(color color.NRGBA) {
 	t.borderColor = color
 }
 
-func (t *TextArea) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
-	borderColor := theme.BorderColor
+func (t *TextArea) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+	borderColor := th.BorderColor
 
 	if gtx.Source.Focused(&t.textEditor) {
-		borderColor = theme.BorderColorFocused
+		borderColor = th.BorderColorFocused
 	}
 
 	cornerRadius := unit.Dp(4)
@@ -76,10 +76,13 @@ func (t *TextArea) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensi
 			inputLayout := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
 				gtx.Constraints.Min.Y = gtx.Dp(unit.Dp(100))  // 设置最小高度为 100dp
 				gtx.Constraints.Max.Y = gtx.Constraints.Min.Y // 限制最大高度与最小高度相同
-				return material.Editor(theme.Material(), &t.textEditor, t.Placeholder).Layout(gtx)
+				editor := material.Editor(th.Material(), &t.textEditor, t.Placeholder)
+				editor.Color = th.TextColor
+				editor.HintColor = theme.LightBlue
+				editor.SelectionColor = th.TextSelectionColor
+				return editor.Layout(gtx)
 			})
 			widgets := []layout.FlexChild{inputLayout}
-
 			spacing := layout.SpaceBetween
 			return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle, Spacing: spacing}.Layout(gtx, widgets...)
 		})

@@ -19,7 +19,7 @@ type RadioButtonStyle struct {
 func CustomRadioButton(th *theme.Theme, enum *widget.Enum, text, value string) material.RadioButtonStyle {
 	rb := material.RadioButton(th.Material(), enum, value, text)
 	// 设置白色的选中颜色
-	rb.IconColor = th.Dark.Bg
+	rb.IconColor = th.TextColor
 	return rb
 }
 
@@ -40,6 +40,7 @@ func (r *RadioButtonStyle) Layout(gtx layout.Context) layout.Dimensions {
 	rb := material.RadioButton(r.theme.Material(), r.Group, r.key, r.label)
 	// 设置白色的选中颜色
 	// rb.IconColor = r.theme.Dark.Fg
-	rb.IconColor = r.theme.Palette.Fg
+	rb.IconColor = r.theme.TextColor
+	rb.Color = r.theme.TextColor
 	return rb.Layout(gtx)
 }
