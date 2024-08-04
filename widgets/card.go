@@ -58,26 +58,3 @@ func (c *Card) Layout(gtx layout.Context, children layout.Widget) layout.Dimensi
 		}),
 	)
 }
-
-func (c *Card) Layout2(gtx layout.Context, children layout.Widget) layout.Dimensions {
-	dims := layout.UniformInset(20).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-		return layout.Stack{}.Layout(gtx,
-			layout.Expanded(func(gtx layout.Context) layout.Dimensions {
-				tr := 20
-				tl := 20
-				br := 20
-				bl := 20
-				defer clip.RRect{
-					Rect: image.Rectangle{Max: image.Point{
-						X: gtx.Constraints.Min.X,
-						Y: gtx.Constraints.Min.Y,
-					}},
-					NW: tl, NE: tr, SE: br, SW: bl,
-				}.Push(gtx.Ops).Pop()
-				return fill(gtx, Hovered(c.theme.Palette.Fg))
-			}),
-			layout.Stacked(children),
-		)
-	})
-	return dims
-}

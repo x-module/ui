@@ -17,6 +17,7 @@ import (
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 	theme2 "github.com/x-module/ui/theme"
+	"github.com/x-module/ui/utils"
 	"image"
 	"image/color"
 )
@@ -35,7 +36,7 @@ type Action struct {
 
 func NewAction(th *theme2.Theme) *Action {
 	bkColor := color.NRGBA{}
-	hoveredColor := Hovered(bkColor)
+	hoveredColor := utils.Hovered(bkColor)
 	iconSize := unit.Dp(6)
 	modal := &Action{
 		theme:  th,
@@ -143,7 +144,7 @@ func (c *Action) Layout(gtx layout.Context) layout.Dimensions {
 					}),
 					DrawLineFlex(c.theme.SeparatorColor, unit.Dp(1), unit.Dp(c.width)),
 					layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
-						but := Button(c.theme, &c.actionClickable, nil, 1, "确 定", unit.Dp(50))
+						but := Button(c.theme, &c.actionClickable, "确 定", unit.Dp(50))
 						but.Background = c.theme.ConfirmButtonColor
 						but.width = unit.Dp(300)
 						return but.Layout(gtx, c.theme)

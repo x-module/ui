@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"gioui.org/app"
 	"gioui.org/layout"
 	"gioui.org/op"
+	"gioui.org/op/clip"
+	"gioui.org/op/paint"
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
@@ -12,13 +15,13 @@ import (
 )
 
 func main() {
-	var confirm *widgets.Confirm
+	var dir *widgets.DirSelector
 	var clickable widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
 
 	//w := new(app.Window)
 	var ops op.Ops
-	confirm = widgets.NewConfirm(th)
+	dir = widgets.NewDirSelector("/usr/local/go/src/", "请选择文件...")
 	go func() {
 		w := new(app.Window)
 		for {
@@ -28,8 +31,16 @@ func main() {
 				panic(e.Err)
 			case app.FrameEvent:
 				gtx := app.NewContext(&ops, e)
+				//==============================================
+				rect := clip.Rect{
+					Max: gtx.Constraints.Max,
+				}
+				paint.FillShape(gtx.Ops, th.Palette.Fg, rect.Op())
+				//=============================================
+				dir.SetOnSelectDir(func(dir string) {
+					fmt.Println(dir)
+				})
 				if clickable.Clicked(gtx) {
-					confirm.Message("确定退出吗?")
 				}
 				//==============================================
 				layout.Stack{Alignment: layout.Center}.Layout(gtx,
@@ -40,15 +51,9 @@ func main() {
 								return widgets.BlueLabel(th, "&clickable, nil, 0,  unit.Dp(100)").Layout(gtx)
 							}),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return widgets.Button(th, &clickable, "click me", unit.Dp(100)).Layout(gtx, th)
+								return dir.Layout(gtx, th)
 							}),
 						)
-					}),
-					layout.Expanded(func(gtx layout.Context) layout.Dimensions {
-						if confirm.Visible() {
-							return confirm.Layout(gtx)
-						}
-						return layout.Dimensions{}
 					}),
 				)
 				e.Frame(gtx.Ops)

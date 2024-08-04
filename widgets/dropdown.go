@@ -19,7 +19,7 @@ type DropDown struct {
 	theme           *theme2.Theme
 
 	MinWidth unit.Dp
-	MaxWidth unit.Dp
+	width    unit.Dp
 	menuInit bool
 
 	isOpen              bool
@@ -46,6 +46,11 @@ type DropDownOption struct {
 
 	isDivider bool
 	isDefault bool
+}
+
+// SetWidth 设置width
+func (c *DropDown) SetWidth(width unit.Dp) {
+	c.width = width
 }
 
 func NewDropDownOption(text string) *DropDownOption {
@@ -142,7 +147,7 @@ func (c *DropDown) SetSelectedByValue(value string) {
 	}
 }
 
-func NewDropDown(theme *theme2.Theme, options ...*DropDownOption) *DropDown {
+func NewDropDown(theme *theme2.Theme, options ...string) *DropDown {
 	c := &DropDown{
 		menuContextArea: component.ContextArea{
 			Activation:       pointer.ButtonPrimary,
@@ -153,13 +158,16 @@ func NewDropDown(theme *theme2.Theme, options ...*DropDownOption) *DropDown {
 				Axis: layout.Vertical,
 			},
 		},
-		options:      options,
 		borderWidth:  unit.Dp(1),
 		cornerRadius: unit.Dp(4),
 		theme:        theme,
 		menuInit:     true,
 	}
-
+	if len(options) > 0 {
+		for _, opt := range options {
+			c.options = append(c.options, NewDropDownOption(opt))
+		}
+	}
 	return c
 }
 
@@ -186,7 +194,7 @@ func (c *DropDown) SelectedIndex() int {
 	return c.selectedOptionIndex
 }
 
-func (c *DropDown) SetOptions(options ...*DropDownOption) {
+func (c *DropDown) SetOptions(options []*DropDownOption) {
 	c.selectedOptionIndex = 0
 	c.options = options
 	if len(c.options) > 0 {
@@ -237,7 +245,7 @@ func (c *DropDown) box(gtx layout.Context, theme *theme2.Theme, text string, max
 				}),
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 					gtx.Constraints.Min.X = gtx.Dp(16)
-					return ExpandIcon.Layout(gtx, theme.Palette.Fg)
+					return ExpandIcon.Layout(gtx, theme.TextColor)
 				}),
 			)
 		})
@@ -285,7 +293,7 @@ func (c *DropDown) Layout(gtx layout.Context, theme *theme2.Theme) layout.Dimens
 		text = c.options[c.selectedOptionIndex].Text
 	}
 
-	box := c.box(gtx, theme, text, c.MaxWidth)
+	box := c.box(gtx, theme, text, c.width)
 	return layout.Stack{}.Layout(gtx,
 		layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 			return box
@@ -298,11 +306,11 @@ func (c *DropDown) Layout(gtx layout.Context, theme *theme2.Theme) layout.Dimens
 				}
 				return offset.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 					gtx.Constraints.Min.X = gtx.Dp(c.MinWidth)
-					if c.MaxWidth != 0 {
-						gtx.Constraints.Max.X = gtx.Dp(c.MaxWidth)
+					if c.width != 0 {
+						gtx.Constraints.Max.X = gtx.Dp(c.width)
 					}
 					m := component.Menu(theme.Material(), &c.menu)
-					m.SurfaceStyle.Fill = theme.DropDownMenuBgColor
+					m.SurfaceStyle.Fill = theme.Palette.Fg
 					return m.Layout(gtx)
 				})
 			})

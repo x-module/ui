@@ -4,6 +4,8 @@ import (
 	"gioui.org/app"
 	"gioui.org/layout"
 	"gioui.org/op"
+	"gioui.org/op/clip"
+	"gioui.org/op/paint"
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
@@ -12,13 +14,13 @@ import (
 )
 
 func main() {
-	var confirm *widgets.Confirm
+	var labelInput *widgets.LabeledInput
 	var clickable widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
 
 	//w := new(app.Window)
 	var ops op.Ops
-	confirm = widgets.NewConfirm(th)
+	labelInput = widgets.NewLabeledInput("用户名", "请输入用户名")
 	go func() {
 		w := new(app.Window)
 		for {
@@ -28,8 +30,14 @@ func main() {
 				panic(e.Err)
 			case app.FrameEvent:
 				gtx := app.NewContext(&ops, e)
+				//==============================================
+				rect := clip.Rect{
+					Max: gtx.Constraints.Max,
+				}
+				paint.FillShape(gtx.Ops, th.Palette.Fg, rect.Op())
+				//=============================================
+
 				if clickable.Clicked(gtx) {
-					confirm.Message("确定退出吗?")
 				}
 				//==============================================
 				layout.Stack{Alignment: layout.Center}.Layout(gtx,
@@ -40,15 +48,9 @@ func main() {
 								return widgets.BlueLabel(th, "&clickable, nil, 0,  unit.Dp(100)").Layout(gtx)
 							}),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return widgets.Button(th, &clickable, "click me", unit.Dp(100)).Layout(gtx, th)
+								return labelInput.Layout(gtx, th)
 							}),
 						)
-					}),
-					layout.Expanded(func(gtx layout.Context) layout.Dimensions {
-						if confirm.Visible() {
-							return confirm.Layout(gtx)
-						}
-						return layout.Dimensions{}
 					}),
 				)
 				e.Frame(gtx.Ops)

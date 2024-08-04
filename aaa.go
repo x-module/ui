@@ -2,127 +2,92 @@ package main
 
 import (
 	"gioui.org/app"
-	"gioui.org/io/pointer"
+	"gioui.org/font/gofont"
+	"gioui.org/io/system"
 	"gioui.org/layout"
 	"gioui.org/op"
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-	"gioui.org/x/component"
 	"image"
+	"image/color"
 )
 
-//type MenuState struct {
-//	OptionList layout.List
-//	Options    []func(gtx C) D
-//}
-
-var th = material.NewTheme()
-
-var menuState = &component.MenuState{
-	OptionList: layout.List{Axis: layout.Vertical},
-	Options:    []func(gtx layout.Context) layout.Dimensions{},
-}
-
-type MenuItem struct {
-	Label     string
-	Clickable widget.Clickable
-}
-
-type Menu struct {
-	Items []MenuItem
-}
-
-func NewMenu(items []string) *Menu {
-	menuItems := make([]MenuItem, len(items))
-	for i, item := range items {
-		menuItems[i] = MenuItem{Label: item}
-	}
-	return &Menu{Items: menuItems}
-}
-
-func (m *Menu) Layout(gtx layout.Context, th *material.Theme) layout.Dimensions {
-	menu := component.Menu(th, menuState)
-	return menu.Layout(gtx)
-}
-
-var menuContextArea = component.ContextArea{
-	Activation:       pointer.ButtonPrimary,
-	AbsolutePosition: true,
-}
-
 func main() {
-	//w := new(app.Window)
-	menu := NewMenu([]string{"Item 1", "Item 2", "Item 3"})
-
-	menuContextArea.Active()
-	var ops op.Ops
 	go func() {
-		w := new(app.Window)
-		for {
-			e := w.Event()
-			switch e := e.(type) {
-			case app.DestroyEvent:
-				panic(e.Err)
-			case app.FrameEvent:
-				gtx := app.NewContext(&ops, e)
-				layout.Flex{Axis: layout.Vertical}.Layout(gtx,
-					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-						//gtx.Constraints.Max.Y = 30
-						return layout.Stack{}.Layout(gtx,
-							layout.Stacked(func(gtx layout.Context) layout.Dimensions {
-								return material.Label(th, unit.Sp(20), "open").Layout(gtx)
-							}),
-							layout.Expanded(func(gtx layout.Context) layout.Dimensions {
-								return menuContextArea.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-									menuState.Options = []func(gtx layout.Context) layout.Dimensions{
-										func(gtx layout.Context) layout.Dimensions {
-											itm := component.MenuItem(th, new(widget.Clickable), "aaa")
-											//itm.Label.Color = theme2.White
-											return itm.Layout(gtx)
-										},
-										func(gtx layout.Context) layout.Dimensions {
-											itm := component.MenuItem(th, new(widget.Clickable), "bbb")
-											//itm.Label.Color = theme2.White
-											return itm.Layout(gtx)
-										}, func(gtx layout.Context) layout.Dimensions {
-											itm := component.MenuItem(th, new(widget.Clickable), "ccc")
-											//itm.Label.Color = theme2.White
-											return itm.Layout(gtx)
-										},
-										func(gtx layout.Context) layout.Dimensions {
-											itm := component.MenuItem(th, new(widget.Clickable), "dddd")
-											//itm.Label.Color = theme2.White
-											return itm.Layout(gtx)
-										},
-									}
-									offset := layout.Inset{
-										Top:  unit.Dp(20),
-										Left: unit.Dp(4),
-									}
-									return offset.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-										gtx.Constraints.Min = image.Point{}
-										//m := component.Menu(theme.Material(), &node.menu)
-										//m.SurfaceStyle.Fill = theme.MenuBgColor
-										//return m.Layout(gtx)
-										//
-										return menu.Layout(gtx, th)
-									})
-								})
-							}),
-						)
-					}),
-					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-						return material.Label(th, unit.Sp(20), "adfasdfasd").Layout(gtx)
-					}), layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-						return material.Label(th, unit.Sp(20), "adfasdfasd").Layout(gtx)
-					}), layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-						return material.Label(th, unit.Sp(20), "adfasdfasd").Layout(gtx)
-					}),
-				)
-				e.Frame(gtx.Ops)
-			}
+		w := app.NewWindow()
+		if err := loop(w); err != nil {
+			panic(err)
 		}
+		app.Main()
 	}()
-	app.Main()
+}
+
+func loop(w *app.Window) error {
+	th := material.NewTheme(gofont.Collection())
+	var (
+		passwordEditor  widget.Editor
+		showPasswordBtn widget.Clickable
+		showPassword    bool
+	)
+	passwordEditor.SingleLine = true
+
+	for e := range w.Events() {
+		switch e := e.(type) {
+		case system.FrameEvent:
+			gtx := layout.NewContext(&op.Ops{}, e)
+			layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+				return layout.UniformInset(unit.Dp(16)).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+					return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
+						layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+							return material.Label(th, unit.Sp(16), "Password:").Layout(gtx)
+						}),
+						layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+							return layout.Flex{Axis: layout.Horizontal}.Layout(gtx,
+								layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
+									return PasswordEditor(th, &passwordEditor, showPassword).Layout(gtx)
+								}),
+								layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+									return ShowPasswordButton(th, &showPasswordBtn).Layout(gtx)
+								}),
+							)
+						}),
+					)
+				})
+			})
+
+			if showPasswordBtn.Clicked() {
+				showPassword = !showPassword
+			}
+
+			e.Frame(gtx.Ops)
+		case system.DestroyEvent:
+			return e.Err
+		}
+	}
+	return nil
+}
+
+func PasswordEditor(th *material.Theme, editor *widget.Editor, showPassword bool) material.EditorStyle {
+	if !showPassword {
+		maskedText := ""
+		for range editor.Text() {
+			maskedText += "•"
+		}
+		editor.SetText(maskedText)
+	}
+
+	editorStyle := material.Editor(th, editor, "Password")
+	editorStyle.Color = color.NRGBA{R: 0, G: 0, B: 0, A: 255}
+	editorStyle.TextSize = unit.Sp(16)
+	editorStyle.Hint = "Enter your password"
+	editorStyle.Mask = !showPassword
+	return editorStyle
+}
+
+func ShowPasswordButton(th *material.Theme, btn *widget.Clickable) material.ButtonStyle {
+	icon := material.IconButton(th, btn, &widget.Icon{src: image.NewUniform(color.NRGBA{0, 0, 0, 0})})
+	icon.Text = "👁️" // Use an emoji or replace with an actual icon
+	icon.Size = unit.Dp(24)
+	return icon
 }

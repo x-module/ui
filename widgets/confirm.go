@@ -17,6 +17,7 @@ import (
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 	theme2 "github.com/x-module/ui/theme"
+	"github.com/x-module/ui/utils"
 	"image"
 	"image/color"
 )
@@ -37,7 +38,7 @@ type Confirm struct {
 
 func NewConfirm(th *theme2.Theme) *Confirm {
 	bkColor := color.NRGBA{}
-	hoveredColor := Hovered(bkColor)
+	hoveredColor := utils.Hovered(bkColor)
 	iconSize := unit.Dp(6)
 	modal := &Confirm{
 		theme:  th,
@@ -158,7 +159,7 @@ func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
 					layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
 						return layout.Flex{Axis: layout.Horizontal}.Layout(gtx,
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								but := Button(c.theme, &c.cancelClickable, nil, 1, "取消", unit.Dp(50))
+								but := Button(c.theme, &c.cancelClickable, "取消", unit.Dp(50))
 								but.Background = c.theme.ConfirmButtonColor
 								but.width = unit.Dp(150)
 								return but.Layout(gtx, c.theme)
@@ -167,7 +168,7 @@ func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
 								return DrawLine(gtx, c.theme.SeparatorColor, unit.Dp(35), unit.Dp(1))
 							}),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								but := Button(c.theme, &c.confirmClickable, nil, 1, "确认", unit.Dp(50))
+								but := Button(c.theme, &c.confirmClickable, "确认", unit.Dp(50))
 								but.Background = c.theme.ConfirmButtonColor
 								but.width = unit.Dp(150)
 								return but.Layout(gtx, c.theme)

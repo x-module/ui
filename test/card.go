@@ -12,13 +12,11 @@ import (
 )
 
 func main() {
-	var confirm *widgets.Confirm
 	var clickable widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
-
+	var card = widgets.NewCard(th)
 	//w := new(app.Window)
 	var ops op.Ops
-	confirm = widgets.NewConfirm(th)
 	go func() {
 		w := new(app.Window)
 		for {
@@ -29,26 +27,24 @@ func main() {
 			case app.FrameEvent:
 				gtx := app.NewContext(&ops, e)
 				if clickable.Clicked(gtx) {
-					confirm.Message("确定退出吗?")
 				}
+
 				//==============================================
 				layout.Stack{Alignment: layout.Center}.Layout(gtx,
 					layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 						return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								gtx.Constraints.Min.Y = gtx.Dp(unit.Dp(400))
-								return widgets.BlueLabel(th, "&clickable, nil, 0,  unit.Dp(100)").Layout(gtx)
+								return card.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+									return widgets.ButtonWithIcon(th, &clickable, widgets.DeleteIcon, 0, "click me", unit.Dp(100)).Layout(gtx, th)
+								})
 							}),
+							layout.Rigid(layout.Spacer{Height: unit.Dp(20)}.Layout),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return widgets.Button(th, &clickable, "click me", unit.Dp(100)).Layout(gtx, th)
+								return card.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+									return widgets.ButtonWithIcon(th, &clickable, widgets.DeleteIcon, 0, "click me", unit.Dp(100)).Layout(gtx, th)
+								})
 							}),
 						)
-					}),
-					layout.Expanded(func(gtx layout.Context) layout.Dimensions {
-						if confirm.Visible() {
-							return confirm.Layout(gtx)
-						}
-						return layout.Dimensions{}
 					}),
 				)
 				e.Frame(gtx.Ops)

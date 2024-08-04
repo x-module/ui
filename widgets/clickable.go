@@ -6,6 +6,7 @@ import (
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
 	"gioui.org/widget"
+	"github.com/x-module/ui/utils"
 	"image"
 	"image/color"
 )
@@ -30,7 +31,7 @@ func Clickable(gtx layout.Context, button *widget.Clickable, w layout.Widget) la
 				}.Push(gtx.Ops).Pop()
 				//defer clip.Rect{Max: gtx.Constraints.Min}.Push(gtx.Ops).Pop()
 				if button.Hovered() {
-					paint.Fill(gtx.Ops, Hovered(color.NRGBA{}))
+					paint.Fill(gtx.Ops, utils.Hovered(color.NRGBA{}))
 				}
 				return layout.Dimensions{Size: gtx.Constraints.Min}
 			},
