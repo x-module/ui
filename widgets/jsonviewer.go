@@ -1,16 +1,16 @@
 package widgets
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/x-module/ui/theme"
-	"strings"
-
 	"gioui.org/font"
 	"gioui.org/layout"
 	"gioui.org/text"
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
+	"github.com/x-module/ui/theme"
+	"strings"
 )
 
 type JsonViewer struct {
@@ -33,10 +33,15 @@ func NewJsonViewer() *JsonViewer {
 	}
 }
 
-func (j *JsonViewer) SetData(data string) {
-	j.data = data
-	j.lines = strings.Split(data, "\n")
+func (j *JsonViewer) SetData(data any) {
 
+	// 使用MarshalIndent序列化map，生成格式化的JSON字符串
+	// 第二个参数是每一行输出的前缀（通常为空）
+	// 第三个参数是每一级缩进的字符串，这里使用4个空格作为缩进
+	formattedJSON, _ := json.MarshalIndent(data, "", "    ")
+	jsonData := string(formattedJSON)
+	j.data = jsonData
+	j.lines = strings.Split(jsonData, "\n")
 	j.selectables = make([]*widget.Selectable, len(j.lines))
 	for i := range j.selectables {
 		j.selectables[i] = &widget.Selectable{}

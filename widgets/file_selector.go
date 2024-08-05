@@ -22,10 +22,10 @@ type FileSelector struct {
 	width   unit.Dp
 }
 
-func NewFileSelector(filename string, explorer *Explorer, extensions ...string) *FileSelector {
+func NewFileSelector(filename string, explorer *Explorer, placeholder string, extensions ...string) *FileSelector {
 	bf := &FileSelector{
 		FileName:   filename,
-		textField:  NewTextField(filename, "File"),
+		textField:  NewTextField(filename, placeholder),
 		explorer:   explorer,
 		extensions: extensions,
 		width:      unit.Dp(200),

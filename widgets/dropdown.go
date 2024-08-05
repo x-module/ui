@@ -237,7 +237,7 @@ func (c *DropDown) box(gtx layout.Context, theme *theme2.Theme, text string, max
 				}),
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 					gtx.Constraints.Min.X = gtx.Dp(16)
-					return ExpandIcon.Layout(gtx, theme.Palette.Fg)
+					return ExpandIcon.Layout(gtx, theme.TextColor)
 				}),
 			)
 		})

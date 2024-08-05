@@ -8,35 +8,30 @@ import (
 	"github.com/x-module/ui/theme"
 )
 
-// DirSelector is a widget that allows the user to select a file. it handles the file selection and display the file name.
-// TODO replace binary file with this widget
 type DirSelector struct {
 	textField *TextField
-	FileName  string
+	DirName   string
 
-	extensions []string
-
-	explorer     *Explorer
-	onSelectFile func()
+	explorer    *Explorer
+	onSelectDir func(dir string)
 
 	changed bool
 	width   unit.Dp
 }
 
-func NewDirSelector(filename string, explorer *Explorer, extensions ...string) *DirSelector {
+func NewDirSelector(DirName string, explorer *Explorer, placeholder string) *DirSelector {
 	bf := &DirSelector{
-		FileName:   filename,
-		textField:  NewTextField(filename, "File"),
-		explorer:   explorer,
-		extensions: extensions,
-		width:      unit.Dp(200),
+		DirName:   DirName,
+		textField: NewTextField(DirName, placeholder),
+		explorer:  explorer,
+		width:     unit.Dp(200),
 	}
 
-	bf.textField.SetText(filename)
+	bf.textField.SetText(DirName)
 	bf.textField.IconPosition = IconPositionEnd
 	bf.textField.SetMinWidth(200)
 	bf.updateIcon()
-	bf.SetOnSelectFile(bf.handleExplorerSelect)
+	bf.setOnSelectDir(bf.handleExplorerSelect)
 	return bf
 }
 
@@ -59,26 +54,31 @@ func (b *DirSelector) handleExplorerSelect() {
 	if dir == "" {
 		return
 	}
-	b.SetFileName(dir)
+	b.SetDirName(dir)
 	b.changed = true
+	if b.onSelectDir != nil {
+		b.onSelectDir(dir)
+	}
 }
 
-func (b *DirSelector) SetOnSelectFile(f func()) {
-	b.onSelectFile = f
+func (b *DirSelector) SetOnSelectDir(f func(dir string)) {
+	b.onSelectDir = f
+}
+
+func (b *DirSelector) setOnSelectDir(f func()) {
 	b.textField.SetOnIconClick(func() {
-		if b.FileName != "" {
-			b.RemoveFile()
+		if b.DirName != "" {
+			b.RemoveDir()
 			b.changed = true
 			return
 		} else {
-			// Select file
 			f()
 		}
 	})
 }
 
-func (b *DirSelector) SetFileName(name string) {
-	b.FileName = name
+func (b *DirSelector) SetDirName(name string) {
+	b.DirName = name
 	b.textField.SetText(name)
 	b.updateIcon()
 	b.changed = true
@@ -90,19 +90,19 @@ func (b *DirSelector) Changed() bool {
 	return out
 }
 
-func (b *DirSelector) RemoveFile() {
-	b.FileName = ""
+func (b *DirSelector) RemoveDir() {
+	b.DirName = ""
 	b.textField.SetText("")
 	b.updateIcon()
 	b.changed = true
 }
 
-func (b *DirSelector) GetFilePath() string {
-	return b.FileName
+func (b *DirSelector) GetDirPath() string {
+	return b.DirName
 }
 
 func (b *DirSelector) updateIcon() {
-	if b.FileName != "" {
+	if b.DirName != "" {
 		b.textField.SetIcon(DeleteIcon, IconPositionEnd)
 	} else {
 		b.textField.SetIcon(UploadIcon, IconPositionEnd)
