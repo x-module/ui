@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"github.com/x-module/ui/theme"
+	"github.com/x-module/ui/utils"
 	"image"
 
 	"gioui.org/layout"
@@ -73,7 +74,7 @@ func (b *BadgeInput) itemLayout(gtx layout.Context, theme *theme.Theme, item *Ba
 						layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 							return layout.UniformInset(unit.Dp(3)).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 								bkColor := theme.BadgeBgColor
-								hoveredColor := Hovered(bkColor)
+								hoveredColor := utils.Hovered(bkColor)
 								if item.closeButton.Hovered() {
 									bkColor = hoveredColor
 								}

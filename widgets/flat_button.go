@@ -5,6 +5,7 @@ import (
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
 	"github.com/x-module/ui/theme"
+	"github.com/x-module/ui/utils"
 	"image"
 	"image/color"
 
@@ -96,9 +97,9 @@ func (f *FlatButton) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimen
 					defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, f.CornerRadius).Push(gtx.Ops).Pop()
 					background := f.BackgroundColor
 					if gtx.Source == (input.Source{}) {
-						background = Disabled(f.BackgroundColor)
+						background = utils.Disabled(f.BackgroundColor)
 					} else if f.Clickable.Hovered() || gtx.Focused(f.Clickable) {
-						background = Hovered(f.BackgroundColor)
+						background = utils.Hovered(f.BackgroundColor)
 					}
 					paint.Fill(gtx.Ops, background)
 					return layout.Dimensions{Size: gtx.Constraints.Min}

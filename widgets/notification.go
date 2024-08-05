@@ -36,9 +36,6 @@ func (n *Notification) SetHeight(height unit.Dp) {
 }
 
 func (n *Notification) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
-	// fmt.Println("==========n.EndAt == (time.Time{})==========:", n.EndAt == (time.Time{}))
-	// fmt.Println("========== time.Now().After(n.EndAt)===========:", time.Now().After(n.EndAt))
-
 	if n.Text == "" || n.EndAt == (time.Time{}) || time.Now().After(n.EndAt) {
 		return layout.Dimensions{}
 	}
@@ -63,7 +60,6 @@ func (n *Notification) Layout(gtx layout.Context, theme *theme.Theme) layout.Dim
 		},
 	)
 	call := macro.Stop()
-
 	return layout.SE.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		return layout.Inset{Bottom: unit.Dp(40), Right: unit.Dp(40)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 			call.Add(gtx.Ops)

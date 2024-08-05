@@ -30,12 +30,16 @@ type Theme struct {
 	isDark bool
 	Dark   Dark
 
-	ConfirmButtonColor color.NRGBA
+	//============== new ===============
+	MaskLayerBgColor color.NRGBA //遮罩层背景颜色
 
+	//==================================
+	ConfirmButtonColor    color.NRGBA
 	LoaderColor           color.NRGBA
 	BorderColor           color.NRGBA
 	BorderColorFocused    color.NRGBA
 	TextColor             color.NRGBA
+	IconColor             color.NRGBA
 	ButtonTextColor       color.NRGBA
 	SendButtonBgColor     color.NRGBA
 	DeleteButtonBgColor   color.NRGBA
@@ -87,10 +91,17 @@ func (t *Theme) Switch(isDark bool) *material.Theme {
 	t.isDark = isDark
 
 	if isDark {
+
+		//============== new ===============
+		t.MaskLayerBgColor = color.NRGBA{R: 28, G: 28, B: 30, A: 230} //遮罩层背景颜色
+
+		//==================================
+
 		// rgb(43, 45, 48)
 		t.Theme.Palette.Fg = color.NRGBA{R: 44, G: 44, B: 48, A: 255}
 		t.Theme.Palette.Bg = color.NRGBA{R: 28, G: 28, B: 30, A: 255}
 		t.TextColor = color.NRGBA{R: 188, G: 190, B: 195, A: 255}
+		t.IconColor = color.NRGBA{R: 188, G: 190, B: 195, A: 255}
 		t.TextSelectionColor = rgb(0x6380ad)
 		t.LoaderColor = rgb(0xd7dade)
 		t.Theme.Palette.ContrastBg = color.NRGBA{R: 30, G: 31, B: 34, A: 255}

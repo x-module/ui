@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"github.com/x-module/ui/theme"
+	"github.com/x-module/ui/utils"
 	"image"
 	"image/color"
 	"math"
@@ -53,7 +54,25 @@ type IconButtonStyle struct {
 	Description string
 }
 
-func Button(th *theme.Theme, button *widget.Clickable, icon *widget.Icon, iconPosition int, txt string, width unit.Dp) ButtonStyle {
+func Button(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp) ButtonStyle {
+	b := ButtonStyle{
+		Text:         txt,
+		Color:        th.TextColor,
+		CornerRadius: 4,
+		Background:   th.Palette.Bg,
+		TextSize:     th.TextSize * 14.0 / 16.0,
+		Inset: layout.Inset{
+			Top: 8, Bottom: 8,
+			Left: 8, Right: 8,
+		},
+		Button: button,
+		shaper: th.Shaper,
+		width:  width,
+	}
+	b.Font.Typeface = th.Face
+	return b
+}
+func ButtonWithIcon(th *theme.Theme, button *widget.Clickable, icon *widget.Icon, iconPosition int, txt string, width unit.Dp) ButtonStyle {
 	b := ButtonStyle{
 		Text:         txt,
 		Icon:         icon,
@@ -129,9 +148,9 @@ func (b ButtonLayoutStyle) Layout(gtx layout.Context, w layout.Widget) layout.Di
 				background := b.Background
 				switch {
 				case !gtx.Enabled():
-					background = Disabled(b.Background)
+					background = utils.Disabled(b.Background)
 				case b.Button.Hovered() || gtx.Focused(b.Button):
-					background = Hovered(b.Background)
+					background = utils.Hovered(b.Background)
 				}
 				paint.Fill(gtx.Ops, background)
 				for _, c := range b.Button.History() {
@@ -234,7 +253,7 @@ func drawInk(gtx layout.Context, c widget.Press) {
 	alpha := 0.7 * alphaBezier
 	const col = 0.8
 	ba, bc := byte(alpha*0xff), byte(col*0xff)
-	rgba := MulAlpha(color.NRGBA{A: 0xff, R: bc, G: bc, B: bc}, ba)
+	rgba := utils.MulAlpha(color.NRGBA{A: 0xff, R: bc, G: bc, B: bc}, ba)
 	ink := paint.ColorOp{Color: rgba}
 	ink.Add(gtx.Ops)
 	rr := size / 2

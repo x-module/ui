@@ -16,6 +16,7 @@ import (
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 	theme2 "github.com/x-module/ui/theme"
+	"github.com/x-module/ui/utils"
 	"image"
 	"image/color"
 	"sync"
@@ -34,7 +35,7 @@ type Modal struct {
 
 func NewModal(th *theme2.Theme) *Modal {
 	bkColor := color.NRGBA{}
-	hoveredColor := Hovered(bkColor)
+	hoveredColor := utils.Hovered(bkColor)
 	iconSize := unit.Dp(16)
 	modal := &Modal{
 		theme:  th,

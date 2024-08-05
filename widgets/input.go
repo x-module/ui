@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"github.com/x-module/ui/theme"
+	"golang.org/x/exp/shiny/materialdesign/icons"
 	"image"
 	"image/color"
 
@@ -16,7 +17,7 @@ const (
 	IconPositionEnd   = 1
 )
 
-type TextField struct {
+type Input struct {
 	textEditor widget.Editor
 	Icon       *widget.Icon
 	iconClick  widget.Clickable
@@ -31,46 +32,55 @@ type TextField struct {
 	onIconClick  func()
 	onTextChange func(text string)
 	borderColor  color.NRGBA
+
+	showPassword bool
 }
 
-func NewTextField(text, placeholder string) *TextField {
-	t := &TextField{
+func NewInput(text, placeholder string) *Input {
+	t := &Input{
 		textEditor:  widget.Editor{},
 		Text:        text,
 		Placeholder: placeholder,
+		onIconClick: func() {},
 	}
-
+	t.textEditor.Mask = '*'
 	t.textEditor.SetText(text)
 	t.textEditor.SingleLine = true
 	return t
 }
+func (t *Input) Password() {
+	t.textEditor.Mask = '*'
+	t.Icon, _ = widget.NewIcon(icons.ActionVisibilityOff)
+	t.IconPosition = IconPositionEnd
+	t.showPassword = false
+}
 
-func (t *TextField) SetText(text string) {
+func (t *Input) SetText(text string) {
 	t.textEditor.SetText(text)
 }
 
-func (t *TextField) SetIcon(icon *widget.Icon, position int) {
+func (t *Input) SetIcon(icon *widget.Icon, position int) {
 	t.Icon = icon
 	t.IconPosition = position
 }
 
-func (t *TextField) SetMinWidth(width int) {
+func (t *Input) SetWidth(width int) {
 	t.size.X = width
 }
 
-func (t *TextField) SetBorderColor(color color.NRGBA) {
+func (t *Input) SetBorderColor(color color.NRGBA) {
 	t.borderColor = color
 }
 
-func (t *TextField) SetOnTextChange(f func(text string)) {
+func (t *Input) SetOnTextChange(f func(text string)) {
 	t.onTextChange = f
 }
 
-func (t *TextField) SetOnIconClick(f func()) {
+func (t *Input) SetOnIconClick(f func()) {
 	t.onIconClick = f
 }
 
-func (t *TextField) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (t *Input) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 	borderColor := th.BorderColor
 	if gtx.Source.Focused(&t.textEditor) {
 		borderColor = th.BorderColorFocused
@@ -120,7 +130,6 @@ func (t *TextField) Layout(gtx layout.Context, th *theme.Theme) layout.Dimension
 				return editor.Layout(gtx)
 			})
 			widgets := []layout.FlexChild{inputLayout}
-
 			spacing := layout.SpaceBetween
 			if t.Icon != nil {
 				iconLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
@@ -129,14 +138,21 @@ func (t *TextField) Layout(gtx layout.Context, th *theme.Theme) layout.Dimension
 						clk = &t.iconClick
 						if t.iconClick.Clicked(gtx) {
 							t.onIconClick()
+							if !t.showPassword {
+								t.textEditor.Mask = 0
+								t.Icon = ActionVisibilityIcon
+								t.showPassword = true
+							} else {
+								t.textEditor.Mask = '*'
+								t.Icon = ActionVisibilityOffIcon
+								t.showPassword = false
+							}
 						}
 					}
-
-					b := Button(th, clk, t.Icon, IconPositionStart, "", 0)
+					b := ButtonWithIcon(th, clk, t.Icon, IconPositionStart, "", 0)
 					b.Inset = layout.Inset{Left: unit.Dp(8), Right: unit.Dp(2), Top: unit.Dp(2), Bottom: unit.Dp(2)}
 					return b.Layout(gtx, th)
 				})
-
 				if t.IconPosition == IconPositionEnd {
 					widgets = []layout.FlexChild{inputLayout, iconLayout}
 				} else {
@@ -144,7 +160,6 @@ func (t *TextField) Layout(gtx layout.Context, th *theme.Theme) layout.Dimension
 					spacing = layout.SpaceEnd
 				}
 			}
-
 			return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle, Spacing: spacing}.Layout(gtx, widgets...)
 		})
 	})

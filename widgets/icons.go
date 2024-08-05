@@ -160,3 +160,12 @@ var CleanIcon *widget.Icon = func() *widget.Icon {
 	icon, _ := widget.NewIcon(icons.EditorFormatColorText)
 	return icon
 }()
+
+var ActionVisibilityIcon *widget.Icon = func() *widget.Icon {
+	icon, _ := widget.NewIcon(icons.ActionVisibility)
+	return icon
+}()
+var ActionVisibilityOffIcon *widget.Icon = func() *widget.Icon {
+	icon, _ := widget.NewIcon(icons.ActionVisibilityOff)
+	return icon
+}()

@@ -6,6 +6,7 @@ import (
 	"gioui.org/op/paint"
 	"github.com/x-module/ui/internal/safemap"
 	"github.com/x-module/ui/theme"
+	"github.com/x-module/ui/utils"
 	"image"
 	"image/color"
 	"unicode"
@@ -148,7 +149,7 @@ func (tabs *Tabs) Clickable(gtx layout.Context, button *widget.Clickable, w layo
 				}.Push(gtx.Ops).Pop()
 				// defer clip.Rect{Max: gtx.Constraints.Min}.Push(gtx.Ops).Pop()
 				if button.Hovered() {
-					paint.Fill(gtx.Ops, Hovered(color.NRGBA{}))
+					paint.Fill(gtx.Ops, utils.Hovered(color.NRGBA{}))
 				}
 				return layout.Dimensions{Size: gtx.Constraints.Min}
 			},
@@ -217,7 +218,7 @@ func (tabs *Tabs) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensio
 							layout.Rigid(layout.Spacer{Width: unit.Dp(2)}.Layout),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 								bkColor := color.NRGBA{}
-								hoveredColor := Hovered(bkColor)
+								hoveredColor := utils.Hovered(bkColor)
 								if t.btn.Hovered() {
 									bkColor = hoveredColor
 								}

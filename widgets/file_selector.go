@@ -10,13 +10,13 @@ import (
 // FileSelector is a widget that allows the user to select a file. it handles the file selection and display the file name.
 // TODO replace binary file with this widget
 type FileSelector struct {
-	textField *TextField
+	textField *Input
 	FileName  string
 
 	extensions []string
 
 	explorer     *Explorer
-	onSelectFile func()
+	onSelectFile func(file string)
 
 	changed bool
 	width   unit.Dp
@@ -25,7 +25,7 @@ type FileSelector struct {
 func NewFileSelector(filename string, explorer *Explorer, placeholder string, extensions ...string) *FileSelector {
 	bf := &FileSelector{
 		FileName:   filename,
-		textField:  NewTextField(filename, placeholder),
+		textField:  NewInput(filename, placeholder),
 		explorer:   explorer,
 		extensions: extensions,
 		width:      unit.Dp(200),
@@ -33,9 +33,9 @@ func NewFileSelector(filename string, explorer *Explorer, placeholder string, ex
 
 	bf.textField.SetText(filename)
 	bf.textField.IconPosition = IconPositionEnd
-	bf.textField.SetMinWidth(200)
+	bf.textField.SetWidth(200)
 	bf.updateIcon()
-	bf.SetOnSelectFile(bf.handleExplorerSelect)
+	bf.setOnSelectFile()
 	return bf
 }
 
@@ -49,26 +49,10 @@ func (b *FileSelector) SetExplorer(explorer *Explorer) {
 }
 
 func (b *FileSelector) handleExplorerSelect() {
-	if b.explorer == nil {
-		return
-	}
 
-	b.explorer.ChoseFile(func(result Result) {
-		if result.Error != nil {
-			fmt.Println("failed to get file", result.Error)
-			return
-		}
-		if result.FilePath == "" {
-			return
-		}
-
-		b.SetFileName(result.FilePath)
-		b.changed = true
-	}, b.extensions...)
 }
 
-func (b *FileSelector) SetOnSelectFile(f func()) {
-	b.onSelectFile = f
+func (b *FileSelector) setOnSelectFile() {
 	b.textField.SetOnIconClick(func() {
 		if b.FileName != "" {
 			b.RemoveFile()
@@ -76,9 +60,28 @@ func (b *FileSelector) SetOnSelectFile(f func()) {
 			return
 		} else {
 			// Select file
-			f()
+			if b.explorer == nil {
+				return
+			}
+			b.explorer.ChoseFile(func(result Result) {
+				if result.Error != nil {
+					fmt.Println("failed to get file", result.Error)
+					return
+				}
+				if result.FilePath == "" {
+					return
+				}
+				b.SetFileName(result.FilePath)
+				if b.onSelectFile != nil {
+					b.onSelectFile(result.FilePath)
+				}
+				b.changed = true
+			}, b.extensions...)
 		}
 	})
+}
+func (b *FileSelector) SetOnSelectFile(f func(file string)) {
+	b.onSelectFile = f
 }
 
 func (b *FileSelector) SetFileName(name string) {

@@ -2,6 +2,7 @@ package widgets
 
 import (
 	"github.com/x-module/ui/theme"
+	"github.com/x-module/ui/utils"
 	"image"
 	"image/color"
 
@@ -34,7 +35,7 @@ func (ib *IconButton) Layout(gtx layout.Context, theme *theme.Theme) layout.Dime
 	}
 
 	if ib.BackgroundColorHover == (color.NRGBA{}) {
-		ib.BackgroundColorHover = Hovered(ib.BackgroundColor)
+		ib.BackgroundColorHover = utils.Hovered(ib.BackgroundColor)
 	}
 
 	for ib.Clickable.Clicked(gtx) {
@@ -51,7 +52,7 @@ func (ib *IconButton) Layout(gtx layout.Context, theme *theme.Theme) layout.Dime
 				defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, 4).Push(gtx.Ops).Pop()
 				background := ib.BackgroundColor
 				if gtx.Source == (input.Source{}) {
-					background = Disabled(ib.BackgroundColor)
+					background = utils.Disabled(ib.BackgroundColor)
 				} else if (ib.Clickable.Hovered() || (gtx.Focused(ib.Clickable) && !ib.SkipFocus)) && ib.Hovered {
 					background = ib.BackgroundColorHover
 				}

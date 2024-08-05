@@ -9,72 +9,67 @@ import (
 )
 
 type DirSelector struct {
-	textField *TextField
+	textField *Input
 	DirName   string
 
-	explorer    *Explorer
+	windowTitle string
 	onSelectDir func(dir string)
 
 	changed bool
 	width   unit.Dp
 }
 
-func NewDirSelector(DirName string, explorer *Explorer, placeholder string) *DirSelector {
+func NewDirSelector(dirName string, placeholder string) *DirSelector {
 	bf := &DirSelector{
-		DirName:   DirName,
-		textField: NewTextField(DirName, placeholder),
-		explorer:  explorer,
-		width:     unit.Dp(200),
+		DirName:     dirName,
+		textField:   NewInput(dirName, placeholder),
+		width:       unit.Dp(200),
+		windowTitle: "Select Directory",
 	}
-
-	bf.textField.SetText(DirName)
+	bf.textField.SetText(dirName)
 	bf.textField.IconPosition = IconPositionEnd
-	bf.textField.SetMinWidth(200)
+	bf.textField.SetWidth(200)
 	bf.updateIcon()
-	bf.setOnSelectDir(bf.handleExplorerSelect)
+	bf.setOnSelectDir()
 	return bf
 }
 
-// 设置width
+// SetWidth 设置width
 func (b *DirSelector) SetWidth(width unit.Dp) {
 	b.width = width
 }
 
-func (b *DirSelector) SetExplorer(explorer *Explorer) {
-	b.explorer = explorer
+// SetWindowTitle 设置windowTitle
+func (b *DirSelector) SetWindowTitle(title string) {
+	b.windowTitle = title
 }
 
-func (b *DirSelector) handleExplorerSelect() {
-	dir, _, err := dlgs.File("Select Directory", "", true)
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-	fmt.Println("Selected Directory:", dir)
-	if dir == "" {
-		return
-	}
-	b.SetDirName(dir)
-	b.changed = true
-	if b.onSelectDir != nil {
-		b.onSelectDir(dir)
-	}
-}
-
-func (b *DirSelector) SetOnSelectDir(f func(dir string)) {
-	b.onSelectDir = f
-}
-
-func (b *DirSelector) setOnSelectDir(f func()) {
+func (b *DirSelector) setOnSelectDir() {
 	b.textField.SetOnIconClick(func() {
 		if b.DirName != "" {
 			b.RemoveDir()
 			b.changed = true
 			return
 		} else {
-			f()
+			dir, _, err := dlgs.File(b.windowTitle, "", true)
+			if err != nil {
+				fmt.Println("Error:", err)
+				return
+			}
+			fmt.Println("Selected Directory:", dir)
+			if dir == "" {
+				return
+			}
+			b.SetDirName(dir)
+			b.changed = true
+			if b.onSelectDir != nil {
+				b.onSelectDir(dir)
+			}
 		}
 	})
+}
+func (b *DirSelector) SetOnSelectDir(f func(dir string)) {
+	b.onSelectDir = f
 }
 
 func (b *DirSelector) SetDirName(name string) {

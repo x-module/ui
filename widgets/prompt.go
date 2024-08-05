@@ -188,7 +188,7 @@ func (p *Prompt) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 							items = append(
 								items,
 								layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-									btn := Button(th, &p.options[i].Button, nil, IconPositionStart, p.options[i].Text, 0)
+									btn := Button(th, &p.options[i].Button, p.options[i].Text, 0)
 									btn.Background = theme.White
 									btn.Color = theme.Black
 									return btn.Layout(gtx, th)

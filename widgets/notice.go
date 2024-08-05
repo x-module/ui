@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	icon  = "ui/assets/decredicons/qrcodeSymbol.png"
-	title = "Godcr"
+	icon  = "/Users/lijin/go/ui/qrcodeSymbol.png"
+	title = "Client"
 )
 
 type SystemNotification struct {
@@ -25,8 +25,12 @@ func NewSystemNotification() (*SystemNotification, error) {
 		return nil, err
 	}
 
+	fmt.Println(filepath.Join(absolutePath, icon))
+	fmt.Println(filepath.Join(absolutePath, icon))
+	fmt.Println(filepath.Join(absolutePath, icon))
 	return &SystemNotification{
-		iconPath: filepath.Join(absolutePath, icon),
+		//iconPath: filepath.Join(absolutePath, icon),
+		iconPath: icon,
 	}, nil
 }
 
