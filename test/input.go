@@ -14,13 +14,13 @@ import (
 )
 
 func main() {
-	var textField *widgets.TextField
+	var textField *widgets.Input
 	var clickable widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
 
-	//w := new(app.Window)
+	// w := new(app.Window)
 	var ops op.Ops
-	textField = widgets.NewTextField("土豆", "请输入名称...")
+	textField = widgets.NewInput("土豆", "请输入名称...")
 	textField.Password()
 	go func() {
 		w := new(app.Window)
@@ -31,19 +31,19 @@ func main() {
 				panic(e.Err)
 			case app.FrameEvent:
 				gtx := app.NewContext(&ops, e)
-				//textField.SetOnIconClick(func() {
+				// textField.SetOnIconClick(func() {
 				//	fmt.Println("clicked")
-				//})
-				//==============================================
+				// })
+				// ==============================================
 				rect := clip.Rect{
 					Max: gtx.Constraints.Max,
 				}
 				paint.FillShape(gtx.Ops, th.Palette.Fg, rect.Op())
-				//=============================================
+				// =============================================
 
 				if clickable.Clicked(gtx) {
 				}
-				//==============================================
+				// ==============================================
 				layout.Stack{Alignment: layout.Center}.Layout(gtx,
 					layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 						return layout.Flex{Axis: layout.Vertical}.Layout(gtx,

@@ -23,6 +23,7 @@ type ButtonStyle struct {
 	Text         string
 	Icon         *widget.Icon
 	IconPosition int
+	theme        *theme.Theme
 	// Color is the text color.
 	Color        color.NRGBA
 	Font         font.Font
@@ -56,6 +57,7 @@ type IconButtonStyle struct {
 
 func Button(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp) ButtonStyle {
 	b := ButtonStyle{
+		theme:        th,
 		Text:         txt,
 		Color:        th.TextColor,
 		CornerRadius: 4,
@@ -74,6 +76,7 @@ func Button(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp
 }
 func ButtonWithIcon(th *theme.Theme, button *widget.Clickable, icon *widget.Icon, iconPosition int, txt string, width unit.Dp) ButtonStyle {
 	b := ButtonStyle{
+		theme:        th,
 		Text:         txt,
 		Icon:         icon,
 		IconPosition: iconPosition,
@@ -97,7 +100,7 @@ func ButtonWithIcon(th *theme.Theme, button *widget.Clickable, icon *widget.Icon
 func (b *ButtonStyle) SetBackground(background color.NRGBA) {
 	b.Background = background
 }
-func (b ButtonStyle) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
+func (b ButtonStyle) Layout(gtx layout.Context) layout.Dimensions {
 	return ButtonLayoutStyle{
 		Background:   b.Background,
 		CornerRadius: b.CornerRadius,
@@ -114,7 +117,7 @@ func (b ButtonStyle) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimen
 			return layout.Dimensions{}
 		})
 		labelDims := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-			lb := material.Label(theme.Material(), b.TextSize, b.Text)
+			lb := material.Label(b.theme.Material(), b.TextSize, b.Text)
 			lb.Color = b.Color
 			lb.Alignment = text.Middle
 			return lb.Layout(gtx)

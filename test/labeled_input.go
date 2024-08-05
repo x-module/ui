@@ -18,9 +18,9 @@ func main() {
 	var clickable widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
 
-	//w := new(app.Window)
+	// w := new(app.Window)
 	var ops op.Ops
-	labelInput = widgets.NewLabeledInput("用户名", "请输入用户名")
+	labelInput = widgets.NewLabeledInput(th, "用户名", "请输入用户名")
 	go func() {
 		w := new(app.Window)
 		for {
@@ -30,16 +30,16 @@ func main() {
 				panic(e.Err)
 			case app.FrameEvent:
 				gtx := app.NewContext(&ops, e)
-				//==============================================
+				// ==============================================
 				rect := clip.Rect{
 					Max: gtx.Constraints.Max,
 				}
 				paint.FillShape(gtx.Ops, th.Palette.Fg, rect.Op())
-				//=============================================
+				// =============================================
 
 				if clickable.Clicked(gtx) {
 				}
-				//==============================================
+				// ==============================================
 				layout.Stack{Alignment: layout.Center}.Layout(gtx,
 					layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 						return layout.Flex{Axis: layout.Vertical}.Layout(gtx,

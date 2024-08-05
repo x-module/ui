@@ -147,7 +147,7 @@ func (c *Action) Layout(gtx layout.Context) layout.Dimensions {
 						but := Button(c.theme, &c.actionClickable, "确 定", unit.Dp(50))
 						but.Background = c.theme.ConfirmButtonColor
 						but.width = unit.Dp(300)
-						return but.Layout(gtx, c.theme)
+						return but.Layout(gtx)
 					}),
 				)
 

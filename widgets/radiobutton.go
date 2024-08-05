@@ -1,9 +1,8 @@
-// SPDX-License-Identifier: Unlicense OR MIT
-// Copied from: gioui material/radiobutton.go with some modifications
 package widgets
 
 import (
 	"gioui.org/layout"
+	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/theme"
@@ -42,5 +41,6 @@ func (r *RadioButtonStyle) Layout(gtx layout.Context) layout.Dimensions {
 	// rb.IconColor = r.theme.Dark.Fg
 	rb.IconColor = r.theme.TextColor
 	rb.Color = r.theme.TextColor
+	rb.Size = unit.Dp(20)
 	return rb.Layout(gtx)
 }

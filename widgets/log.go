@@ -20,8 +20,8 @@ type LogViewer struct {
 	list        *widget.List
 }
 
-func NewLogViewer() *LogViewer {
-	return &LogViewer{
+func NewLogViewer(scrollToEnd ...bool) *LogViewer {
+	logView := &LogViewer{
 		list: &widget.List{
 			List: layout.List{
 				Axis:        layout.Vertical,
@@ -30,6 +30,10 @@ func NewLogViewer() *LogViewer {
 			},
 		},
 	}
+	if len(scrollToEnd) > 0 {
+		logView.list.ScrollToEnd = scrollToEnd[0]
+	}
+	return logView
 }
 
 func (j *LogViewer) SetData(data string) {
@@ -67,6 +71,7 @@ func (j *LogViewer) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimens
 						return layout.Inset{Left: unit.Dp(10)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 							l := material.Label(theme.Material(), theme.TextSize, j.lines[i])
 							l.State = j.selectables[i]
+							l.Color = theme.TextColor
 							l.SelectionColor = theme.TextSelectionColor
 							l.TextSize = unit.Sp(14)
 							return l.Layout(gtx)

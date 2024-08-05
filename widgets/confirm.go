@@ -162,7 +162,7 @@ func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
 								but := Button(c.theme, &c.cancelClickable, "取消", unit.Dp(50))
 								but.Background = c.theme.ConfirmButtonColor
 								but.width = unit.Dp(150)
-								return but.Layout(gtx, c.theme)
+								return but.Layout(gtx)
 							}),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 								return DrawLine(gtx, c.theme.SeparatorColor, unit.Dp(35), unit.Dp(1))
@@ -171,7 +171,7 @@ func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
 								but := Button(c.theme, &c.confirmClickable, "确认", unit.Dp(50))
 								but.Background = c.theme.ConfirmButtonColor
 								but.width = unit.Dp(150)
-								return but.Layout(gtx, c.theme)
+								return but.Layout(gtx)
 							}),
 						)
 					}),

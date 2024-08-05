@@ -22,6 +22,8 @@ type Tabs struct {
 	tabs     []*Tab
 	selected int
 
+	theme *theme.Theme
+
 	// number of characters to show in the tab title
 	maxTitleWidth    int
 	onSelectedChange func(int)
@@ -42,13 +44,13 @@ type Tab struct {
 	Meta *safemap.Map[string]
 }
 
-func NewTabs(items []*Tab, onSelectedChange func(int)) *Tabs {
+func NewTabs(theme *theme.Theme, items []*Tab, onSelectedChange func(int)) *Tabs {
 	t := &Tabs{
+		theme:            theme,
 		tabs:             items,
 		selected:         0,
 		onSelectedChange: onSelectedChange,
 	}
-
 	return t
 }
 
@@ -158,7 +160,7 @@ func (tabs *Tabs) Clickable(gtx layout.Context, button *widget.Clickable, w layo
 	})
 }
 
-func (tabs *Tabs) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
+func (tabs *Tabs) Layout(gtx layout.Context) layout.Dimensions {
 	// update tabs with new items
 	tabItems := make([]*Tab, 0)
 	for _, ot := range tabs.tabs {
@@ -200,7 +202,7 @@ func (tabs *Tabs) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensio
 		}
 
 		if t.btn.Hovered() {
-			paint.FillShape(gtx.Ops, theme.Palette.ContrastBg, clip.Rect{Max: gtx.Constraints.Min}.Op())
+			paint.FillShape(gtx.Ops, tabs.theme.Palette.ContrastBg, clip.Rect{Max: gtx.Constraints.Min}.Op())
 		}
 
 		var tabWidth int
@@ -212,7 +214,7 @@ func (tabs *Tabs) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensio
 						return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle}.Layout(gtx,
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 								return layout.UniformInset(unit.Dp(12)).Layout(gtx,
-									Label(theme, ellipticalTruncate(t.Title, tabs.maxTitleWidth)).Layout,
+									Label(tabs.theme, ellipticalTruncate(t.Title, tabs.maxTitleWidth)).Layout,
 								)
 							}),
 							layout.Rigid(layout.Spacer{Width: unit.Dp(2)}.Layout),
@@ -222,7 +224,7 @@ func (tabs *Tabs) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensio
 								if t.btn.Hovered() {
 									bkColor = hoveredColor
 								}
-								iconColor := theme.ContrastFg
+								iconColor := tabs.theme.ContrastFg
 								closeIcon := CloseIcon
 								iconSize := unit.Dp(16)
 								padding := unit.Dp(4)
@@ -244,7 +246,7 @@ func (tabs *Tabs) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensio
 								}
 								return layout.UniformInset(padding).Layout(gtx,
 									func(gtx layout.Context) layout.Dimensions {
-										return ib.Layout(gtx, theme)
+										return ib.Layout(gtx, tabs.theme)
 									},
 								)
 							}),
@@ -254,7 +256,7 @@ func (tabs *Tabs) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensio
 					dims = tabs.Clickable(gtx, &t.btn, func(gtx layout.Context) layout.Dimensions {
 						// return layout.UniformInset(unit.Dp(12)).Layout(gtx,
 						return layout.Inset{Top: unit.Dp(8), Bottom: unit.Dp(8), Left: unit.Dp(12), Right: unit.Dp(12)}.Layout(gtx,
-							Label(theme, t.Title).Layout,
+							Label(tabs.theme, t.Title).Layout,
 						)
 					})
 				}
@@ -268,7 +270,7 @@ func (tabs *Tabs) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensio
 				}
 				tabHeight := gtx.Dp(unit.Dp(2))
 				tabRect := image.Rect(0, 0, tabWidth, tabHeight)
-				paint.FillShape(gtx.Ops, theme.TabInactiveColor, clip.Rect(tabRect).Op())
+				paint.FillShape(gtx.Ops, tabs.theme.TabInactiveColor, clip.Rect(tabRect).Op())
 				return layout.Dimensions{
 					Size: image.Point{X: tabWidth, Y: tabHeight},
 				}

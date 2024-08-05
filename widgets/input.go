@@ -151,7 +151,7 @@ func (t *Input) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 					}
 					b := ButtonWithIcon(th, clk, t.Icon, IconPositionStart, "", 0)
 					b.Inset = layout.Inset{Left: unit.Dp(8), Right: unit.Dp(2), Top: unit.Dp(2), Bottom: unit.Dp(2)}
-					return b.Layout(gtx, th)
+					return b.Layout(gtx)
 				})
 				if t.IconPosition == IconPositionEnd {
 					widgets = []layout.FlexChild{inputLayout, iconLayout}
