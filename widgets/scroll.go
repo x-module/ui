@@ -13,7 +13,6 @@ import (
 	"gioui.org/widget"
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/theme"
-	"github.com/x-module/ui/utils"
 	"image/color"
 )
 
@@ -51,7 +50,8 @@ func (n *Scroll) SetScrollToEnd(scrollToEnd bool) {
 }
 
 func (n *Scroll) Layout(gtx layout.Context) layout.Dimensions {
-	utils.ColorBackground(gtx, gtx.Constraints.Max, n.bgColor)
+	//gtx.Constraints.Min.X = gtx.Dp(unit.Dp(150))
+	//utils.ColorBackground(gtx, gtx.Constraints.Max, n.bgColor)
 	return material.List(n.theme.Material(), n.list).Layout(gtx, len(n.elementList), func(gtx layout.Context, index int) layout.Dimensions {
 		return n.elementList[index](gtx)
 	})

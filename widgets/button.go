@@ -96,6 +96,12 @@ func ButtonWithIcon(th *theme.Theme, button *widget.Clickable, icon *widget.Icon
 	return b
 }
 
+// 设置CornerRadius
+func (b *ButtonStyle) SetCornerRadius(cornerRadius unit.Dp) ButtonStyle {
+	b.CornerRadius = cornerRadius
+	return *b
+}
+
 // SetBackground 设置Background
 func (b *ButtonStyle) SetBackground(background color.NRGBA) {
 	b.Background = background
@@ -126,9 +132,9 @@ func (b ButtonStyle) Layout(gtx layout.Context) layout.Dimensions {
 		items := []layout.FlexChild{iconDims, labelDims}
 		if b.IconPosition == IconPositionEnd {
 			items = []layout.FlexChild{labelDims, iconDims}
-
 			b.Inset.Right = unit.Dp(5)
 		}
+
 		return b.Inset.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 			return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle}.Layout(gtx,
 				items...,

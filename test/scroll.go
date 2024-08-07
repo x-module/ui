@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"gioui.org/app"
 	"gioui.org/layout"
 	"gioui.org/op"
@@ -36,7 +37,7 @@ func main() {
 							return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 								layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 									gtx.Constraints.Max.Y = 100
-									return widgets.Label(th, "n.Name").Layout(gtx)
+									return widgets.Label(th, "n.Name:"+fmt.Sprint(i)).Layout(gtx)
 								}),
 							)
 						})
