@@ -40,6 +40,8 @@ type FlatButton struct {
 	ContentPadding    unit.Dp
 
 	MarginRight int
+	MarginLeft  int
+	IconSize    unit.Dp
 }
 
 func (f *FlatButton) SetIcon(icon *widget.Icon, position int, spaceBetween unit.Dp) {
@@ -51,6 +53,10 @@ func (f *FlatButton) SetIcon(icon *widget.Icon, position int, spaceBetween unit.
 func (f *FlatButton) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	if f.BackgroundColor == (color.NRGBA{}) {
 		f.BackgroundColor = theme.Palette.ContrastBg
+	}
+
+	if f.IconSize == 0 {
+		f.IconSize = unit.Dp(20)
 	}
 
 	if f.TextColor == (color.NRGBA{}) {
@@ -70,8 +76,9 @@ func (f *FlatButton) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimen
 
 	if f.Icon != nil {
 		iconLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-			return layout.UniformInset(f.SpaceBetween).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-				gtx.Constraints.Min.X = gtx.Dp(20)
+			// return layout.UniformInset(f.SpaceBetween).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+			return layout.Inset{Left: unit.Dp(f.MarginLeft), Right: f.SpaceBetween, Top: f.SpaceBetween, Bottom: f.SpaceBetween}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+				gtx.Constraints.Min.X = gtx.Dp(f.IconSize)
 				return f.Icon.Layout(gtx, f.TextColor)
 			})
 		})
@@ -91,6 +98,7 @@ func (f *FlatButton) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimen
 	return f.Clickable.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		return layout.UniformInset(f.BackgroundPadding).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 			semantic.Button.Add(gtx.Ops)
+			// gtx.Constraints.Min.Y = gtx.Dp(20)
 			return layout.Background{}.Layout(gtx,
 				func(gtx layout.Context) layout.Dimensions {
 					gtx.Constraints.Min.X = gtx.Dp(f.MinWidth)

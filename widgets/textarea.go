@@ -16,16 +16,17 @@ type TextArea struct {
 	Placeholder string
 	size        image.Point
 	borderColor color.NRGBA
+	theme       *theme.Theme
 }
 
-func NewTextArea(text, placeholder string) *TextArea {
+func NewTextArea(th *theme.Theme, text, placeholder string) *TextArea {
 	t := &TextArea{
+		theme:       th,
 		textEditor:  widget.Editor{},
 		Placeholder: placeholder,
 	}
-
 	t.textEditor.SetText(text)
-	t.textEditor.SingleLine = true
+	t.textEditor.SingleLine = false
 	return t
 }
 
@@ -34,22 +35,25 @@ func NewTextArea(text, placeholder string) *TextArea {
 // 	t.textEditor.SetText(text)
 // }
 
-func (t *TextArea) SetMinWidth(width int) {
+func (t *TextArea) SetWidth(width int) {
 	t.size.X = width
 }
 func (t *TextArea) Text() string {
 	return t.textEditor.Text()
 }
 
+func (t *TextArea) SetText(text string) {
+	t.textEditor.SetText(text)
+}
 func (t *TextArea) SetBorderColor(color color.NRGBA) {
 	t.borderColor = color
 }
 
-func (t *TextArea) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
-	borderColor := th.BorderColor
+func (t *TextArea) Layout(gtx layout.Context) layout.Dimensions {
+	borderColor := t.theme.BorderColor
 
 	if gtx.Source.Focused(&t.textEditor) {
-		borderColor = th.BorderColorFocused
+		borderColor = t.theme.BorderColorFocused
 	}
 
 	cornerRadius := unit.Dp(4)
@@ -76,10 +80,10 @@ func (t *TextArea) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions
 			inputLayout := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
 				gtx.Constraints.Min.Y = gtx.Dp(unit.Dp(100))  // 设置最小高度为 100dp
 				gtx.Constraints.Max.Y = gtx.Constraints.Min.Y // 限制最大高度与最小高度相同
-				editor := material.Editor(th.Material(), &t.textEditor, t.Placeholder)
-				editor.Color = th.TextColor
+				editor := material.Editor(t.theme.Material(), &t.textEditor, t.Placeholder)
+				editor.Color = t.theme.TextColor
 				editor.HintColor = theme.LightBlue
-				editor.SelectionColor = th.TextSelectionColor
+				editor.SelectionColor = t.theme.TextSelectionColor
 				return editor.Layout(gtx)
 			})
 			widgets := []layout.FlexChild{inputLayout}

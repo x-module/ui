@@ -169,3 +169,27 @@ var ActionVisibilityOffIcon *widget.Icon = func() *widget.Icon {
 	icon, _ := widget.NewIcon(icons.ActionVisibilityOff)
 	return icon
 }()
+var ActionPermIdentityIcon *widget.Icon = func() *widget.Icon {
+	icon, _ := widget.NewIcon(icons.ActionPermIdentity)
+	return icon
+}()
+var EditorFunctionsIcon *widget.Icon = func() *widget.Icon {
+	icon, _ := widget.NewIcon(icons.EditorFunctions)
+	return icon
+}()
+var EditorBorderAllIcon *widget.Icon = func() *widget.Icon {
+	icon, _ := widget.NewIcon(icons.EditorBorderAll)
+	return icon
+}()
+var MapsDirectionsRunIcon *widget.Icon = func() *widget.Icon {
+	icon, _ := widget.NewIcon(icons.MapsDirectionsRun)
+	return icon
+}()
+var ActionZoomInIcon *widget.Icon = func() *widget.Icon {
+	icon, _ := widget.NewIcon(icons.ActionZoomIn)
+	return icon
+}()
+var NavigationSubdirectoryArrowRightIcon *widget.Icon = func() *widget.Icon {
+	icon, _ := widget.NewIcon(icons.NavigationSubdirectoryArrowRight)
+	return icon
+}()

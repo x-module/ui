@@ -30,10 +30,10 @@ type Theme struct {
 	isDark bool
 	Dark   Dark
 
-	//============== new ===============
-	MaskLayerBgColor color.NRGBA //遮罩层背景颜色
+	// ============== new ===============
+	MaskLayerBgColor color.NRGBA // 遮罩层背景颜色
 
-	//==================================
+	// ==================================
 	ConfirmButtonColor    color.NRGBA
 	LoaderColor           color.NRGBA
 	BorderColor           color.NRGBA
@@ -71,7 +71,7 @@ func New(material *material.Theme, isDark bool) *Theme {
 		SideBarTextColor: rgb(0xffffff),
 		Dark: Dark{
 			// Fg: color.NRGBA{R: 201, G: 201, B: 201, A: 255},
-			Fg:        color.NRGBA{R: 24, G: 24, B: 24, A: 255},
+			Fg:        color.NRGBA{R: 34, G: 34, B: 38, A: 255},
 			Bg:        color.NRGBA{R: 1, G: 1, B: 1, A: 255},
 			TextColor: rgb(0xffffff),
 		},
@@ -92,10 +92,10 @@ func (t *Theme) Switch(isDark bool) *material.Theme {
 
 	if isDark {
 
-		//============== new ===============
-		t.MaskLayerBgColor = color.NRGBA{R: 28, G: 28, B: 30, A: 230} //遮罩层背景颜色
+		// ============== new ===============
+		t.MaskLayerBgColor = color.NRGBA{R: 28, G: 28, B: 30, A: 230} // 遮罩层背景颜色
 
-		//==================================
+		// ==================================
 
 		// rgb(43, 45, 48)
 		t.Theme.Palette.Fg = color.NRGBA{R: 44, G: 44, B: 48, A: 255}
