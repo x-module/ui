@@ -4,22 +4,25 @@ import (
 	"gioui.org/app"
 	"gioui.org/layout"
 	"gioui.org/op"
+	"gioui.org/op/clip"
+	"gioui.org/op/paint"
 	"gioui.org/unit"
-	"gioui.org/widget"
 	"gioui.org/widget/material"
+	"github.com/x-module/ui/naive/widgets"
 	"github.com/x-module/ui/theme"
-	"github.com/x-module/ui/widgets"
 )
 
 func main() {
-	var action *widgets.Action
-	var clickable widget.Clickable
+	var username *widgets.Input
+	var password *widgets.Input
+	//var clickable widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
 
-	w := new(app.Window)
-	w.Option(app.Title())
+	// w := new(app.Window)
 	var ops op.Ops
-	action = widgets.NewAction(th)
+	username = widgets.NewInput("土豆", "请输入名称...")
+	password = widgets.NewInput("", "请输入密码...")
+	password.Password()
 	go func() {
 		w := new(app.Window)
 		for {
@@ -29,26 +32,23 @@ func main() {
 				panic(e.Err)
 			case app.FrameEvent:
 				gtx := app.NewContext(&ops, e)
-				if clickable.Clicked(gtx) {
-					action.Message("确定退出吗?")
+				rect := clip.Rect{
+					Max: gtx.Constraints.Max,
 				}
+				paint.FillShape(gtx.Ops, th.Palette.Fg, rect.Op())
+				// =============================================
+				// ==============================================
 				layout.Stack{Alignment: layout.Center}.Layout(gtx,
 					layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 						return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								gtx.Constraints.Min.Y = gtx.Dp(unit.Dp(400))
-								return widgets.BlueLabel(th, "&clickable, nil, 0,  unit.Dp(100)").Layout(gtx)
+								return username.Layout(gtx, th)
 							}),
+							layout.Rigid(layout.Spacer{Height: unit.Dp(20)}.Layout),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return widgets.Button(th, &clickable, nil, 0, "click me", unit.Dp(100)).Layout(gtx, th)
+								return password.Layout(gtx, th)
 							}),
 						)
-					}),
-					layout.Expanded(func(gtx layout.Context) layout.Dimensions {
-						if action.Visible() {
-							return action.Layout(gtx)
-						}
-						return layout.Dimensions{}
 					}),
 				)
 				e.Frame(gtx.Ops)

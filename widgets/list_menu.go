@@ -81,7 +81,7 @@ func (l *ListMenu) Layout(gtx layout.Context) layout.Dimensions {
 			return layout.Stack{}.Layout(gtx,
 				layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 					return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-						label := Button(l.theme, new(widget.Clickable), l.Label, l.labelWidth)
+						label := Button(l.theme, new(widget.Clickable), l.Label, l.labelWidth, layout.Inset{})
 						// label.SetBackground(l.theme.Dark.Bg)
 						return label.Layout(gtx)
 					})

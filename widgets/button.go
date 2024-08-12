@@ -55,7 +55,7 @@ type IconButtonStyle struct {
 	Description string
 }
 
-func Button(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp) ButtonStyle {
+func Button(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) ButtonStyle {
 	b := ButtonStyle{
 		theme:        th,
 		Text:         txt,
@@ -70,6 +70,9 @@ func Button(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp
 		Button: button,
 		shaper: th.Shaper,
 		width:  width,
+	}
+	if len(inset) > 0 {
+		b.Inset = inset[0]
 	}
 	b.Font.Typeface = th.Face
 	return b
