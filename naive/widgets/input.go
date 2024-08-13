@@ -15,13 +15,21 @@ import (
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/naive/resource"
 	"github.com/x-module/ui/theme"
+	widgets2 "github.com/x-module/ui/widgets"
+	"golang.org/x/exp/shiny/materialdesign/icons"
 	"image"
 )
 
 type Input struct {
 	CommonWidget
-	editor widget.Editor
-	height unit.Dp
+	editor    widget.Editor
+	height    unit.Dp
+	before    layout.Widget
+	after     layout.Widget
+	Icon      *widget.Icon
+	iconClick widget.Clickable
+
+	showPassword bool
 }
 
 func NewInput(hint string, text ...string) *Input {
@@ -54,12 +62,23 @@ func NewTextArea(hint string, text ...string) *Input {
 
 func (t *Input) Password() {
 	t.editor.Mask = '*'
+	t.Icon, _ = widget.NewIcon(icons.ActionVisibilityOff)
+	// t.IconPosition = IconPositionEnd
+	t.showPassword = false
 }
 
 // SetRadius 设置radius
 func (t *Input) SetRadius(radius unit.Dp) {
 	t.radius = radius
 }
+
+func (t *Input) SetBefore(before layout.Widget) {
+	t.before = before
+}
+func (t *Input) SetAfter(after layout.Widget) {
+	t.after = after
+}
+
 func (t *Input) SetSize(size resource.Size) {
 	t.size = size
 }
@@ -155,7 +174,37 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 
 						return editor.Layout(gtx)
 					})
-					widgets := []layout.FlexChild{inputLayout}
+					var widgets []layout.FlexChild
+					if t.before != nil {
+						widgets = append(widgets, layout.Rigid(t.before))
+					}
+					widgets = append(widgets, inputLayout)
+
+					if t.Icon != nil {
+						iconLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+							clk := &widget.Clickable{}
+							clk = &t.iconClick
+							if t.iconClick.Clicked(gtx) {
+								if !t.showPassword {
+									t.editor.Mask = 0
+									t.Icon = widgets2.ActionVisibilityIcon
+									t.showPassword = true
+								} else {
+									t.editor.Mask = '*'
+									t.Icon = widgets2.ActionVisibilityOffIcon
+									t.showPassword = false
+								}
+							}
+							b := ButtonWithIcon(th, clk, t.Icon, widgets2.IconPositionStart, "", 0)
+							b.Inset = layout.Inset{Left: unit.Dp(8), Right: unit.Dp(2), Top: unit.Dp(2), Bottom: unit.Dp(2)}
+							return b.Layout(gtx)
+						})
+						widgets = append(widgets, iconLayout)
+					} else {
+						if t.after != nil {
+							widgets = append(widgets, layout.Rigid(t.after))
+						}
+					}
 					spacing := layout.SpaceBetween
 					return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle, Spacing: spacing}.Layout(gtx, widgets...)
 				})

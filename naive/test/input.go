@@ -11,6 +11,7 @@ import (
 	"github.com/x-module/ui/naive/resource"
 	"github.com/x-module/ui/naive/widgets"
 	"github.com/x-module/ui/theme"
+	widgets2 "github.com/x-module/ui/widgets"
 )
 
 func main() {
@@ -36,7 +37,14 @@ func main() {
 	password2.SetSize(resource.Medium)
 	age.SetSize(resource.Large)
 
-	password.Password()
+	// password2.SetAfter(func(gtx layout.Context) layout.Dimensions {
+	// 	return widgets2.NavigationSubdirectoryArrowRightIcon.Layout(gtx, resource.IconColor)
+	// })
+	password2.SetBefore(func(gtx layout.Context) layout.Dimensions {
+		return widgets2.ActionPermIdentityIcon.Layout(gtx, resource.IconColor)
+	})
+
+	password2.Password()
 	go func() {
 		w := new(app.Window)
 		for {
