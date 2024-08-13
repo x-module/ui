@@ -16,6 +16,7 @@ import (
 func main() {
 	var username *widgets.Input
 	var password *widgets.Input
+	var profile *widgets.Input
 	// var clickable widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
 
@@ -23,6 +24,7 @@ func main() {
 	var ops op.Ops
 	username = widgets.NewInput("请输入名称...")
 	password = widgets.NewInput("请输入密码...")
+	profile = widgets.NewTextArea("请输入属性...")
 	password.Password()
 	go func() {
 		w := new(app.Window)
@@ -48,6 +50,10 @@ func main() {
 							layout.Rigid(layout.Spacer{Height: unit.Dp(20)}.Layout),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 								return password.Layout(gtx, th)
+							}),
+							layout.Rigid(layout.Spacer{Height: unit.Dp(20)}.Layout),
+							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+								return profile.Layout(gtx, th)
 							}),
 						)
 					}),

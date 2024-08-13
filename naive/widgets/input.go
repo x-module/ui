@@ -21,6 +21,7 @@ import (
 type Input struct {
 	CommonWidget
 	editor widget.Editor
+	height unit.Dp
 }
 
 func NewInput(hint string, text ...string) *Input {
@@ -35,6 +36,20 @@ func NewInput(hint string, text ...string) *Input {
 	t.editor.SingleLine = true
 	return t
 }
+func NewTextArea(hint string, text ...string) *Input {
+	t := &Input{
+		editor: widget.Editor{},
+		height: unit.Dp(100),
+	}
+	t.hint = hint
+	t.radius = 4
+	if len(text) > 0 {
+		t.editor.SetText(text[0])
+	}
+	t.editor.SingleLine = false
+	return t
+}
+
 func (t *Input) Password() {
 	t.editor.Mask = '*'
 }
@@ -124,6 +139,10 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 					Right:  4,
 				}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 					inputLayout := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
+						if t.height > 0 {
+							gtx.Constraints.Min.Y = gtx.Dp(t.height)      // 设置最小高度为 100dp
+							gtx.Constraints.Max.Y = gtx.Constraints.Min.Y // 限制最大高度与最小高度相同
+						}
 						editor := material.Editor(th.Material(), &t.editor, t.hint)
 						editor.Color = resource.TextColor
 						editor.HintColor = resource.HintTextColor
