@@ -22,3 +22,12 @@ func ColorBackground(gtx layout.Context, point image.Point, color color.NRGBA) {
 	}
 	paint.FillShape(gtx.Ops, color, rect.Op())
 }
+
+func WithAlpha(c color.NRGBA, a uint8) color.NRGBA {
+	return color.NRGBA{
+		R: c.R,
+		G: c.G,
+		B: c.B,
+		A: a,
+	}
+}

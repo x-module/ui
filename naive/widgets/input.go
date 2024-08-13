@@ -9,9 +9,9 @@ import (
 	"gioui.org/op"
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
-	"gioui.org/unit"
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/theme"
+	"github.com/x-module/ui/utils"
 	"image"
 	"image/color"
 
@@ -24,16 +24,9 @@ type Input struct {
 	Background  color.NRGBA
 	Text        string
 	Placeholder string
-
-	click     gesture.Click
-	state     state
-	border    border
-	changed   bool
-	submitted bool
-}
-type border struct {
-	Thickness unit.Dp
-	Color     color.NRGBA
+	click       gesture.Click
+	state       state
+	border      color.NRGBA
 }
 
 func NewInput(text, placeholder string) *Input {
@@ -64,15 +57,6 @@ const (
 	focused
 )
 
-func WithAlpha(c color.NRGBA, a uint8) color.NRGBA {
-	return color.NRGBA{
-		R: c.R,
-		G: c.G,
-		B: c.B,
-		A: a,
-	}
-}
-
 func (t *Input) update(gtx layout.Context, th *theme.Theme) {
 	disabled := gtx.Source == (input.Source{})
 	for {
@@ -83,6 +67,7 @@ func (t *Input) update(gtx layout.Context, th *theme.Theme) {
 		switch ev.Kind {
 		case gesture.KindPress:
 			gtx.Execute(key.FocusCmd{Tag: &t.textEditor})
+		default:
 		}
 	}
 
@@ -96,28 +81,15 @@ func (t *Input) update(gtx layout.Context, th *theme.Theme) {
 	if gtx.Source.Focused(&t.textEditor) && !disabled {
 		t.state = focused
 	}
-
 	switch t.state {
 	case inactive:
-		t.border = border{
-			Thickness: unit.Dp(0.5),
-			Color:     WithAlpha(th.Fg, 128),
-		}
+		t.border = utils.WithAlpha(th.Fg, 128)
 	case hovered:
-		t.border = border{
-			Thickness: unit.Dp(0.5),
-			Color:     WithAlpha(th.Fg, 221),
-		}
+		t.border = utils.WithAlpha(th.Fg, 221)
 	case focused:
-		t.border = border{
-			Thickness: unit.Dp(2),
-			Color:     th.ContrastBg,
-		}
+		t.border = th.ContrastBg
 	case activated:
-		t.border = border{
-			Thickness: unit.Dp(0.5),
-			Color:     WithAlpha(th.Fg, 221),
-		}
+		t.border = utils.WithAlpha(th.Fg, 221)
 	}
 }
 
@@ -142,7 +114,7 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 		func(gtx layout.Context) layout.Dimensions {
 			rr := gtx.Dp(0)
 			defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, rr).Push(gtx.Ops).Pop()
-			paint.Fill(gtx.Ops, t.border.Color)
+			paint.Fill(gtx.Ops, t.border)
 			return layout.Dimensions{Size: gtx.Constraints.Min}
 		},
 		func(gtx layout.Context) layout.Dimensions {

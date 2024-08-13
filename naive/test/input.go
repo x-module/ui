@@ -18,7 +18,7 @@ func main() {
 
 	// w := new(app.Window)
 	var ops op.Ops
-	username = widgets.NewInput("土豆", "请输入名称...")
+	username = widgets.NewInput("", "请输入名称...")
 	password = widgets.NewInput("", "请输入密码...")
 	password.Password()
 	go func() {
