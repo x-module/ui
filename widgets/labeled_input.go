@@ -36,7 +36,10 @@ func NewLabeledInput(theme *theme.Theme, label string, hint string) *LabeledInpu
 func (l *LabeledInput) SetText(text string) *LabeledInput {
 	l.Editor.SetText(text)
 	return l
-
+}
+func (l *LabeledInput) ReadOnly() *LabeledInput {
+	l.Editor.ReadOnly = true
+	return l
 }
 
 func (l *LabeledInput) SetSpaceBetween(space int) *LabeledInput {
