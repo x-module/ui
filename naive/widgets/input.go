@@ -9,9 +9,10 @@ import (
 	"gioui.org/op"
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
+	"gioui.org/unit"
 	"gioui.org/widget/material"
+	"github.com/x-module/ui/naive/resource"
 	"github.com/x-module/ui/theme"
-	"github.com/x-module/ui/utils"
 	"image"
 	"image/color"
 
@@ -20,42 +21,32 @@ import (
 )
 
 type Input struct {
-	textEditor  widget.Editor
-	Background  color.NRGBA
-	Text        string
-	Placeholder string
-	click       gesture.Click
-	state       state
-	border      color.NRGBA
+	CommonWidget
+	editor     widget.Editor
+	Background color.NRGBA
+	hint       string
+	radius     unit.Dp
 }
 
-func NewInput(text, placeholder string) *Input {
+func NewInput(hint string, text ...string) *Input {
 	t := &Input{
-		textEditor:  widget.Editor{},
-		Text:        text,
-		Placeholder: placeholder,
+		editor: widget.Editor{},
+		hint:   hint,
+		radius: 4,
 	}
-	t.textEditor.SetText(text)
-	t.textEditor.SingleLine = true
+	if len(text) > 0 {
+		t.editor.SetText(text[0])
+	}
+	t.editor.SingleLine = true
 	return t
 }
 func (t *Input) Password() {
-	t.textEditor.Mask = '*'
+	t.editor.Mask = '*'
 }
 
 func (t *Input) SetText(text string) {
-	t.textEditor.SetText(text)
+	t.editor.SetText(text)
 }
-
-type state uint8
-type LabelAlignment uint8
-
-const (
-	inactive state = iota
-	hovered
-	activated
-	focused
-)
 
 func (t *Input) update(gtx layout.Context, th *theme.Theme) {
 	disabled := gtx.Source == (input.Source{})
@@ -66,30 +57,33 @@ func (t *Input) update(gtx layout.Context, th *theme.Theme) {
 		}
 		switch ev.Kind {
 		case gesture.KindPress:
-			gtx.Execute(key.FocusCmd{Tag: &t.textEditor})
+			gtx.Execute(key.FocusCmd{Tag: &t.editor})
 		default:
+
 		}
 	}
-
 	t.state = inactive
 	if t.click.Hovered() && !disabled {
 		t.state = hovered
 	}
-	if t.textEditor.Len() > 0 {
-		t.state = activated
-	}
-	if gtx.Source.Focused(&t.textEditor) && !disabled {
+	// if t.editor.Len() > 0 {
+	// 	t.state = activated
+	// }
+	if gtx.Source.Focused(&t.editor) && !disabled {
 		t.state = focused
 	}
+
+	t.bgColor = resource.DefaultBgColor
 	switch t.state {
 	case inactive:
-		t.border = utils.WithAlpha(th.Fg, 128)
+		t.borderColor = resource.DefaultBorderBgColor
 	case hovered:
-		t.border = utils.WithAlpha(th.Fg, 221)
+		t.borderColor = resource.HoveredBorderColor
 	case focused:
-		t.border = th.ContrastBg
+		t.bgColor = resource.FocusedBgColor
+		t.borderColor = resource.FocusedBorderColor
 	case activated:
-		t.border = utils.WithAlpha(th.Fg, 221)
+		t.borderColor = resource.DefaultBorderBgColor
 	}
 }
 
@@ -103,39 +97,45 @@ func (t *Input) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 	defer pointer.PassOp{}.Push(gtx.Ops).Pop()
 	defer clip.Rect(image.Rectangle{Max: dims.Size}).Push(gtx.Ops).Pop()
 	t.click.Add(gtx.Ops)
-	event.Op(gtx.Ops, &t.textEditor)
+	event.Op(gtx.Ops, &t.editor)
 	call.Add(gtx.Ops)
 	return dims
 }
 
 func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 	t.Background = th.Palette.Fg
-	return layout.Background{}.Layout(gtx,
-		func(gtx layout.Context) layout.Dimensions {
-			rr := gtx.Dp(0)
-			defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, rr).Push(gtx.Ops).Pop()
-			paint.Fill(gtx.Ops, t.border)
-			return layout.Dimensions{Size: gtx.Constraints.Min}
-		},
-		func(gtx layout.Context) layout.Dimensions {
-			return layout.Inset{
-				Top:    8,
-				Bottom: 8,
-				Left:   8,
-				Right:  4,
-			}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-				inputLayout := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
-					editor := material.Editor(th.Material(), &t.textEditor, t.Placeholder)
-					editor.Color = theme.LightBlue
-					editor.HintColor = theme.LightBlue
-					editor.SelectionColor = th.TextSelectionColor
-					return editor.Layout(gtx)
+	border := widget.Border{
+		Color:        t.borderColor,
+		Width:        unit.Dp(1),
+		CornerRadius: t.radius,
+	}
+	return border.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+		return layout.Background{}.Layout(gtx,
+			func(gtx layout.Context) layout.Dimensions {
+				rr := gtx.Dp(t.radius)
+				defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, rr).Push(gtx.Ops).Pop()
+				paint.Fill(gtx.Ops, t.bgColor)
+				return layout.Dimensions{Size: gtx.Constraints.Min}
+			},
+			func(gtx layout.Context) layout.Dimensions {
+				return layout.Inset{
+					Top:    8,
+					Bottom: 8,
+					Left:   8,
+					Right:  4,
+				}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+					inputLayout := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
+						editor := material.Editor(th.Material(), &t.editor, t.hint)
+						editor.Color = resource.TextColor
+						editor.HintColor = resource.HintTextColor
+						editor.SelectionColor = resource.TextSelectionColor
+						return editor.Layout(gtx)
+					})
+					widgets := []layout.FlexChild{inputLayout}
+					spacing := layout.SpaceBetween
+					return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle, Spacing: spacing}.Layout(gtx, widgets...)
 				})
-				widgets := []layout.FlexChild{inputLayout}
-				spacing := layout.SpaceBetween
-				return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle, Spacing: spacing}.Layout(gtx, widgets...)
-			})
-		},
-	)
-
+			},
+		)
+	})
 }
