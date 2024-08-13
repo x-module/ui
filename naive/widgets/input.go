@@ -1,46 +1,39 @@
 package widgets
 
 import (
-	"fmt"
+	"gioui.org/gesture"
+	"gioui.org/io/event"
+	"gioui.org/io/input"
+	"gioui.org/io/key"
 	"gioui.org/io/pointer"
+	"gioui.org/op"
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
+	"gioui.org/unit"
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/theme"
-	"github.com/x-module/ui/utils"
-	widgets2 "github.com/x-module/ui/widgets"
-	"golang.org/x/exp/shiny/materialdesign/icons"
 	"image"
 	"image/color"
 
 	"gioui.org/layout"
-	"gioui.org/unit"
 	"gioui.org/widget"
 )
 
-const (
-	IconPositionStart = 0
-	IconPositionEnd   = 1
-)
-
 type Input struct {
-	textEditor widget.Editor
-	Icon       *widget.Icon
-	iconClick  widget.Clickable
-	Background color.NRGBA
-
-	IconPosition int
-
+	textEditor  widget.Editor
+	Background  color.NRGBA
 	Text        string
 	Placeholder string
 
-	size image.Point
-
-	onIconClick  func()
-	onTextChange func(text string)
-	borderColor  color.NRGBA
-
-	showPassword bool
+	click     gesture.Click
+	state     state
+	border    border
+	changed   bool
+	submitted bool
+}
+type border struct {
+	Thickness unit.Dp
+	Color     color.NRGBA
 }
 
 func NewInput(text, placeholder string) *Input {
@@ -48,157 +41,127 @@ func NewInput(text, placeholder string) *Input {
 		textEditor:  widget.Editor{},
 		Text:        text,
 		Placeholder: placeholder,
-		onIconClick: func() {},
 	}
-	t.textEditor.Mask = '*'
 	t.textEditor.SetText(text)
 	t.textEditor.SingleLine = true
 	return t
 }
 func (t *Input) Password() {
 	t.textEditor.Mask = '*'
-	t.Icon, _ = widget.NewIcon(icons.ActionVisibilityOff)
-	t.IconPosition = IconPositionEnd
-	t.showPassword = false
 }
 
 func (t *Input) SetText(text string) {
 	t.textEditor.SetText(text)
 }
 
-func (t *Input) SetIcon(icon *widget.Icon, position int) {
-	t.Icon = icon
-	t.IconPosition = position
-}
+type state uint8
+type LabelAlignment uint8
 
-func (t *Input) SetWidth(width int) {
-	t.size.X = width
-}
+const (
+	inactive state = iota
+	hovered
+	activated
+	focused
+)
 
-func (t *Input) SetBorderColor(color color.NRGBA) {
-	t.borderColor = color
-}
-
-func (t *Input) SetOnTextChange(f func(text string)) {
-	t.onTextChange = f
-}
-
-func (t *Input) SetOnIconClick(f func()) {
-	t.onIconClick = f
-}
-
-func (t *Input) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
-	borderColor := th.BorderColor
-	if gtx.Source.Focused(&t.textEditor) {
-		borderColor = th.BorderColorFocused
+func WithAlpha(c color.NRGBA, a uint8) color.NRGBA {
+	return color.NRGBA{
+		R: c.R,
+		G: c.G,
+		B: c.B,
+		A: a,
 	}
-	t.Background = th.Palette.Fg
+}
 
-	cornerRadius := unit.Dp(4)
-	border := widget.Border{
-		Color:        borderColor,
-		Width:        unit.Dp(1),
-		CornerRadius: cornerRadius,
-	}
-
-	leftPadding := unit.Dp(8)
-	if t.Icon != nil && t.IconPosition == IconPositionStart {
-		leftPadding = unit.Dp(0)
-	}
-
+func (t *Input) update(gtx layout.Context, th *theme.Theme) {
+	disabled := gtx.Source == (input.Source{})
 	for {
-		event, ok := t.textEditor.Update(gtx)
+		ev, ok := t.click.Update(gtx.Source)
 		if !ok {
 			break
 		}
-		if _, ok := event.(widget.ChangeEvent); ok {
-			if t.onTextChange != nil {
-				t.onTextChange(t.textEditor.Text())
-			}
+		switch ev.Kind {
+		case gesture.KindPress:
+			gtx.Execute(key.FocusCmd{Tag: &t.textEditor})
 		}
 	}
 
+	t.state = inactive
+	if t.click.Hovered() && !disabled {
+		t.state = hovered
+	}
+	if t.textEditor.Len() > 0 {
+		t.state = activated
+	}
+	if gtx.Source.Focused(&t.textEditor) && !disabled {
+		t.state = focused
+	}
+
+	switch t.state {
+	case inactive:
+		t.border = border{
+			Thickness: unit.Dp(0.5),
+			Color:     WithAlpha(th.Fg, 128),
+		}
+	case hovered:
+		t.border = border{
+			Thickness: unit.Dp(0.5),
+			Color:     WithAlpha(th.Fg, 221),
+		}
+	case focused:
+		t.border = border{
+			Thickness: unit.Dp(2),
+			Color:     th.ContrastBg,
+		}
+	case activated:
+		t.border = border{
+			Thickness: unit.Dp(0.5),
+			Color:     WithAlpha(th.Fg, 221),
+		}
+	}
+}
+
+func (t *Input) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+	t.update(gtx, th)
+	gtx.Constraints.Min.X = gtx.Constraints.Max.X
+	gtx.Constraints.Min.Y = 0
+	macro := op.Record(gtx.Ops)
+	dims := t.layout(gtx, th)
+	call := macro.Stop()
+	defer pointer.PassOp{}.Push(gtx.Ops).Pop()
+	defer clip.Rect(image.Rectangle{Max: dims.Size}).Push(gtx.Ops).Pop()
+	t.click.Add(gtx.Ops)
+	event.Op(gtx.Ops, &t.textEditor)
+	call.Add(gtx.Ops)
+	return dims
+}
+
+func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+	t.Background = th.Palette.Fg
 	return layout.Background{}.Layout(gtx,
 		func(gtx layout.Context) layout.Dimensions {
-			rr := gtx.Dp(2)
+			rr := gtx.Dp(0)
 			defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, rr).Push(gtx.Ops).Pop()
-			evt, exist := gtx.Source.Event(pointer.Filter{
-				Target: &t.textEditor,
-				Kinds:  pointer.Enter | pointer.Leave,
-			})
-			if exist {
-				e, ok := evt.(pointer.Event)
-				if !ok {
-					panic("not pointer.Event")
-				}
-				background := t.Background
-				switch e.Kind {
-				case pointer.Enter:
-					background = utils.Hovered(t.Background)
-					fmt.Println("---------------in")
-				case pointer.Leave:
-					background = t.Background
-					fmt.Println("---------------out")
-				}
-				fmt.Println("---------------print:", background)
-				paint.Fill(gtx.Ops, background)
-			}
-			t.textEditor.Update(gtx)
+			paint.Fill(gtx.Ops, t.border.Color)
 			return layout.Dimensions{Size: gtx.Constraints.Min}
 		},
 		func(gtx layout.Context) layout.Dimensions {
-			return border.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-				if t.size.X == 0 {
-					t.size.X = gtx.Constraints.Min.X
-				}
-
-				gtx.Constraints.Min = t.size
-				return layout.Inset{
-					Top:    8,
-					Bottom: 8,
-					Left:   leftPadding,
-					Right:  4,
-				}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-					inputLayout := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
-						editor := material.Editor(th.Material(), &t.textEditor, t.Placeholder)
-						editor.Color = th.TextColor
-						editor.HintColor = theme.LightBlue
-						editor.SelectionColor = th.TextSelectionColor
-						return editor.Layout(gtx)
-					})
-					widgets := []layout.FlexChild{inputLayout}
-					spacing := layout.SpaceBetween
-					if t.Icon != nil {
-						iconLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-							clk := &widget.Clickable{}
-							if t.onIconClick != nil {
-								clk = &t.iconClick
-								if t.iconClick.Clicked(gtx) {
-									t.onIconClick()
-									if !t.showPassword {
-										t.textEditor.Mask = 0
-										t.Icon = widgets2.ActionVisibilityIcon
-										t.showPassword = true
-									} else {
-										t.textEditor.Mask = '*'
-										t.Icon = widgets2.ActionVisibilityOffIcon
-										t.showPassword = false
-									}
-								}
-							}
-							b := widgets2.ButtonWithIcon(th, clk, t.Icon, IconPositionStart, "", 0)
-							b.Inset = layout.Inset{Left: unit.Dp(8), Right: unit.Dp(2), Top: unit.Dp(2), Bottom: unit.Dp(2)}
-							return b.Layout(gtx)
-						})
-						if t.IconPosition == IconPositionEnd {
-							widgets = []layout.FlexChild{inputLayout, iconLayout}
-						} else {
-							widgets = []layout.FlexChild{iconLayout, inputLayout}
-							spacing = layout.SpaceEnd
-						}
-					}
-					return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle, Spacing: spacing}.Layout(gtx, widgets...)
+			return layout.Inset{
+				Top:    8,
+				Bottom: 8,
+				Left:   8,
+				Right:  4,
+			}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+				inputLayout := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
+					editor := material.Editor(th.Material(), &t.textEditor, t.Placeholder)
+					editor.Color = theme.LightBlue
+					editor.HintColor = theme.LightBlue
+					editor.SelectionColor = th.TextSelectionColor
+					return editor.Layout(gtx)
 				})
+				widgets := []layout.FlexChild{inputLayout}
+				spacing := layout.SpaceBetween
+				return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle, Spacing: spacing}.Layout(gtx, widgets...)
 			})
 		},
 	)

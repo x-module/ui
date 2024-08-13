@@ -4,8 +4,6 @@ import (
 	"gioui.org/app"
 	"gioui.org/layout"
 	"gioui.org/op"
-	"gioui.org/op/clip"
-	"gioui.org/op/paint"
 	"gioui.org/unit"
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/naive/widgets"
@@ -15,7 +13,7 @@ import (
 func main() {
 	var username *widgets.Input
 	var password *widgets.Input
-	//var clickable widget.Clickable
+	// var clickable widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
 
 	// w := new(app.Window)
@@ -32,10 +30,10 @@ func main() {
 				panic(e.Err)
 			case app.FrameEvent:
 				gtx := app.NewContext(&ops, e)
-				rect := clip.Rect{
-					Max: gtx.Constraints.Max,
-				}
-				paint.FillShape(gtx.Ops, th.Palette.Fg, rect.Op())
+				// rect := clip.Rect{
+				// 	Max: gtx.Constraints.Max,
+				// }
+				// paint.FillShape(gtx.Ops, th.Palette.Fg, rect.Op())
 				// =============================================
 				// ==============================================
 				layout.Stack{Alignment: layout.Center}.Layout(gtx,
