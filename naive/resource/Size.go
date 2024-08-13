@@ -8,11 +8,20 @@
 
 package resource
 
-import "gioui.org/unit"
+import (
+	"gioui.org/layout"
+	"gioui.org/unit"
+)
+
+type Size struct {
+	TextSize unit.Sp
+	Height   unit.Dp
+	Inset    layout.Inset
+}
 
 var (
-	Tiny   = unit.Dp(8)
-	Small  = unit.Dp(12)
-	Medium = unit.Dp(16)
-	Large  = unit.Dp(24)
+	Tiny   = Size{TextSize: unit.Sp(9), Height: unit.Dp(10), Inset: layout.UniformInset(unit.Dp(4))}
+	Small  = Size{TextSize: unit.Sp(12), Height: unit.Dp(15), Inset: layout.UniformInset(unit.Dp(6))}
+	Medium = Size{TextSize: unit.Sp(15), Height: unit.Dp(20), Inset: layout.UniformInset(unit.Dp(8))}
+	Large  = Size{TextSize: unit.Sp(20), Height: unit.Dp(25), Inset: layout.UniformInset(unit.Dp(10))}
 )

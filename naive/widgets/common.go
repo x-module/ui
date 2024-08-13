@@ -15,6 +15,7 @@ import (
 	"gioui.org/op"
 	"gioui.org/op/clip"
 	"gioui.org/unit"
+	"github.com/x-module/ui/naive/resource"
 	"image"
 	"image/color"
 )
@@ -26,6 +27,7 @@ type CommonWidget struct {
 	bgColor     color.NRGBA
 	hint        string
 	radius      unit.Dp
+	size        resource.Size
 }
 
 type state uint8

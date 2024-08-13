@@ -28,6 +28,7 @@ func NewInput(hint string, text ...string) *Input {
 	t := &Input{
 		editor: widget.Editor{},
 	}
+	t.size = resource.Medium
 	t.hint = hint
 	t.radius = 4
 	if len(text) > 0 {
@@ -41,6 +42,7 @@ func NewTextArea(hint string, text ...string) *Input {
 		editor: widget.Editor{},
 		height: unit.Dp(100),
 	}
+	t.size = resource.Medium
 	t.hint = hint
 	t.radius = 4
 	if len(text) > 0 {
@@ -57,6 +59,9 @@ func (t *Input) Password() {
 // SetRadius 设置radius
 func (t *Input) SetRadius(radius unit.Dp) {
 	t.radius = radius
+}
+func (t *Input) SetSize(size resource.Size) {
+	t.size = size
 }
 
 func (t *Input) SetText(text string) {
@@ -132,21 +137,22 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 				return layout.Dimensions{Size: gtx.Constraints.Min}
 			},
 			func(gtx layout.Context) layout.Dimensions {
-				return layout.Inset{
-					Top:    8,
-					Bottom: 8,
-					Left:   8,
-					Right:  4,
-				}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+				return t.size.Inset.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 					inputLayout := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
-						if t.height > 0 {
-							gtx.Constraints.Min.Y = gtx.Dp(t.height)      // 设置最小高度为 100dp
-							gtx.Constraints.Max.Y = gtx.Constraints.Min.Y // 限制最大高度与最小高度相同
-						}
 						editor := material.Editor(th.Material(), &t.editor, t.hint)
 						editor.Color = resource.TextColor
 						editor.HintColor = resource.HintTextColor
 						editor.SelectionColor = resource.TextSelectionColor
+
+						gtx.Constraints.Min.Y = gtx.Dp(t.size.Height) // 设置最小高度为 100dp
+						gtx.Constraints.Max.Y = gtx.Constraints.Min.Y // 限制最大高度与最小高度相同
+						editor.TextSize = t.size.TextSize
+
+						if t.height > 0 {
+							gtx.Constraints.Min.Y = gtx.Dp(t.height)      // 设置最小高度为 100dp
+							gtx.Constraints.Max.Y = gtx.Constraints.Min.Y // 限制最大高度与最小高度相同
+						}
+
 						return editor.Layout(gtx)
 					})
 					widgets := []layout.FlexChild{inputLayout}
