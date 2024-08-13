@@ -43,7 +43,6 @@ func NewInput(text, placeholder string) *Input {
 		Placeholder: placeholder,
 		onIconClick: func() {},
 	}
-	t.textEditor.Mask = '*'
 	t.textEditor.SetText(text)
 	t.textEditor.SingleLine = true
 	return t
