@@ -6,34 +6,29 @@ import (
 	"gioui.org/io/input"
 	"gioui.org/io/key"
 	"gioui.org/io/pointer"
+	"gioui.org/layout"
 	"gioui.org/op"
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
 	"gioui.org/unit"
+	"gioui.org/widget"
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/naive/resource"
 	"github.com/x-module/ui/theme"
 	"image"
-	"image/color"
-
-	"gioui.org/layout"
-	"gioui.org/widget"
 )
 
 type Input struct {
 	CommonWidget
-	editor     widget.Editor
-	Background color.NRGBA
-	hint       string
-	radius     unit.Dp
+	editor widget.Editor
 }
 
 func NewInput(hint string, text ...string) *Input {
 	t := &Input{
 		editor: widget.Editor{},
-		hint:   hint,
-		radius: 4,
 	}
+	t.hint = hint
+	t.radius = 4
 	if len(text) > 0 {
 		t.editor.SetText(text[0])
 	}
@@ -42,6 +37,11 @@ func NewInput(hint string, text ...string) *Input {
 }
 func (t *Input) Password() {
 	t.editor.Mask = '*'
+}
+
+// SetRadius 设置radius
+func (t *Input) SetRadius(radius unit.Dp) {
+	t.radius = radius
 }
 
 func (t *Input) SetText(text string) {
@@ -103,7 +103,6 @@ func (t *Input) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 }
 
 func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
-	t.Background = th.Palette.Fg
 	border := widget.Border{
 		Color:        t.borderColor,
 		Width:        unit.Dp(1),

@@ -14,6 +14,7 @@ import (
 	"gioui.org/layout"
 	"gioui.org/op"
 	"gioui.org/op/clip"
+	"gioui.org/unit"
 	"image"
 	"image/color"
 )
@@ -23,6 +24,8 @@ type CommonWidget struct {
 	state       state
 	borderColor color.NRGBA
 	bgColor     color.NRGBA
+	hint        string
+	radius      unit.Dp
 }
 
 type state uint8
