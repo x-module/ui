@@ -19,6 +19,11 @@ var (
 	TextColor      = color.NRGBA{R: 223, G: 223, B: 224, A: 255}
 	BorderColor    = color.NRGBA{R: 127, G: 231, B: 196, A: 255}
 
+	CommonColor  = color.NRGBA{R: 101, G: 231, B: 188, A: 255}
+	ErrorColor   = color.NRGBA{R: 232, G: 127, B: 127, A: 255}
+	WarningColor = color.NRGBA{R: 242, G: 201, B: 126, A: 255}
+	SuccessColor = color.NRGBA{R: 99, G: 226, B: 184, A: 255}
+	InfoColor    = color.NRGBA{R: 113, G: 192, B: 231, A: 255}
 	// =============input======================
 
 	DefaultBorderBgColor = color.NRGBA{R: 53, G: 54, B: 56, A: 255}
