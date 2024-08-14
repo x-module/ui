@@ -37,7 +37,7 @@ func NewInput(hint string, text ...string) *Input {
 	}
 	t.size = resource.Medium
 	t.hint = hint
-	t.radius = resource.RadiusSize
+	t.radius = resource.DefaultRadiusSize
 	if len(text) > 0 {
 		t.editor.SetText(text[0])
 	}
@@ -52,7 +52,7 @@ func NewTextArea(hint string, text ...string) *Input {
 	}
 	t.size = resource.Medium
 	t.hint = hint
-	t.radius = resource.RadiusSize
+	t.radius = resource.DefaultRadiusSize
 	if len(text) > 0 {
 		t.editor.SetText(text[0])
 	}
@@ -114,7 +114,7 @@ func (t *Input) update(gtx layout.Context, th *theme.Theme) {
 		t.state = focused
 	}
 
-	t.bgColor = resource.DefaultBgColor
+	t.bgColor = resource.DefaultBgBlueColor
 
 	if t.editor.ReadOnly {
 		return
@@ -180,7 +180,7 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 						if t.editor.ReadOnly {
 							editor.Color = resource.HintTextColor
 						} else {
-							editor.Color = resource.TextColor
+							editor.Color = resource.DefaultTextWhiteColor
 						}
 						return editor.Layout(gtx)
 					})

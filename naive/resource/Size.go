@@ -17,15 +17,18 @@ type Size struct {
 	TextSize unit.Sp
 	Height   unit.Dp
 	Inset    layout.Inset
+	IconSize unit.Dp
 }
 
 var (
-	Tiny   = Size{TextSize: unit.Sp(9), Height: unit.Dp(10), Inset: layout.UniformInset(unit.Dp(4))}
-	Small  = Size{TextSize: unit.Sp(12), Height: unit.Dp(15), Inset: layout.UniformInset(unit.Dp(6))}
-	Medium = Size{TextSize: unit.Sp(15), Height: unit.Dp(20), Inset: layout.UniformInset(unit.Dp(8))}
-	Large  = Size{TextSize: unit.Sp(20), Height: unit.Dp(25), Inset: layout.UniformInset(unit.Dp(10))}
+	Tiny   = Size{TextSize: unit.Sp(9), Height: unit.Dp(10), Inset: layout.UniformInset(unit.Dp(4)), IconSize: unit.Dp(14)}
+	Small  = Size{TextSize: unit.Sp(12), Height: unit.Dp(15), Inset: layout.UniformInset(unit.Dp(6)), IconSize: unit.Dp(18)}
+	Medium = Size{TextSize: unit.Sp(14), Height: unit.Dp(20), Inset: layout.UniformInset(unit.Dp(8)), IconSize: unit.Dp(24)}
+	Large  = Size{TextSize: unit.Sp(20), Height: unit.Dp(25), Inset: layout.UniformInset(unit.Dp(10)), IconSize: unit.Dp(30)}
 )
 
 var (
-	RadiusSize = unit.Dp(4)
+	DefaultTextSize   = unit.Sp(14)
+	DefaultIconSize   = unit.Dp(24)
+	DefaultRadiusSize = unit.Dp(4)
 )
