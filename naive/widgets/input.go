@@ -15,6 +15,7 @@ import (
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/naive/resource"
 	"github.com/x-module/ui/theme"
+	widgets2 "github.com/x-module/ui/widgets"
 	"golang.org/x/exp/shiny/materialdesign/icons"
 	"image"
 )
@@ -192,25 +193,26 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 					widgets = append(widgets, inputLayout)
 
 					if t.Icon != nil {
-						// iconLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-						// 	clk := &widget.Clickable{}
-						// 	clk = &t.iconClick
-						// 	if t.iconClick.Clicked(gtx) {
-						// 		if !t.showPassword {
-						// 			t.editor.Mask = 0
-						// 			t.Icon = widgets2.ActionVisibilityIcon
-						// 			t.showPassword = true
-						// 		} else {
-						// 			t.editor.Mask = '*'
-						// 			t.Icon = widgets2.ActionVisibilityOffIcon
-						// 			t.showPassword = false
-						// 		}
-						// 	}
-						// 	b := ButtonWithIcon(th, clk, t.Icon, widgets2.IconPositionStart, "", 0)
-						// 	b.Inset = layout.Inset{Left: unit.Dp(8), Right: unit.Dp(2), Top: unit.Dp(2), Bottom: unit.Dp(2)}
-						// 	return b.Layout(gtx)
-						// })
-						// widgets = append(widgets, iconLayout)
+						iconLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+							clk := &widget.Clickable{}
+							clk = &t.iconClick
+							if t.iconClick.Clicked(gtx) {
+								if !t.showPassword {
+									t.editor.Mask = 0
+									t.Icon = widgets2.ActionVisibilityIcon
+									t.showPassword = true
+								} else {
+									t.editor.Mask = '*'
+									t.Icon = widgets2.ActionVisibilityOffIcon
+									t.showPassword = false
+								}
+							}
+							b := DefaultButton(th, clk, "", unit.Dp(30))
+							b.SetIcon(t.Icon, widgets2.IconPositionStart)
+							b.Inset = layout.Inset{Left: unit.Dp(8), Right: unit.Dp(2), Top: unit.Dp(2), Bottom: unit.Dp(2)}
+							return b.Layout(gtx)
+						})
+						widgets = append(widgets, iconLayout)
 					} else {
 						if t.after != nil {
 							widgets = append(widgets, layout.Rigid(t.after))

@@ -28,7 +28,7 @@ func main() {
 	username = widgets.NewInput("请输入名称...")
 	age = widgets.NewInput("请输入年龄...", "á3452345234523452345")
 	password = widgets.NewInput("请输入密码...")
-	password2 = widgets.NewInput("请输入确认密码...")
+	password2 = widgets.NewInput("请输入确认密码===...")
 	profile = widgets.NewTextArea("请输入属性...")
 
 	username.SetSize(resource.Tiny)

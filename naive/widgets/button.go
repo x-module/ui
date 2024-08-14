@@ -88,6 +88,27 @@ type Button struct {
 	bdColor      color.NRGBA
 }
 
+func NullButton(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) Button {
+	b := Button{
+		theme: th,
+		Text:  txt,
+		// Color:        defaultButtonStyle.TextColor,
+		CornerRadius: resource.DefaultRadiusSize,
+		// Background:   defaultButtonStyle.BgColor,
+		// TextSize:     defaultButtonStyle.TextSize,
+		// bdColor:      defaultButtonStyle.BorderColor,
+		Inset: layout.Inset{
+			Top: 8, Bottom: 8,
+			Left: 8, Right: 8,
+		},
+		Button: button,
+		width:  width,
+	}
+	if len(inset) > 0 {
+		b.Inset = inset[0]
+	}
+	return b
+}
 func DefaultButton(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) Button {
 	b := Button{
 		theme:        th,
