@@ -88,27 +88,6 @@ type Button struct {
 	bdColor      color.NRGBA
 }
 
-func NullButton(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) Button {
-	b := Button{
-		theme: th,
-		Text:  txt,
-		// Color:        defaultButtonStyle.TextColor,
-		CornerRadius: resource.DefaultRadiusSize,
-		// Background:   defaultButtonStyle.BgColor,
-		// TextSize:     defaultButtonStyle.TextSize,
-		// bdColor:      defaultButtonStyle.BorderColor,
-		Inset: layout.Inset{
-			Top: 8, Bottom: 8,
-			Left: 8, Right: 8,
-		},
-		Button: button,
-		width:  width,
-	}
-	if len(inset) > 0 {
-		b.Inset = inset[0]
-	}
-	return b
-}
 func DefaultButton(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) Button {
 	b := Button{
 		theme:        th,
@@ -283,9 +262,10 @@ func (b Button) Layout(gtx layout.Context) layout.Dimensions {
 			return layout.Background{}.Layout(gtx,
 				func(gtx layout.Context) layout.Dimensions {
 					defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, gtx.Dp(resource.DefaultRadiusSize)).Push(gtx.Ops).Pop()
-					background := b.Background
-
-					paint.Fill(gtx.Ops, background)
+					if b.Background != (color.NRGBA{}) {
+						background := b.Background
+						paint.Fill(gtx.Ops, background)
+					}
 					for _, c := range b.Button.History() {
 						drawInk(gtx, c)
 					}
@@ -298,6 +278,7 @@ func (b Button) Layout(gtx layout.Context) layout.Dimensions {
 							if b.Icon != nil {
 								return layout.Inset{Right: unit.Dp(5)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 									gtx.Constraints.Min.X = gtx.Dp(18)
+									gtx.Constraints.Min.Y = gtx.Dp(18)
 									return b.Icon.Layout(gtx, b.Color)
 								})
 							}

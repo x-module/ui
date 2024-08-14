@@ -191,11 +191,9 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 						widgets = append(widgets, layout.Rigid(t.before))
 					}
 					widgets = append(widgets, inputLayout)
-
 					if t.Icon != nil {
 						iconLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-							clk := &widget.Clickable{}
-							clk = &t.iconClick
+							t.Icon = widgets2.ActionVisibilityIcon
 							if t.iconClick.Clicked(gtx) {
 								if !t.showPassword {
 									t.editor.Mask = 0
@@ -207,10 +205,9 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 									t.showPassword = false
 								}
 							}
-							b := DefaultButton(th, clk, "", unit.Dp(30))
-							b.SetIcon(t.Icon, widgets2.IconPositionStart)
-							b.Inset = layout.Inset{Left: unit.Dp(8), Right: unit.Dp(2), Top: unit.Dp(2), Bottom: unit.Dp(2)}
-							return b.Layout(gtx)
+							return t.iconClick.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+								return t.Icon.Layout(gtx, resource.IconBlueColor)
+							})
 						})
 						widgets = append(widgets, iconLayout)
 					} else {
