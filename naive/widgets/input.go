@@ -15,7 +15,6 @@ import (
 	"gioui.org/widget/material"
 	"github.com/x-module/ui/naive/resource"
 	"github.com/x-module/ui/theme"
-	widgets2 "github.com/x-module/ui/widgets"
 	"golang.org/x/exp/shiny/materialdesign/icons"
 	"image"
 )
@@ -38,11 +37,12 @@ func NewInput(hint string, text ...string) *Input {
 	}
 	t.size = resource.Medium
 	t.hint = hint
-	t.radius = 4
+	t.radius = resource.RadiusSize
 	if len(text) > 0 {
 		t.editor.SetText(text[0])
 	}
 	t.editor.SingleLine = true
+
 	return t
 }
 func NewTextArea(hint string, text ...string) *Input {
@@ -52,7 +52,7 @@ func NewTextArea(hint string, text ...string) *Input {
 	}
 	t.size = resource.Medium
 	t.hint = hint
-	t.radius = 4
+	t.radius = resource.RadiusSize
 	if len(text) > 0 {
 		t.editor.SetText(text[0])
 	}
@@ -71,7 +71,9 @@ func (t *Input) Password() {
 func (t *Input) SetRadius(radius unit.Dp) {
 	t.radius = radius
 }
-
+func (t *Input) ReadOnly() {
+	t.editor.ReadOnly = true
+}
 func (t *Input) SetBefore(before layout.Widget) {
 	t.before = before
 }
@@ -113,6 +115,11 @@ func (t *Input) update(gtx layout.Context, th *theme.Theme) {
 	}
 
 	t.bgColor = resource.DefaultBgColor
+
+	if t.editor.ReadOnly {
+		return
+	}
+
 	switch t.state {
 	case inactive:
 		t.borderColor = resource.DefaultBorderBgColor
@@ -159,7 +166,6 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 				return t.size.Inset.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 					inputLayout := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
 						editor := material.Editor(th.Material(), &t.editor, t.hint)
-						editor.Color = resource.TextColor
 						editor.HintColor = resource.HintTextColor
 						editor.SelectionColor = resource.TextSelectionColor
 
@@ -171,9 +177,14 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 							gtx.Constraints.Min.Y = gtx.Dp(t.height)      // 设置最小高度为 100dp
 							gtx.Constraints.Max.Y = gtx.Constraints.Min.Y // 限制最大高度与最小高度相同
 						}
-
+						if t.editor.ReadOnly {
+							editor.Color = resource.HintTextColor
+						} else {
+							editor.Color = resource.TextColor
+						}
 						return editor.Layout(gtx)
 					})
+
 					var widgets []layout.FlexChild
 					if t.before != nil {
 						widgets = append(widgets, layout.Rigid(t.before))
@@ -181,25 +192,25 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 					widgets = append(widgets, inputLayout)
 
 					if t.Icon != nil {
-						iconLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-							clk := &widget.Clickable{}
-							clk = &t.iconClick
-							if t.iconClick.Clicked(gtx) {
-								if !t.showPassword {
-									t.editor.Mask = 0
-									t.Icon = widgets2.ActionVisibilityIcon
-									t.showPassword = true
-								} else {
-									t.editor.Mask = '*'
-									t.Icon = widgets2.ActionVisibilityOffIcon
-									t.showPassword = false
-								}
-							}
-							b := ButtonWithIcon(th, clk, t.Icon, widgets2.IconPositionStart, "", 0)
-							b.Inset = layout.Inset{Left: unit.Dp(8), Right: unit.Dp(2), Top: unit.Dp(2), Bottom: unit.Dp(2)}
-							return b.Layout(gtx)
-						})
-						widgets = append(widgets, iconLayout)
+						// iconLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+						// 	clk := &widget.Clickable{}
+						// 	clk = &t.iconClick
+						// 	if t.iconClick.Clicked(gtx) {
+						// 		if !t.showPassword {
+						// 			t.editor.Mask = 0
+						// 			t.Icon = widgets2.ActionVisibilityIcon
+						// 			t.showPassword = true
+						// 		} else {
+						// 			t.editor.Mask = '*'
+						// 			t.Icon = widgets2.ActionVisibilityOffIcon
+						// 			t.showPassword = false
+						// 		}
+						// 	}
+						// 	b := ButtonWithIcon(th, clk, t.Icon, widgets2.IconPositionStart, "", 0)
+						// 	b.Inset = layout.Inset{Left: unit.Dp(8), Right: unit.Dp(2), Top: unit.Dp(2), Bottom: unit.Dp(2)}
+						// 	return b.Layout(gtx)
+						// })
+						// widgets = append(widgets, iconLayout)
 					} else {
 						if t.after != nil {
 							widgets = append(widgets, layout.Rigid(t.after))

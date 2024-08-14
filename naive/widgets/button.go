@@ -9,7 +9,6 @@ import (
 	"image/color"
 	"math"
 
-	"gioui.org/font"
 	"gioui.org/io/semantic"
 	"gioui.org/layout"
 	"gioui.org/op"
@@ -22,161 +21,289 @@ import (
 )
 
 type ButtonStyle struct {
+	TextColor   color.NRGBA
+	TextSize    unit.Sp
+	BorderColor color.NRGBA
+	BgColor     color.NRGBA
+}
+
+var (
+	defaultButtonStyle = ButtonStyle{
+		TextColor:   color.NRGBA{R: 216, G: 216, B: 217, A: 255},
+		TextSize:    unit.Sp(14),
+		BorderColor: color.NRGBA{R: 76, G: 76, B: 79, A: 255},
+		BgColor:     color.NRGBA{R: 24, G: 24, B: 28, A: 255},
+	}
+	tertiaryButtonStyle = ButtonStyle{
+		TextColor:   color.NRGBA{R: 149, G: 149, B: 150, A: 255},
+		TextSize:    unit.Sp(14),
+		BorderColor: color.NRGBA{R: 76, G: 76, B: 79, A: 255},
+		BgColor:     color.NRGBA{R: 24, G: 24, B: 28, A: 255},
+	}
+	primaryButtonStyle = ButtonStyle{
+		TextColor:   color.NRGBA{R: 0, G: 0, B: 0, A: 255},
+		TextSize:    unit.Sp(14),
+		BorderColor: color.NRGBA{R: 76, G: 76, B: 79, A: 255},
+		BgColor:     color.NRGBA{R: 99, G: 226, B: 184, A: 255},
+	}
+	infoButtonStyle = ButtonStyle{
+		TextColor:   color.NRGBA{R: 0, G: 0, B: 0, A: 255},
+		TextSize:    unit.Sp(14),
+		BorderColor: color.NRGBA{R: 76, G: 76, B: 79, A: 255},
+		BgColor:     color.NRGBA{R: 113, G: 192, B: 231, A: 255},
+	}
+	successButtonStyle = ButtonStyle{
+		TextColor:   color.NRGBA{R: 0, G: 0, B: 0, A: 255},
+		TextSize:    unit.Sp(14),
+		BorderColor: color.NRGBA{R: 76, G: 76, B: 79, A: 255},
+		BgColor:     color.NRGBA{R: 99, G: 226, B: 184, A: 255},
+	}
+	warningButtonStyle = ButtonStyle{
+		TextColor:   color.NRGBA{R: 0, G: 0, B: 0, A: 255},
+		TextSize:    unit.Sp(14),
+		BorderColor: color.NRGBA{R: 76, G: 76, B: 79, A: 255},
+		BgColor:     color.NRGBA{R: 242, G: 201, B: 126, A: 255},
+	}
+	errorButtonStyle = ButtonStyle{
+		TextColor:   color.NRGBA{R: 0, G: 0, B: 0, A: 255},
+		TextSize:    unit.Sp(14),
+		BorderColor: color.NRGBA{R: 76, G: 76, B: 79, A: 255},
+		BgColor:     color.NRGBA{R: 232, G: 127, B: 127, A: 255},
+	}
+)
+
+type Button struct {
 	Text         string
 	Icon         *widget.Icon
 	IconPosition int
 	theme        *theme.Theme
 	// Color is the text color.
 	Color        color.NRGBA
-	Font         font.Font
 	TextSize     unit.Sp
 	Background   color.NRGBA
 	CornerRadius unit.Dp
 	Inset        layout.Inset
 	Button       *widget.Clickable
-	shaper       *text.Shaper
 	width        unit.Dp
+	bdColor      color.NRGBA
 }
 
-type ButtonLayoutStyle struct {
-	Background   color.NRGBA
-	CornerRadius unit.Dp
-	Button       *widget.Clickable
-	width        unit.Dp
-}
-
-type IconButtonStyle struct {
-	Background color.NRGBA
-	// Color is the icon color.
-	Color color.NRGBA
-	Icon  *widget.Icon
-	// Size is the icon size.
-	Size        unit.Dp
-	Inset       layout.Inset
-	Button      *widget.Clickable
-	Description string
-}
-
-func Button(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) ButtonStyle {
-	b := ButtonStyle{
+func DefaultButton(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) Button {
+	b := Button{
 		theme:        th,
 		Text:         txt,
-		Color:        th.TextColor,
-		CornerRadius: 4,
-		Background:   th.Palette.Bg,
-		TextSize:     th.TextSize * 14.0 / 16.0,
+		Color:        defaultButtonStyle.TextColor,
+		CornerRadius: resource.RadiusSize,
+		Background:   defaultButtonStyle.BgColor,
+		TextSize:     defaultButtonStyle.TextSize,
+		bdColor:      defaultButtonStyle.BorderColor,
 		Inset: layout.Inset{
 			Top: 8, Bottom: 8,
 			Left: 8, Right: 8,
 		},
 		Button: button,
-		shaper: th.Shaper,
 		width:  width,
 	}
 	if len(inset) > 0 {
 		b.Inset = inset[0]
 	}
-	b.Font.Typeface = th.Face
 	return b
 }
-func ButtonWithIcon(th *theme.Theme, button *widget.Clickable, icon *widget.Icon, iconPosition int, txt string, width unit.Dp) ButtonStyle {
-	b := ButtonStyle{
+func TertiaryButton(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) Button {
+	b := Button{
 		theme:        th,
 		Text:         txt,
-		Icon:         icon,
-		IconPosition: iconPosition,
-		Color:        th.TextColor,
-		CornerRadius: 4,
-		Background:   resource.DefaultBgColor,
-		TextSize:     th.TextSize * 14.0 / 16.0,
+		Color:        tertiaryButtonStyle.TextColor,
+		CornerRadius: resource.RadiusSize,
+		Background:   tertiaryButtonStyle.BgColor,
+		TextSize:     tertiaryButtonStyle.TextSize,
+		bdColor:      tertiaryButtonStyle.BorderColor,
 		Inset: layout.Inset{
 			Top: 8, Bottom: 8,
 			Left: 8, Right: 8,
 		},
 		Button: button,
-		shaper: th.Shaper,
 		width:  width,
 	}
-	b.Font.Typeface = th.Face
+	if len(inset) > 0 {
+		b.Inset = inset[0]
+	}
+	return b
+}
+func PrimaryButton(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) Button {
+	b := Button{
+		theme:        th,
+		Text:         txt,
+		Color:        primaryButtonStyle.TextColor,
+		CornerRadius: resource.RadiusSize,
+		Background:   primaryButtonStyle.BgColor,
+		TextSize:     primaryButtonStyle.TextSize,
+		bdColor:      primaryButtonStyle.BorderColor,
+		Inset: layout.Inset{
+			Top: 8, Bottom: 8,
+			Left: 8, Right: 8,
+		},
+		Button: button,
+		width:  width,
+	}
+	if len(inset) > 0 {
+		b.Inset = inset[0]
+	}
+	return b
+}
+func InfoButton(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) Button {
+	b := Button{
+		theme:        th,
+		Text:         txt,
+		Color:        infoButtonStyle.TextColor,
+		CornerRadius: resource.RadiusSize,
+		Background:   infoButtonStyle.BgColor,
+		TextSize:     infoButtonStyle.TextSize,
+		bdColor:      infoButtonStyle.BorderColor,
+		Inset: layout.Inset{
+			Top: 8, Bottom: 8,
+			Left: 8, Right: 8,
+		},
+		Button: button,
+		width:  width,
+	}
+	if len(inset) > 0 {
+		b.Inset = inset[0]
+	}
+	return b
+}
+func SuccessButton(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) Button {
+	b := Button{
+		theme:        th,
+		Text:         txt,
+		Color:        successButtonStyle.TextColor,
+		CornerRadius: resource.RadiusSize,
+		Background:   successButtonStyle.BgColor,
+		TextSize:     successButtonStyle.TextSize,
+		bdColor:      successButtonStyle.BorderColor,
+		Inset: layout.Inset{
+			Top: 8, Bottom: 8,
+			Left: 8, Right: 8,
+		},
+		Button: button,
+		width:  width,
+	}
+	if len(inset) > 0 {
+		b.Inset = inset[0]
+	}
+	return b
+}
+func WarningButton(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) Button {
+	b := Button{
+		theme:        th,
+		Text:         txt,
+		Color:        warningButtonStyle.TextColor,
+		CornerRadius: resource.RadiusSize,
+		Background:   warningButtonStyle.BgColor,
+		TextSize:     warningButtonStyle.TextSize,
+		bdColor:      warningButtonStyle.BorderColor,
+		Inset: layout.Inset{
+			Top: 8, Bottom: 8,
+			Left: 8, Right: 8,
+		},
+		Button: button,
+		width:  width,
+	}
+	if len(inset) > 0 {
+		b.Inset = inset[0]
+	}
+	return b
+}
+func ErrorButton(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) Button {
+	b := Button{
+		theme:        th,
+		Text:         txt,
+		Color:        errorButtonStyle.TextColor,
+		CornerRadius: resource.RadiusSize,
+		Background:   errorButtonStyle.BgColor,
+		TextSize:     errorButtonStyle.TextSize,
+		bdColor:      errorButtonStyle.BorderColor,
+		Inset: layout.Inset{
+			Top: 8, Bottom: 8,
+			Left: 8, Right: 8,
+		},
+		Button: button,
+		width:  width,
+	}
+	if len(inset) > 0 {
+		b.Inset = inset[0]
+	}
 	return b
 }
 
-// 设置CornerRadius
-func (b *ButtonStyle) SetCornerRadius(cornerRadius unit.Dp) ButtonStyle {
-	b.CornerRadius = cornerRadius
-	return *b
+func (b Button) SetIcon(icon *widget.Icon, iconPosition int) Button {
+	b.Icon = icon
+	b.IconPosition = iconPosition
+	return b
 }
 
-// SetBackground 设置Background
-func (b *ButtonStyle) SetBackground(background color.NRGBA) {
-	b.Background = background
-}
-func (b ButtonStyle) Layout(gtx layout.Context) layout.Dimensions {
-	return ButtonLayoutStyle{
-		Background:   b.Background,
-		CornerRadius: b.CornerRadius,
-		Button:       b.Button,
-		width:        b.width,
-	}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-		iconDims := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-			if b.Icon != nil {
-				return layout.Inset{Right: unit.Dp(5)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-					gtx.Constraints.Min.X = gtx.Dp(18)
-					return b.Icon.Layout(gtx, b.Color)
-				})
-			}
-			return layout.Dimensions{}
-		})
-		labelDims := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-			lb := material.Label(b.theme.Material(), b.TextSize, b.Text)
-			lb.Color = b.Color
-			lb.Alignment = text.Middle
-			return lb.Layout(gtx)
-		})
-
-		items := []layout.FlexChild{iconDims, labelDims}
-		if b.IconPosition == widgets.IconPositionEnd {
-			items = []layout.FlexChild{labelDims, iconDims}
-			b.Inset.Right = unit.Dp(5)
-		}
-
-		return b.Inset.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-			return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle}.Layout(gtx,
-				items...,
-			)
-		})
-	})
-}
-
-func (b ButtonLayoutStyle) Layout(gtx layout.Context, w layout.Widget) layout.Dimensions {
+func (b Button) Layout(gtx layout.Context) layout.Dimensions {
 	minWidth := gtx.Constraints.Min
 	if b.width > 0 {
 		minWidth.X = gtx.Dp(b.width)
 	}
+	border := widget.Border{
+		Color:        b.bdColor,
+		Width:        unit.Dp(1),
+		CornerRadius: resource.RadiusSize,
+	}
+
 	return b.Button.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		semantic.Button.Add(gtx.Ops)
-		return layout.Background{}.Layout(gtx,
-			func(gtx layout.Context) layout.Dimensions {
-				rr := gtx.Dp(b.CornerRadius)
-				defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, rr).Push(gtx.Ops).Pop()
-				background := b.Background
-				switch {
-				case !gtx.Enabled():
-					background = utils.Disabled(b.Background)
-				case b.Button.Hovered() || gtx.Focused(b.Button):
-					background = utils.Hovered(b.Background)
-				}
-				paint.Fill(gtx.Ops, background)
-				for _, c := range b.Button.History() {
-					drawInk(gtx, c)
-				}
-				return layout.Dimensions{Size: gtx.Constraints.Min}
-			},
-			func(gtx layout.Context) layout.Dimensions {
-				gtx.Constraints.Min = minWidth
-				return layout.Center.Layout(gtx, w)
-			},
-		)
+		if b.Button.Hovered() {
+			border.Color = resource.BorderColor
+		}
+		return border.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+			return layout.Background{}.Layout(gtx,
+				func(gtx layout.Context) layout.Dimensions {
+					defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, gtx.Dp(resource.RadiusSize)).Push(gtx.Ops).Pop()
+					background := b.Background
+
+					paint.Fill(gtx.Ops, background)
+					for _, c := range b.Button.History() {
+						drawInk(gtx, c)
+					}
+					return layout.Dimensions{Size: gtx.Constraints.Min}
+				},
+				func(gtx layout.Context) layout.Dimensions {
+					gtx.Constraints.Min = minWidth
+					return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+						iconDims := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+							if b.Icon != nil {
+								return layout.Inset{Right: unit.Dp(5)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+									gtx.Constraints.Min.X = gtx.Dp(18)
+									return b.Icon.Layout(gtx, b.Color)
+								})
+							}
+							return layout.Dimensions{}
+						})
+						labelDims := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+							lb := material.Label(b.theme.Material(), b.TextSize, b.Text)
+							lb.Color = b.Color
+							lb.Alignment = text.Middle
+							return lb.Layout(gtx)
+						})
+
+						items := []layout.FlexChild{iconDims, labelDims}
+						if b.IconPosition == widgets.IconPositionEnd {
+							items = []layout.FlexChild{labelDims, iconDims}
+							b.Inset.Right = unit.Dp(5)
+						}
+
+						return b.Inset.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+							return layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle}.Layout(gtx,
+								items...,
+							)
+						})
+					})
+				},
+			)
+		})
 	})
 }
 

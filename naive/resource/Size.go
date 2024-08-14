@@ -25,3 +25,7 @@ var (
 	Medium = Size{TextSize: unit.Sp(15), Height: unit.Dp(20), Inset: layout.UniformInset(unit.Dp(8))}
 	Large  = Size{TextSize: unit.Sp(20), Height: unit.Dp(25), Inset: layout.UniformInset(unit.Dp(10))}
 )
+
+var (
+	RadiusSize = unit.Dp(4)
+)

@@ -26,7 +26,7 @@ func main() {
 	// w := new(app.Window)
 	var ops op.Ops
 	username = widgets.NewInput("请输入名称...")
-	age = widgets.NewInput("请输入年龄...")
+	age = widgets.NewInput("请输入年龄...", "á3452345234523452345")
 	password = widgets.NewInput("请输入密码...")
 	password2 = widgets.NewInput("请输入确认密码...")
 	profile = widgets.NewTextArea("请输入属性...")
@@ -37,6 +37,7 @@ func main() {
 	password2.SetSize(resource.Medium)
 	age.SetSize(resource.Large)
 
+	age.ReadOnly()
 	// password2.SetAfter(func(gtx layout.Context) layout.Dimensions {
 	// 	return widgets2.NavigationSubdirectoryArrowRightIcon.Layout(gtx, resource.IconColor)
 	// })

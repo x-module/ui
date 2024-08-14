@@ -17,6 +17,7 @@ var (
 	DefaultBgColor = color.NRGBA{R: 53, G: 54, B: 56, A: 255}
 	IconColor      = color.NRGBA{R: 136, G: 136, B: 137, A: 255}
 	TextColor      = color.NRGBA{R: 223, G: 223, B: 224, A: 255}
+	BorderColor    = color.NRGBA{R: 127, G: 231, B: 196, A: 255}
 
 	// =============input======================
 
