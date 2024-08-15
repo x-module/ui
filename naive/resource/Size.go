@@ -29,6 +29,6 @@ var (
 
 var (
 	DefaultTextSize   = unit.Sp(14)
-	DefaultIconSize   = unit.Dp(24)
+	DefaultIconSize   = unit.Dp(20)
 	DefaultRadiusSize = unit.Dp(4)
 )

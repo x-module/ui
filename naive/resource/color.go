@@ -11,7 +11,8 @@ package resource
 import "image/color"
 
 var (
-	WindowBgColor = color.NRGBA{R: 24, G: 24, B: 28, A: 255}
+	DefaultWindowBgGrayColor  = color.NRGBA{R: 17, G: 15, B: 20, A: 255}
+	DefaultContentBgGrayColor = color.NRGBA{R: 24, G: 24, B: 28, A: 255}
 
 	DefaultBgGrayColor    = color.NRGBA{R: 53, G: 54, B: 56, A: 255}
 	DefaultTextWhiteColor = color.NRGBA{R: 223, G: 223, B: 224, A: 255}

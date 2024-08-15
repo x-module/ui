@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"gioui.org/app"
 	"gioui.org/layout"
 	"gioui.org/op"
@@ -15,20 +16,19 @@ import (
 )
 
 func main() {
-
-	// var clickable widget.Clickable
+	var clickable widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
-
-	accountType := &widget.Enum{
-		Value: "old",
-	}
-
-	newAccount := widgets.NewRadioButton(th, accountType, "new", "新用户")
-	oldAccount := widgets.NewRadioButton(th, accountType, "old", "老用户")
-
-	oldAccount.SetSize(resource.Large)
+	var dirSelect = widgets.NewDirSelector("请选择目录...")
+	dirSelect.SetWidth(unit.Dp(400))
 	// w := new(app.Window)
 	var ops op.Ops
+	confirm := widgets.NewConfirm(th)
+	confirm.Confirm(func() {
+		fmt.Println("确定...")
+	})
+	confirm.Cancel(func() {
+		fmt.Println("取消...")
+	})
 	go func() {
 		w := new(app.Window)
 		for {
@@ -38,23 +38,21 @@ func main() {
 				panic(e.Err)
 			case app.FrameEvent:
 				gtx := app.NewContext(&ops, e)
+				if clickable.Clicked(gtx) {
+					confirm.Message("确定退出吗?")
+				}
 				rect := clip.Rect{
 					Max: gtx.Constraints.Max,
 				}
 				paint.FillShape(gtx.Ops, resource.DefaultWindowBgGrayColor, rect.Op())
-				// =============================================
 				// ==============================================
-				layout.Stack{Alignment: layout.Center}.Layout(gtx,
-					layout.Stacked(func(gtx layout.Context) layout.Dimensions {
-						return layout.Flex{Axis: layout.Horizontal}.Layout(gtx,
-							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return newAccount.Layout(gtx)
-							}),
-							layout.Rigid(layout.Spacer{Height: unit.Dp(20)}.Layout),
-							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return oldAccount.Layout(gtx)
-							}),
-						)
+				layout.Flex{Axis: layout.Vertical}.Layout(gtx,
+					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+						gtx.Constraints.Min.Y = gtx.Dp(unit.Dp(400))
+						return widgets.Label(th, "&clickable, nil, 0,  unit.Dp(100)").Layout(gtx)
+					}),
+					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+						return dirSelect.Layout(gtx, th)
 					}),
 				)
 				e.Frame(gtx.Ops)

@@ -110,7 +110,7 @@ func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
 				}},
 				NW: 10, NE: 10, SE: 10, SW: 10,
 			}
-			paint.FillShape(gtx.Ops, resource.WindowBgColor, rc.Op(gtx.Ops))
+			paint.FillShape(gtx.Ops, resource.DefaultContentBgGrayColor, rc.Op(gtx.Ops))
 			// Center the text inside the Confirm
 			return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {

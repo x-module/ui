@@ -26,10 +26,13 @@ type Input struct {
 	height    unit.Dp
 	before    layout.Widget
 	after     layout.Widget
-	Icon      *widget.Icon
+	icon      *widget.Icon
 	iconClick widget.Clickable
 
+	// size image.Point
+
 	showPassword bool
+	onIconClick  func()
 }
 
 func NewInput(hint string, text ...string) *Input {
@@ -61,11 +64,17 @@ func NewTextArea(hint string, text ...string) *Input {
 	return t
 }
 
+func (t *Input) SetOnIconClick(f func()) {
+	t.onIconClick = f
+}
 func (t *Input) Password() {
 	t.editor.Mask = '*'
-	t.Icon, _ = widget.NewIcon(icons.ActionVisibilityOff)
+	t.icon, _ = widget.NewIcon(icons.ActionVisibilityOff)
 	// t.IconPosition = IconPositionEnd
 	t.showPassword = false
+}
+func (t *Input) SetIcon(icon *widget.Icon) {
+	t.icon = icon
 }
 
 // SetRadius 设置radius
@@ -191,22 +200,25 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 						widgets = append(widgets, layout.Rigid(t.before))
 					}
 					widgets = append(widgets, inputLayout)
-					if t.Icon != nil {
+					if t.icon != nil {
 						iconLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-							t.Icon = widgets2.ActionVisibilityIcon
+							t.icon = widgets2.ActionVisibilityIcon
 							if t.iconClick.Clicked(gtx) {
+								if t.onIconClick != nil {
+									t.onIconClick()
+								}
 								if !t.showPassword {
 									t.editor.Mask = 0
-									t.Icon = widgets2.ActionVisibilityIcon
+									t.icon = widgets2.ActionVisibilityIcon
 									t.showPassword = true
 								} else {
 									t.editor.Mask = '*'
-									t.Icon = widgets2.ActionVisibilityOffIcon
+									t.icon = widgets2.ActionVisibilityOffIcon
 									t.showPassword = false
 								}
 							}
 							return t.iconClick.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-								return t.Icon.Layout(gtx, resource.IconGrayColor)
+								return t.icon.Layout(gtx, resource.IconGrayColor)
 							})
 						})
 						widgets = append(widgets, iconLayout)

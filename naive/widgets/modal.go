@@ -102,7 +102,7 @@ func (m *Modal) Layout(gtx layout.Context) layout.Dimensions {
 				}},
 				NW: 20, NE: 20, SE: 20, SW: 20,
 			}
-			paint.FillShape(gtx.Ops, resource.WindowBgColor, rc.Op(gtx.Ops))
+			paint.FillShape(gtx.Ops, resource.DefaultContentBgGrayColor, rc.Op(gtx.Ops))
 			// Center the text inside the Modal
 			return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 				layout.Rigid(func(gtx layout.Context) layout.Dimensions {

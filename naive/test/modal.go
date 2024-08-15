@@ -47,7 +47,7 @@ func main() {
 				rect := clip.Rect{
 					Max: gtx.Constraints.Max,
 				}
-				paint.FillShape(gtx.Ops, resource.WindowBgColor, rect.Op())
+				paint.FillShape(gtx.Ops, resource.DefaultWindowBgGrayColor, rect.Op())
 				// ==============================================
 				layout.Stack{Alignment: layout.Center}.Layout(gtx,
 					layout.Stacked(func(gtx layout.Context) layout.Dimensions {
