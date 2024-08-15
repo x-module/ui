@@ -115,7 +115,7 @@ func (t *Input) update(gtx layout.Context, th *theme.Theme) {
 		t.state = focused
 	}
 
-	t.bgColor = resource.DefaultBgBlueColor
+	t.bgColor = resource.DefaultBgGrayColor
 
 	if t.editor.ReadOnly {
 		return
@@ -125,10 +125,10 @@ func (t *Input) update(gtx layout.Context, th *theme.Theme) {
 	case inactive:
 		t.borderColor = resource.DefaultBorderBgColor
 	case hovered:
-		t.borderColor = resource.HoveredBorderColor
+		t.borderColor = resource.HoveredBorderBlueColor
 	case focused:
 		t.bgColor = resource.FocusedBgColor
-		t.borderColor = resource.FocusedBorderColor
+		t.borderColor = resource.FocusedBorderBlueColor
 	case activated:
 		t.borderColor = resource.DefaultBorderBgColor
 	}
@@ -206,7 +206,7 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 								}
 							}
 							return t.iconClick.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-								return t.Icon.Layout(gtx, resource.IconBlueColor)
+								return t.Icon.Layout(gtx, resource.IconGrayColor)
 							})
 						})
 						widgets = append(widgets, iconLayout)

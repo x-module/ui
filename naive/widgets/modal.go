@@ -45,7 +45,7 @@ func NewModal(th *theme2.Theme) *Modal {
 	}
 	modal.closeIcon = &IconButton{
 		Icon:                 widgets.CloseIcon,
-		Color:                resource.IconBlueColor,
+		Color:                resource.IconGrayColor,
 		BackgroundColor:      bkColor,
 		BackgroundColorHover: hoveredColor,
 		Size:                 iconSize,

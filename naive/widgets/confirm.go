@@ -9,16 +9,15 @@
 package widgets
 
 import (
-	"gioui.org/font"
 	"gioui.org/layout"
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
 	"gioui.org/unit"
 	"gioui.org/widget"
-	"gioui.org/widget/material"
 	"github.com/x-module/ui/naive/resource"
 	theme2 "github.com/x-module/ui/theme"
 	"github.com/x-module/ui/utils"
+	"github.com/x-module/ui/widgets"
 	"image"
 )
 
@@ -98,64 +97,74 @@ func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
 
 	width := gtx.Dp(unit.Dp(c.width))
 	height := gtx.Dp(unit.Dp(c.height))
-	return new(widget.Clickable).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-		return layout.Inset{
-			Top: unit.Dp(0),
-		}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-			return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-				// Set the size of the Confirm
-				gtx.Constraints = layout.Exact(image.Point{X: width, Y: height})
-				rc := clip.RRect{
-					Rect: image.Rectangle{Max: image.Point{
-						X: gtx.Constraints.Min.X,
-						Y: gtx.Constraints.Min.Y,
-					}},
-					NW: 10, NE: 10, SE: 10, SW: 10,
-				}
-				paint.FillShape(gtx.Ops, c.theme.Palette.Fg, rc.Op(gtx.Ops))
-				// Center the text inside the Confirm
-				return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
-					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-						return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-							return layout.Inset{Left: 0, Right: 10, Bottom: 10, Top: 10}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-								return layout.Stack{Alignment: layout.N}.Layout(gtx,
-									layout.Stacked(func(gtx layout.Context) layout.Dimensions {
-										return Label(c.theme, c.title).Layout(gtx)
-									}),
-								)
-							})
+	return layout.Inset{
+		Top: unit.Dp(10),
+	}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+		return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+			// Set the size of the Confirm
+			gtx.Constraints = layout.Exact(image.Point{X: width, Y: height})
+			rc := clip.RRect{
+				Rect: image.Rectangle{Max: image.Point{
+					X: gtx.Constraints.Min.X,
+					Y: gtx.Constraints.Min.Y,
+				}},
+				NW: 10, NE: 10, SE: 10, SW: 10,
+			}
+			paint.FillShape(gtx.Ops, resource.WindowBgColor, rc.Op(gtx.Ops))
+			// Center the text inside the Confirm
+			return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
+				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+					return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+						return layout.Inset{Left: 0, Right: 10, Bottom: 10, Top: 10}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+							return layout.Flex{Axis: layout.Horizontal}.Layout(gtx,
+								layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+									gtx.Constraints.Max.X = gtx.Dp(unit.Dp(20))
+									return widgets.ActionInfoOutlineIcon.Layout(gtx, resource.GreenColor)
+								}),
+								layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+									return Label(c.theme, c.title).Layout(gtx)
+								}),
+							)
+
 						})
-					}),
-					utils.DrawLineFlex(resource.DefaultLineColor, unit.Dp(1), unit.Dp(c.width)),
-					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-						gtx.Constraints.Min.Y = gtx.Dp(unit.Dp(50))
-						return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-							return layout.Inset{Left: 5, Right: 5, Bottom: 2, Top: 2}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-								label := material.Label(c.theme.Material(), c.theme.TextSize, c.message)
-								label.Color = theme2.LightBlue
-								label.Font.Weight = font.Medium
-								return label.Layout(gtx)
-							})
+					})
+				}),
+				utils.DrawLineFlex(resource.DefaultLineColor, unit.Dp(1), unit.Dp(c.width)),
+				layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+					gtx.Constraints.Min.Y = gtx.Dp(unit.Dp(50))
+					return layout.Center.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+						return layout.Inset{Left: 5, Right: 5, Bottom: 2, Top: 2}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+							return Label(c.theme, c.message).Layout(gtx)
 						})
-					}),
-					utils.DrawLineFlex(resource.DefaultLineColor, unit.Dp(1), unit.Dp(c.width)),
-					layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
-						return layout.Flex{Axis: layout.Horizontal}.Layout(gtx,
-							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								but := DefaultButton(c.theme, &c.cancelClickable, "取消", unit.Dp(150))
-								return but.Layout(gtx)
-							}),
-							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return utils.DrawLine(gtx, resource.DefaultLineColor, unit.Dp(35), unit.Dp(1))
-							}),
-							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								but := DefaultButton(c.theme, &c.confirmClickable, "确认", unit.Dp(150))
-								return but.Layout(gtx)
-							}),
-						)
-					}),
-				)
-			})
+					})
+				}),
+				layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
+					return layout.E.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+						return layout.UniformInset(unit.Dp(5)).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+							return layout.Flex{Axis: layout.Horizontal}.Layout(gtx,
+								layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+									but := DefaultButton(c.theme, &c.cancelClickable, "取消", unit.Dp(70), layout.Inset{
+										Top: 3, Bottom: 3,
+										Left: 5, Right: 5,
+									})
+									return but.Layout(gtx)
+								}),
+								layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+									return layout.Dimensions{Size: image.Point{X: 20, Y: 0}}
+								}),
+								layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+									but := SuccessButton(c.theme, &c.confirmClickable, "确认", unit.Dp(70), layout.Inset{
+										Top: 3, Bottom: 3,
+										Left: 5, Right: 5,
+									})
+									return but.Layout(gtx)
+								}),
+							)
+						})
+					})
+
+				}),
+			)
 		})
 	})
 }

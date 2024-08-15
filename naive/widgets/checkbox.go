@@ -34,7 +34,7 @@ func CheckBox(th *theme.Theme, checkBox *widget.Bool, label string) Checkbox {
 		CheckBox:           checkBox,
 		Label:              label,
 		Color:              resource.DefaultTextWhiteColor,
-		IconColor:          resource.BorderLightBlueColor,
+		IconColor:          resource.BorderLightGrayColor,
 		TextSize:           resource.DefaultTextSize,
 		Size:               resource.Medium.IconSize,
 		shaper:             th.Shaper,
@@ -59,12 +59,12 @@ func (c Checkbox) Layout(gtx layout.Context) layout.Dimensions {
 		var icon *widget.Icon
 		if c.CheckBox.Value {
 			icon = c.checkedStateIcon
-			c.IconColor = resource.HoveredBorderColor
+			c.IconColor = resource.HoveredBorderBlueColor
 		} else {
 			icon = c.uncheckedStateIcon
 		}
 		if c.CheckBox.Hovered() {
-			c.IconColor = resource.HoveredBorderColor
+			c.IconColor = resource.HoveredBorderBlueColor
 		}
 		return layout.Flex{Alignment: layout.Middle}.Layout(gtx,
 			layout.Rigid(func(gtx layout.Context) layout.Dimensions {

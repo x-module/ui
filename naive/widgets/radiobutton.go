@@ -41,13 +41,13 @@ func (r *RadioButton) SetSize(size resource.Size) {
 
 // Layout updates enum and displays the radio button.
 func (r *RadioButton) Layout(gtx layout.Context) layout.Dimensions {
-	iconColor := resource.BorderLightBlueColor
+	iconColor := resource.BorderLightGrayColor
 	if r.group.Value == r.key {
-		iconColor = resource.ActivatedBorderColor
+		iconColor = resource.ActivatedBorderBlueColor
 	}
 	return r.radioButton.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		if r.radioButton.Hovered() {
-			iconColor = resource.HoveredBorderColor
+			iconColor = resource.HoveredBorderBlueColor
 		}
 		rb := material.RadioButton(r.theme.Material(), r.group, r.key, r.label)
 		rb.IconColor = iconColor

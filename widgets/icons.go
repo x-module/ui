@@ -193,3 +193,7 @@ var NavigationSubdirectoryArrowRightIcon *widget.Icon = func() *widget.Icon {
 	icon, _ := widget.NewIcon(icons.NavigationSubdirectoryArrowRight)
 	return icon
 }()
+var ActionInfoOutlineIcon *widget.Icon = func() *widget.Icon {
+	icon, _ := widget.NewIcon(icons.ActionInfoOutline)
+	return icon
+}()

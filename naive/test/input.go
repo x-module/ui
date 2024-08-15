@@ -42,7 +42,7 @@ func main() {
 	// 	return widgets2.NavigationSubdirectoryArrowRightIcon.Layout(gtx, resource.IconColor)
 	// })
 	password2.SetBefore(func(gtx layout.Context) layout.Dimensions {
-		return widgets2.ActionPermIdentityIcon.Layout(gtx, resource.IconBlueColor)
+		return widgets2.ActionPermIdentityIcon.Layout(gtx, resource.IconGrayColor)
 	})
 
 	password2.Password()
