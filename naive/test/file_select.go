@@ -18,12 +18,14 @@ import (
 func main() {
 	var clickable widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
-	var dirSelect = widgets.NewDirSelector("请选择目录...")
-	dirSelect.SetWidth(unit.Dp(400))
-	dirSelect.SetOnSelectDir(func(dir string) {
-		fmt.Println("dir:", dir)
-	})
 	// w := new(app.Window)
+	var dirSelect = widgets.NewFileSelector("请选择文件...")
+	dirSelect.SetWidth(unit.Dp(600))
+	dirSelect.SetFilter("*.sql")
+	dirSelect.SetOnSelectFile(func(dir string) {
+		fmt.Println("file:", dir)
+	})
+
 	var ops op.Ops
 	confirm := widgets.NewConfirm(th)
 	confirm.Confirm(func() {
