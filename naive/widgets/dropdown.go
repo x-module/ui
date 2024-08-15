@@ -241,7 +241,7 @@ func (c *DropDown) box(gtx layout.Context, theme *theme2.Theme, text string, max
 			// calculate the minimum width of the box, considering icon and padding
 			return layout.Background{}.Layout(gtx,
 				func(gtx layout.Context) layout.Dimensions {
-					defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, gtx.Dp(resource.DefaultRadiusSize)).Push(gtx.Ops).Pop()
+					defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, gtx.Dp(resource.DefaultElementRadiusSize)).Push(gtx.Ops).Pop()
 					paint.Fill(gtx.Ops, resource.DefaultBgGrayColor)
 					return layout.Dimensions{Size: gtx.Constraints.Min}
 				},

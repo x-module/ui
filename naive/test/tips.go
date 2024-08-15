@@ -4,11 +4,14 @@ import (
 	"gioui.org/app"
 	"gioui.org/layout"
 	"gioui.org/op"
+	"gioui.org/op/clip"
+	"gioui.org/op/paint"
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
+	"github.com/x-module/ui/naive/resource"
+	"github.com/x-module/ui/naive/widgets"
 	"github.com/x-module/ui/theme"
-	"github.com/x-module/ui/widgets"
 )
 
 func main() {
@@ -31,16 +34,20 @@ func main() {
 				if clickable.Clicked(gtx) {
 					tips.Message("登录中...")
 				}
+				rect := clip.Rect{
+					Max: gtx.Constraints.Max,
+				}
+				paint.FillShape(gtx.Ops, resource.DefaultWindowBgGrayColor, rect.Op())
 				//==============================================
 				layout.Stack{Alignment: layout.Center}.Layout(gtx,
 					layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 						return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 								gtx.Constraints.Min.Y = gtx.Dp(unit.Dp(400))
-								return widgets.BlueLabel(th, "&clickable, nil, 0,  unit.Dp(100)").Layout(gtx)
+								return widgets.Label(th, "&clickable, nil, 0,  unit.Dp(100)").Layout(gtx)
 							}),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return widgets.Button(th, &clickable, "click me", unit.Dp(100)).Layout(gtx)
+								return widgets.DefaultButton(th, &clickable, "click me", unit.Dp(100)).Layout(gtx)
 							}),
 						)
 					}),

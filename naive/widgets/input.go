@@ -45,7 +45,7 @@ func NewInput(theme *theme.Theme, hint string, text ...string) *Input {
 	}
 	t.size = resource.Medium
 	t.hint = hint
-	t.radius = resource.DefaultRadiusSize
+	t.radius = resource.DefaultElementRadiusSize
 	if len(text) > 0 {
 		t.editor.SetText(text[0])
 	}
@@ -60,7 +60,7 @@ func NewTextArea(theme *theme.Theme, hint string, text ...string) *Input {
 	}
 	t.size = resource.Medium
 	t.hint = hint
-	t.radius = resource.DefaultRadiusSize
+	t.radius = resource.DefaultElementRadiusSize
 	if len(text) > 0 {
 		t.editor.SetText(text[0])
 	}

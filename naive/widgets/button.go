@@ -93,7 +93,7 @@ func DefaultButton(th *theme.Theme, button *widget.Clickable, txt string, width 
 		theme:        th,
 		Text:         txt,
 		Color:        defaultButtonStyle.TextColor,
-		CornerRadius: resource.DefaultRadiusSize,
+		CornerRadius: resource.DefaultElementRadiusSize,
 		Background:   defaultButtonStyle.BgColor,
 		TextSize:     defaultButtonStyle.TextSize,
 		bdColor:      defaultButtonStyle.BorderColor,
@@ -114,7 +114,7 @@ func TertiaryButton(th *theme.Theme, button *widget.Clickable, txt string, width
 		theme:        th,
 		Text:         txt,
 		Color:        tertiaryButtonStyle.TextColor,
-		CornerRadius: resource.DefaultRadiusSize,
+		CornerRadius: resource.DefaultElementRadiusSize,
 		Background:   tertiaryButtonStyle.BgColor,
 		TextSize:     tertiaryButtonStyle.TextSize,
 		bdColor:      tertiaryButtonStyle.BorderColor,
@@ -135,7 +135,7 @@ func PrimaryButton(th *theme.Theme, button *widget.Clickable, txt string, width 
 		theme:        th,
 		Text:         txt,
 		Color:        primaryButtonStyle.TextColor,
-		CornerRadius: resource.DefaultRadiusSize,
+		CornerRadius: resource.DefaultElementRadiusSize,
 		Background:   primaryButtonStyle.BgColor,
 		TextSize:     primaryButtonStyle.TextSize,
 		bdColor:      primaryButtonStyle.BorderColor,
@@ -156,7 +156,7 @@ func InfoButton(th *theme.Theme, button *widget.Clickable, txt string, width uni
 		theme:        th,
 		Text:         txt,
 		Color:        infoButtonStyle.TextColor,
-		CornerRadius: resource.DefaultRadiusSize,
+		CornerRadius: resource.DefaultElementRadiusSize,
 		Background:   infoButtonStyle.BgColor,
 		TextSize:     infoButtonStyle.TextSize,
 		bdColor:      infoButtonStyle.BorderColor,
@@ -177,7 +177,7 @@ func SuccessButton(th *theme.Theme, button *widget.Clickable, txt string, width 
 		theme:        th,
 		Text:         txt,
 		Color:        successButtonStyle.TextColor,
-		CornerRadius: resource.DefaultRadiusSize,
+		CornerRadius: resource.DefaultElementRadiusSize,
 		Background:   successButtonStyle.BgColor,
 		TextSize:     successButtonStyle.TextSize,
 		bdColor:      successButtonStyle.BorderColor,
@@ -198,7 +198,7 @@ func WarningButton(th *theme.Theme, button *widget.Clickable, txt string, width 
 		theme:        th,
 		Text:         txt,
 		Color:        warningButtonStyle.TextColor,
-		CornerRadius: resource.DefaultRadiusSize,
+		CornerRadius: resource.DefaultElementRadiusSize,
 		Background:   warningButtonStyle.BgColor,
 		TextSize:     warningButtonStyle.TextSize,
 		bdColor:      warningButtonStyle.BorderColor,
@@ -219,7 +219,7 @@ func ErrorButton(th *theme.Theme, button *widget.Clickable, txt string, width un
 		theme:        th,
 		Text:         txt,
 		Color:        errorButtonStyle.TextColor,
-		CornerRadius: resource.DefaultRadiusSize,
+		CornerRadius: resource.DefaultElementRadiusSize,
 		Background:   errorButtonStyle.BgColor,
 		TextSize:     errorButtonStyle.TextSize,
 		bdColor:      errorButtonStyle.BorderColor,
@@ -250,7 +250,7 @@ func (b Button) Layout(gtx layout.Context) layout.Dimensions {
 	border := widget.Border{
 		Color:        b.bdColor,
 		Width:        unit.Dp(1),
-		CornerRadius: resource.DefaultRadiusSize,
+		CornerRadius: resource.DefaultElementRadiusSize,
 	}
 
 	return b.Button.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
@@ -261,7 +261,7 @@ func (b Button) Layout(gtx layout.Context) layout.Dimensions {
 		return border.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 			return layout.Background{}.Layout(gtx,
 				func(gtx layout.Context) layout.Dimensions {
-					defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, gtx.Dp(resource.DefaultRadiusSize)).Push(gtx.Ops).Pop()
+					defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, gtx.Dp(resource.DefaultElementRadiusSize)).Push(gtx.Ops).Pop()
 					if b.Background != (color.NRGBA{}) {
 						background := b.Background
 						paint.Fill(gtx.Ops, background)
