@@ -42,4 +42,5 @@ var (
 	InfoColor    = color.NRGBA{R: 113, G: 192, B: 231, A: 255}
 
 	ActionTipsBgGrayColor = color.NRGBA{A: 255, R: 48, G: 48, B: 51}
+	ProgressBarColor      = color.NRGBA{R: 127, G: 200, B: 235, A: 255}
 )
