@@ -32,6 +32,9 @@ var (
 	TextSelectionColor       = color.NRGBA{R: 92, G: 136, B: 177, A: 255}
 	HintTextColor            = color.NRGBA{R: 136, G: 136, B: 137, A: 255}
 
+	DropDownBgGrayColor          = color.NRGBA{R: 72, G: 72, B: 77, A: 255}
+	DropDownItemHoveredGrayColor = color.NRGBA{R: 90, G: 90, B: 96, A: 255}
+
 	GreenColor   = color.NRGBA{R: 101, G: 231, B: 188, A: 255}
 	ErrorColor   = color.NRGBA{R: 232, G: 127, B: 127, A: 255}
 	WarningColor = color.NRGBA{R: 242, G: 201, B: 126, A: 255}

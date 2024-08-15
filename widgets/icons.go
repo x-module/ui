@@ -197,3 +197,7 @@ var ActionInfoOutlineIcon *widget.Icon = func() *widget.Icon {
 	icon, _ := widget.NewIcon(icons.ActionInfoOutline)
 	return icon
 }()
+var ActionStarRateIcon *widget.Icon = func() *widget.Icon {
+	icon, _ := widget.NewIcon(icons.ActionStarRate)
+	return icon
+}()
