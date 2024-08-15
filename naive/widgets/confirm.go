@@ -155,7 +155,6 @@ func (c *Confirm) Layout(gtx layout.Context) layout.Dimensions {
 						)
 					}),
 				)
-
 			})
 		})
 	})

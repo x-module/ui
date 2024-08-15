@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"gioui.org/app"
 	"gioui.org/layout"
 	"gioui.org/op"
@@ -17,17 +16,13 @@ import (
 
 func main() {
 	var clickable widget.Clickable
+	var clickable1 widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
 
 	// w := new(app.Window)
 	var ops op.Ops
-	confirm := widgets.NewConfirm(th)
-	confirm.Confirm(func() {
-		fmt.Println("确定...")
-	})
-	confirm.Cancel(func() {
-		fmt.Println("取消...")
-	})
+	var model = widgets.NewModal(th)
+
 	go func() {
 		w := new(app.Window)
 		for {
@@ -38,7 +33,16 @@ func main() {
 			case app.FrameEvent:
 				gtx := app.NewContext(&ops, e)
 				if clickable.Clicked(gtx) {
-					confirm.Message("确定退出吗?")
+					model.Display(func(gtx layout.Context) layout.Dimensions {
+						return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
+							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+								return widgets.Label(th, "Hello, World!").Layout(gtx)
+							}),
+							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+								return widgets.DefaultButton(th, &clickable1, "click me", unit.Dp(100)).Layout(gtx)
+							}),
+						)
+					})
 				}
 				rect := clip.Rect{
 					Max: gtx.Constraints.Max,
@@ -58,8 +62,8 @@ func main() {
 						)
 					}),
 					layout.Expanded(func(gtx layout.Context) layout.Dimensions {
-						if confirm.Visible() {
-							return confirm.Layout(gtx)
+						if model.Visible() {
+							return model.Layout(gtx)
 						}
 						return layout.Dimensions{}
 					}),

@@ -17,7 +17,7 @@ var (
 	DefaultTextWhiteColor = color.NRGBA{R: 223, G: 223, B: 224, A: 255}
 	DefaultBorderBgColor  = color.NRGBA{R: 53, G: 54, B: 56, A: 255}
 	DefaultLineColor      = color.NRGBA{R: 44, G: 44, B: 47, A: 255}
-	DefaultMaskBgColor    = color.NRGBA{R: 10, G: 10, B: 12, A: 255}
+	DefaultMaskBgColor    = color.NRGBA{R: 10, G: 10, B: 12, A: 230}
 
 	IconBlueColor        = color.NRGBA{R: 136, G: 136, B: 137, A: 255}
 	BorderBlueColor      = color.NRGBA{R: 127, G: 231, B: 196, A: 255}
