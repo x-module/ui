@@ -25,11 +25,11 @@ func main() {
 
 	// w := new(app.Window)
 	var ops op.Ops
-	username = widgets.NewInput("请输入名称...")
-	age = widgets.NewInput("请输入年龄...", "á3452345234523452345")
-	password = widgets.NewInput("请输入密码...")
-	password2 = widgets.NewInput("请输入确认密码===...")
-	profile = widgets.NewTextArea("请输入属性...")
+	username = widgets.NewInput(th, "请输入名称...")
+	age = widgets.NewInput(th, "请输入年龄...", "á3452345234523452345")
+	password = widgets.NewInput(th, "请输入密码...")
+	password2 = widgets.NewInput(th, "请输入确认密码===...")
+	profile = widgets.NewTextArea(th, "请输入属性...")
 
 	username.SetSize(resource.Tiny)
 	password.SetSize(resource.Small)
@@ -65,23 +65,23 @@ func main() {
 					layout.Stacked(func(gtx layout.Context) layout.Dimensions {
 						return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return username.Layout(gtx, th)
+								return username.Layout(gtx)
 							}),
 							layout.Rigid(layout.Spacer{Height: unit.Dp(20)}.Layout),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return password.Layout(gtx, th)
+								return password.Layout(gtx)
 							}),
 							layout.Rigid(layout.Spacer{Height: unit.Dp(20)}.Layout),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return password2.Layout(gtx, th)
+								return password2.Layout(gtx)
 							}),
 							layout.Rigid(layout.Spacer{Height: unit.Dp(20)}.Layout),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return age.Layout(gtx, th)
+								return age.Layout(gtx)
 							}),
 							layout.Rigid(layout.Spacer{Height: unit.Dp(20)}.Layout),
 							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-								return profile.Layout(gtx, th)
+								return profile.Layout(gtx)
 							}),
 						)
 					}),

@@ -19,7 +19,7 @@ func main() {
 	var clickable widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
 	// w := new(app.Window)
-	var dirSelect = widgets.NewFileSelector("请选择文件...")
+	var dirSelect = widgets.NewFileSelector(th, "请选择文件...")
 	dirSelect.SetWidth(unit.Dp(600))
 	dirSelect.SetFilter("*.sql")
 	dirSelect.SetOnSelectFile(func(dir string) {
@@ -57,7 +57,7 @@ func main() {
 						return widgets.Label(th, "&clickable, nil, 0,  unit.Dp(100)").Layout(gtx)
 					}),
 					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-						return dirSelect.Layout(gtx, th)
+						return dirSelect.Layout(gtx)
 					}),
 				)
 				e.Frame(gtx.Ops)

@@ -15,6 +15,8 @@ type FileSelector struct {
 	input    *Input
 	fileName string
 
+	theme *theme.Theme
+
 	actionClick  widget.Clickable
 	windowTitle  string
 	onSelectFile func(fileName string)
@@ -24,9 +26,10 @@ type FileSelector struct {
 	width   unit.Dp
 }
 
-func NewFileSelector(hint string, fileName ...string) *FileSelector {
+func NewFileSelector(theme *theme.Theme, hint string, fileName ...string) *FileSelector {
 	bf := &FileSelector{
-		input:       NewInput(hint, fileName...),
+		theme:       theme,
+		input:       NewInput(theme, hint, fileName...),
 		width:       unit.Dp(200),
 		windowTitle: "Select file",
 	}
@@ -122,9 +125,9 @@ func (b *FileSelector) updateIcon() {
 	}
 }
 
-func (b *FileSelector) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
+func (b *FileSelector) Layout(gtx layout.Context) layout.Dimensions {
 	// gtx.Constraints.Max.Y = gtx.Dp(42)
 	b.action(gtx)
 	gtx.Constraints.Max.X = gtx.Dp(b.width)
-	return b.input.Layout(gtx, theme)
+	return b.input.Layout(gtx)
 }

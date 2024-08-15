@@ -15,6 +15,8 @@ type DirSelector struct {
 	input   *Input
 	dirName string
 
+	theme *theme.Theme
+
 	actionClick widget.Clickable
 	windowTitle string
 	onSelectDir func(dir string)
@@ -23,9 +25,10 @@ type DirSelector struct {
 	width   unit.Dp
 }
 
-func NewDirSelector(hint string, dirName ...string) *DirSelector {
+func NewDirSelector(theme *theme.Theme, hint string, dirName ...string) *DirSelector {
 	bf := &DirSelector{
-		input:       NewInput(hint, dirName...),
+		theme:       theme,
+		input:       NewInput(theme, hint, dirName...),
 		width:       unit.Dp(200),
 		windowTitle: "Select Directory",
 	}
@@ -117,9 +120,9 @@ func (b *DirSelector) updateIcon() {
 	}
 }
 
-func (b *DirSelector) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
+func (b *DirSelector) Layout(gtx layout.Context) layout.Dimensions {
 	// gtx.Constraints.Max.Y = gtx.Dp(42)
 	b.action(gtx)
 	gtx.Constraints.Max.X = gtx.Dp(b.width)
-	return b.input.Layout(gtx, theme)
+	return b.input.Layout(gtx)
 }

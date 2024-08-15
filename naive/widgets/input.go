@@ -29,14 +29,18 @@ type Input struct {
 	icon      *widget.Icon
 	iconClick widget.Clickable
 
+	theme *theme.Theme
 	// size image.Point
+
+	width unit.Dp
 
 	showPassword bool
 	onIconClick  func()
 }
 
-func NewInput(hint string, text ...string) *Input {
+func NewInput(theme *theme.Theme, hint string, text ...string) *Input {
 	t := &Input{
+		theme:  theme,
 		editor: widget.Editor{},
 	}
 	t.size = resource.Medium
@@ -46,11 +50,11 @@ func NewInput(hint string, text ...string) *Input {
 		t.editor.SetText(text[0])
 	}
 	t.editor.SingleLine = true
-
 	return t
 }
-func NewTextArea(hint string, text ...string) *Input {
+func NewTextArea(theme *theme.Theme, hint string, text ...string) *Input {
 	t := &Input{
+		theme:  theme,
 		editor: widget.Editor{},
 		height: unit.Dp(100),
 	}
@@ -64,130 +68,143 @@ func NewTextArea(hint string, text ...string) *Input {
 	return t
 }
 
-func (t *Input) SetOnIconClick(f func()) {
-	t.onIconClick = f
+func (i *Input) SetWidth(width unit.Dp) {
+	i.width = width
 }
-func (t *Input) Password() {
-	t.editor.Mask = '*'
-	t.icon, _ = widget.NewIcon(icons.ActionVisibilityOff)
+
+func (i *Input) SetOnIconClick(f func()) {
+	i.onIconClick = f
+}
+func (i *Input) Password() {
+	i.editor.Mask = '*'
+	i.icon, _ = widget.NewIcon(icons.ActionVisibilityOff)
 	// t.IconPosition = IconPositionEnd
-	t.showPassword = false
+	i.showPassword = false
 }
-func (t *Input) SetIcon(icon *widget.Icon) {
-	t.icon = icon
+func (i *Input) SetIcon(icon *widget.Icon) {
+	i.icon = icon
 }
 
 // SetRadius 设置radius
-func (t *Input) SetRadius(radius unit.Dp) {
-	t.radius = radius
+func (i *Input) SetRadius(radius unit.Dp) {
+	i.radius = radius
 }
-func (t *Input) ReadOnly() {
-	t.editor.ReadOnly = true
+func (i *Input) ReadOnly() {
+	i.editor.ReadOnly = true
 }
-func (t *Input) SetBefore(before layout.Widget) {
-	t.before = before
+func (i *Input) SetBefore(before layout.Widget) {
+	i.before = before
 }
-func (t *Input) SetAfter(after layout.Widget) {
-	t.after = after
-}
-
-func (t *Input) SetSize(size resource.Size) {
-	t.size = size
+func (i *Input) SetAfter(after layout.Widget) {
+	i.after = after
 }
 
-func (t *Input) SetText(text string) {
-	t.editor.SetText(text)
+func (i *Input) SetSize(size resource.Size) {
+	i.size = size
 }
 
-func (t *Input) update(gtx layout.Context, th *theme.Theme) {
+func (i *Input) SetText(text string) {
+	i.editor.SetText(text)
+}
+func (i *Input) GetText() string {
+	return i.editor.Text()
+}
+func (i *Input) update(gtx layout.Context, th *theme.Theme) {
 	disabled := gtx.Source == (input.Source{})
 	for {
-		ev, ok := t.click.Update(gtx.Source)
+		ev, ok := i.click.Update(gtx.Source)
 		if !ok {
 			break
 		}
 		switch ev.Kind {
 		case gesture.KindPress:
-			gtx.Execute(key.FocusCmd{Tag: &t.editor})
+			gtx.Execute(key.FocusCmd{Tag: &i.editor})
 		default:
 
 		}
 	}
-	t.state = inactive
-	if t.click.Hovered() && !disabled {
-		t.state = hovered
+	i.state = inactive
+	if i.click.Hovered() && !disabled {
+		i.state = hovered
 	}
 	// if t.editor.Len() > 0 {
 	// 	t.state = activated
 	// }
-	if gtx.Source.Focused(&t.editor) && !disabled {
-		t.state = focused
+	if gtx.Source.Focused(&i.editor) && !disabled {
+		i.state = focused
 	}
 
-	t.bgColor = resource.DefaultBgGrayColor
+	i.bgColor = resource.DefaultBgGrayColor
 
-	if t.editor.ReadOnly {
+	if i.editor.ReadOnly {
 		return
 	}
 
-	switch t.state {
+	switch i.state {
 	case inactive:
-		t.borderColor = resource.DefaultBorderGrayColor
+		i.borderColor = resource.DefaultBorderGrayColor
 	case hovered:
-		t.borderColor = resource.HoveredBorderBlueColor
+		i.borderColor = resource.HoveredBorderBlueColor
 	case focused:
-		t.bgColor = resource.FocusedBgColor
-		t.borderColor = resource.FocusedBorderBlueColor
+		i.bgColor = resource.FocusedBgColor
+		i.borderColor = resource.FocusedBorderBlueColor
 	case activated:
-		t.borderColor = resource.DefaultBorderGrayColor
+		i.borderColor = resource.DefaultBorderGrayColor
 	}
 }
 
-func (t *Input) Layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
-	t.update(gtx, th)
+func (i *Input) Layout(gtx layout.Context) layout.Dimensions {
+	if i.width > 0 {
+		gtx.Constraints.Max.X = gtx.Dp(i.width)
+	} else {
+		gtx.Constraints.Min.X = gtx.Constraints.Max.X
+	}
+	i.update(gtx, i.theme)
 	gtx.Constraints.Min.X = gtx.Constraints.Max.X
 	gtx.Constraints.Min.Y = 0
 	macro := op.Record(gtx.Ops)
-	dims := t.layout(gtx, th)
+	dims := i.layout(gtx, i.theme)
 	call := macro.Stop()
 	defer pointer.PassOp{}.Push(gtx.Ops).Pop()
 	defer clip.Rect(image.Rectangle{Max: dims.Size}).Push(gtx.Ops).Pop()
-	t.click.Add(gtx.Ops)
-	event.Op(gtx.Ops, &t.editor)
+	i.click.Add(gtx.Ops)
+	event.Op(gtx.Ops, &i.editor)
 	call.Add(gtx.Ops)
 	return dims
 }
 
-func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
+func (i *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 	border := widget.Border{
-		Color:        t.borderColor,
+		Color:        i.borderColor,
 		Width:        unit.Dp(1),
-		CornerRadius: t.radius,
+		CornerRadius: i.radius,
 	}
 	return border.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		return layout.Background{}.Layout(gtx,
 			func(gtx layout.Context) layout.Dimensions {
-				rr := gtx.Dp(t.radius)
+				rr := gtx.Dp(i.radius)
 				defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, rr).Push(gtx.Ops).Pop()
-				paint.Fill(gtx.Ops, t.bgColor)
+				paint.Fill(gtx.Ops, i.bgColor)
 				return layout.Dimensions{Size: gtx.Constraints.Min}
 			},
 			func(gtx layout.Context) layout.Dimensions {
-				return t.size.Inset.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+				return i.size.Inset.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 					inputLayout := layout.Flexed(1, func(gtx layout.Context) layout.Dimensions {
-						editor := material.Editor(th.Material(), &t.editor, t.hint)
+
+						gtx.Constraints.Max.X = gtx.Dp(i.width)
+						editor := material.Editor(th.Material(), &i.editor, i.hint)
 						editor.HintColor = resource.HintTextColor
 						editor.SelectionColor = resource.TextSelectionColor
 
-						gtx.Constraints.Min.Y = gtx.Dp(t.size.Height) // 设置最小高度为 100dp
+						gtx.Constraints.Min.Y = gtx.Dp(i.size.Height) // 设置最小高度为 100dp
 						gtx.Constraints.Max.Y = gtx.Constraints.Min.Y // 限制最大高度与最小高度相同
-						editor.TextSize = t.size.TextSize
+						editor.TextSize = i.size.TextSize
 
-						if t.height > 0 {
-							gtx.Constraints.Min.Y = gtx.Dp(t.height)      // 设置最小高度为 100dp
+						if i.height > 0 {
+							gtx.Constraints.Min.Y = gtx.Dp(i.height)      // 设置最小高度为 100dp
 							gtx.Constraints.Max.Y = gtx.Constraints.Min.Y // 限制最大高度与最小高度相同
 						}
-						if t.editor.ReadOnly {
+						if i.editor.ReadOnly {
 							editor.Color = resource.HintTextColor
 						} else {
 							editor.Color = resource.DefaultTextWhiteColor
@@ -196,35 +213,35 @@ func (t *Input) layout(gtx layout.Context, th *theme.Theme) layout.Dimensions {
 					})
 
 					var widgets []layout.FlexChild
-					if t.before != nil {
-						widgets = append(widgets, layout.Rigid(t.before))
+					if i.before != nil {
+						widgets = append(widgets, layout.Rigid(i.before))
 					}
 					widgets = append(widgets, inputLayout)
-					if t.icon != nil {
+					if i.icon != nil {
 						iconLayout := layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-							t.icon = widgets2.ActionVisibilityIcon
-							if t.iconClick.Clicked(gtx) {
-								if t.onIconClick != nil {
-									t.onIconClick()
+							i.icon = widgets2.ActionVisibilityIcon
+							if i.iconClick.Clicked(gtx) {
+								if i.onIconClick != nil {
+									i.onIconClick()
 								}
-								if !t.showPassword {
-									t.editor.Mask = 0
-									t.icon = widgets2.ActionVisibilityIcon
-									t.showPassword = true
+								if !i.showPassword {
+									i.editor.Mask = 0
+									i.icon = widgets2.ActionVisibilityIcon
+									i.showPassword = true
 								} else {
-									t.editor.Mask = '*'
-									t.icon = widgets2.ActionVisibilityOffIcon
-									t.showPassword = false
+									i.editor.Mask = '*'
+									i.icon = widgets2.ActionVisibilityOffIcon
+									i.showPassword = false
 								}
 							}
-							return t.iconClick.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-								return t.icon.Layout(gtx, resource.IconGrayColor)
+							return i.iconClick.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
+								return i.icon.Layout(gtx, resource.IconGrayColor)
 							})
 						})
 						widgets = append(widgets, iconLayout)
 					} else {
-						if t.after != nil {
-							widgets = append(widgets, layout.Rigid(t.after))
+						if i.after != nil {
+							widgets = append(widgets, layout.Rigid(i.after))
 						}
 					}
 					spacing := layout.SpaceBetween

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"gioui.org/app"
 	"gioui.org/layout"
 	"gioui.org/op"
@@ -18,20 +17,9 @@ import (
 func main() {
 	var clickable widget.Clickable
 	var th = theme.New(material.NewTheme(), true)
-	var dirSelect = widgets.NewDirSelector(th, "请选择目录...")
-	dirSelect.SetWidth(unit.Dp(400))
-	dirSelect.SetOnSelectDir(func(dir string) {
-		fmt.Println("dir:", dir)
-	})
-	// w := new(app.Window)
+	var notice, _ = widgets.NewSystemNotice()
+	//w := new(app.Window)
 	var ops op.Ops
-	confirm := widgets.NewConfirm(th)
-	confirm.Confirm(func() {
-		fmt.Println("确定...")
-	})
-	confirm.Cancel(func() {
-		fmt.Println("取消...")
-	})
 	go func() {
 		w := new(app.Window)
 		for {
@@ -42,20 +30,20 @@ func main() {
 			case app.FrameEvent:
 				gtx := app.NewContext(&ops, e)
 				if clickable.Clicked(gtx) {
-					confirm.Message("确定退出吗?")
+					notice.Notice("登录成功")
 				}
 				rect := clip.Rect{
 					Max: gtx.Constraints.Max,
 				}
 				paint.FillShape(gtx.Ops, resource.DefaultWindowBgGrayColor, rect.Op())
-				// ==============================================
-				layout.Flex{Axis: layout.Vertical}.Layout(gtx,
-					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-						gtx.Constraints.Min.Y = gtx.Dp(unit.Dp(400))
-						return widgets.Label(th, "&clickable, nil, 0,  unit.Dp(100)").Layout(gtx)
-					}),
-					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
-						return dirSelect.Layout(gtx)
+				//==============================================
+				layout.Stack{Alignment: layout.Center}.Layout(gtx,
+					layout.Stacked(func(gtx layout.Context) layout.Dimensions {
+						return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
+							layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+								return widgets.DefaultButton(th, &clickable, "click me", unit.Dp(100)).Layout(gtx)
+							}),
+						)
 					}),
 				)
 				e.Frame(gtx.Ops)
