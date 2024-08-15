@@ -132,14 +132,14 @@ func (t *Input) update(gtx layout.Context, th *theme.Theme) {
 
 	switch t.state {
 	case inactive:
-		t.borderColor = resource.DefaultBorderBgColor
+		t.borderColor = resource.DefaultBorderGrayColor
 	case hovered:
 		t.borderColor = resource.HoveredBorderBlueColor
 	case focused:
 		t.bgColor = resource.FocusedBgColor
 		t.borderColor = resource.FocusedBorderBlueColor
 	case activated:
-		t.borderColor = resource.DefaultBorderBgColor
+		t.borderColor = resource.DefaultBorderGrayColor
 	}
 }
 

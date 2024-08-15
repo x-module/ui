@@ -51,12 +51,12 @@ func ErrorLabel(th *theme.Theme, txt string) material.LabelStyle {
 	return label
 }
 func Label(th *theme.Theme, txt string) material.LabelStyle {
-	label := material.Label(th.Material(), th.TextSize, txt)
+	label := material.Label(th.Material(), resource.DefaultTextSize, txt)
 	label.Color = resource.DefaultTextWhiteColor
 	return label
 }
 func BoldLabel(th *theme.Theme, txt string) material.LabelStyle {
-	label := material.Label(th.Material(), th.TextSize, txt)
+	label := material.Label(th.Material(), resource.DefaultTextSize, txt)
 	label.Color = resource.DefaultTextWhiteColor
 	label.Font.Weight = font.Bold
 	return label
