@@ -46,7 +46,6 @@ func (ib *IconButton) Layout(gtx layout.Context, theme *theme.Theme) layout.Dime
 
 	return ib.Clickable.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 		semantic.Button.Add(gtx.Ops)
-
 		return layout.Background{}.Layout(gtx,
 			func(gtx layout.Context) layout.Dimensions {
 				defer clip.UniformRRect(image.Rectangle{Max: gtx.Constraints.Min}, 4).Push(gtx.Ops).Pop()
