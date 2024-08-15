@@ -22,6 +22,9 @@ func main() {
 	card := widgets.NewCard(th)
 	// w := new(app.Window)
 	var ops op.Ops
+
+	open := widgets.NewSwitch(th, "")
+
 	go func() {
 		w := new(app.Window)
 		for {
@@ -40,7 +43,7 @@ func main() {
 					return layout.Flex{Axis: layout.Vertical}.Layout(gtx,
 						layout.Rigid(func(gtx layout.Context) layout.Dimensions {
 							return card.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-								return widgets.DefaultButton(th, &clickable1, "default", unit.Dp(100)).SetIcon(widgets2.DeleteIcon, 0).Layout(gtx)
+								return open.Layout(gtx)
 							})
 						}),
 						layout.Rigid(layout.Spacer{Height: unit.Dp(10)}.Layout),
