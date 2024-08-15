@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"github.com/x-module/ui/naive/resource"
 	"github.com/x-module/ui/theme"
 	"github.com/x-module/ui/utils"
 	"image"
@@ -31,7 +32,7 @@ type IconButton struct {
 
 func (ib *IconButton) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	if ib.BackgroundColor == (color.NRGBA{}) {
-		ib.BackgroundColor = theme.Palette.Bg
+		ib.BackgroundColor = resource.DefaultContentBgGrayColor
 	}
 
 	if ib.BackgroundColorHover == (color.NRGBA{}) {

@@ -188,10 +188,6 @@ func (tabs *Tabs) Layout(gtx layout.Context) layout.Dimensions {
 					}
 				}
 
-				// if t.btn.Hovered() {
-				// 	paint.FillShape(gtx.Ops, tabs.theme.Palette.ContrastBg, clip.Rect{Max: gtx.Constraints.Min}.Op())
-				// }
-
 				var tabWidth int
 				return layout.Stack{Alignment: layout.S}.Layout(gtx,
 					layout.Stacked(func(gtx layout.Context) layout.Dimensions {

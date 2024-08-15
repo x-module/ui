@@ -43,4 +43,7 @@ var (
 
 	ActionTipsBgGrayColor = color.NRGBA{A: 255, R: 48, G: 48, B: 51}
 	ProgressBarColor      = color.NRGBA{R: 127, G: 200, B: 235, A: 255}
+
+	MenuHoveredBgColor  = color.NRGBA{R: 45, G: 45, B: 48, A: 255}
+	MenuSelectedBgColor = color.NRGBA{R: 35, G: 54, B: 51, A: 255}
 )
