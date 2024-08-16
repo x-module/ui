@@ -86,8 +86,13 @@ type Button struct {
 	Button       *widget.Clickable
 	width        unit.Dp
 	bdColor      color.NRGBA
+	hovered      func(gtx layout.Context)
 }
 
+// 设置Hovered
+func (b *Button) SetHovered(f func(gtx layout.Context)) {
+	b.hovered = f
+}
 func DefaultButton(th *theme.Theme, button *widget.Clickable, txt string, width unit.Dp, inset ...layout.Inset) Button {
 	b := Button{
 		theme:        th,
@@ -257,6 +262,9 @@ func (b Button) Layout(gtx layout.Context) layout.Dimensions {
 		semantic.Button.Add(gtx.Ops)
 		if b.Button.Hovered() {
 			border.Color = resource.BorderBlueColor
+			if b.hovered != nil {
+				b.hovered(gtx)
+			}
 		}
 		return border.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 			return layout.Background{}.Layout(gtx,
