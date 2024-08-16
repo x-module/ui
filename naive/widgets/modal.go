@@ -20,7 +20,6 @@ import (
 	"github.com/x-module/ui/utils"
 	"github.com/x-module/ui/widgets"
 	"image"
-	"image/color"
 )
 
 type Modal struct {
@@ -34,7 +33,8 @@ type Modal struct {
 }
 
 func NewModal(th *theme2.Theme) *Modal {
-	bkColor := color.NRGBA{}
+	// bkColor := color.NRGBA{}
+	bkColor := resource.ModalBgGrayColor
 	hoveredColor := utils.Hovered(bkColor)
 	iconSize := unit.Dp(16)
 	modal := &Modal{
@@ -116,7 +116,7 @@ func (m *Modal) Layout(gtx layout.Context) layout.Dimensions {
 								}),
 								layout.Expanded(func(gtx layout.Context) layout.Dimensions {
 									return layout.Inset{Left: 470}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-										return m.closeIcon.Layout(gtx, m.theme)
+										return m.closeIcon.Layout(gtx)
 									})
 								}),
 							)

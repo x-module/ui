@@ -1,8 +1,12 @@
 package widgets
 
 import (
+	"gioui.org/widget"
+	"gioui.org/widget/material"
 	"github.com/x-module/ui/naive/resource"
 	"github.com/x-module/ui/theme"
+	"github.com/x-module/ui/utils"
+	"github.com/x-module/ui/widgets"
 	"image"
 	"time"
 
@@ -11,19 +15,29 @@ import (
 	"gioui.org/op/clip"
 	"gioui.org/op/paint"
 	"gioui.org/unit"
-	"gioui.org/widget/material"
 )
 
 type Notification struct {
-	Text  string
-	EndAt time.Time
+	Text      string
+	EndAt     time.Time
+	closeIcon *IconButton
 }
 
-type Notif struct {
-	// Text is the text to display in the notification.
-	Text string
-	// Duration is the duration to display the notification.
-	Duration time.Duration
+func NewNotification() *Notification {
+	notice := &Notification{
+		closeIcon: &IconButton{
+			Icon:                 widgets.CloseIcon,
+			Color:                resource.IconGrayColor,
+			BackgroundColor:      resource.NotificationBgColor,
+			BackgroundColorHover: utils.Hovered(resource.ModalBgGrayColor),
+			Size:                 resource.DefaultIconSize,
+			Clickable:            &widget.Clickable{},
+		},
+	}
+	notice.closeIcon.OnClick = func() {
+		notice.Text = ""
+	}
+	return notice
 }
 
 func (n *Notification) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
@@ -47,9 +61,16 @@ func (n *Notification) Layout(gtx layout.Context, theme *theme.Theme) layout.Dim
 		},
 		func(gtx layout.Context) layout.Dimensions {
 			return layout.UniformInset(unit.Dp(10)).Layout(gtx, func(gtx layout.Context) layout.Dimensions {
-				bd := material.Body1(theme.Material(), n.Text)
-				bd.Color = resource.NotificationTextWhiteColor
-				return bd.Layout(gtx)
+				return layout.Flex{Axis: layout.Horizontal, Spacing: layout.SpaceBetween}.Layout(gtx,
+					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+						bd := material.Body1(theme.Material(), n.Text)
+						bd.Color = resource.NotificationTextWhiteColor
+						return bd.Layout(gtx)
+					}),
+					layout.Rigid(func(gtx layout.Context) layout.Dimensions {
+						return n.closeIcon.Layout(gtx)
+					}),
+				)
 			})
 		},
 	)

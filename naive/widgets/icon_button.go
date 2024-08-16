@@ -2,7 +2,6 @@ package widgets
 
 import (
 	"github.com/x-module/ui/naive/resource"
-	"github.com/x-module/ui/theme"
 	"github.com/x-module/ui/utils"
 	"image"
 	"image/color"
@@ -30,7 +29,7 @@ type IconButton struct {
 	OnClick func()
 }
 
-func (ib *IconButton) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
+func (ib *IconButton) Layout(gtx layout.Context) layout.Dimensions {
 	if ib.BackgroundColor == (color.NRGBA{}) {
 		ib.BackgroundColor = resource.DefaultContentBgGrayColor
 	}

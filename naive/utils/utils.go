@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-var NotificationController = &widgets.Notification{}
+var NotificationController = widgets.NewNotification()
 var SystemNoticeController = &widgets.SystemNotice{}
 
 func AppNotice(text string, duration ...time.Duration) {

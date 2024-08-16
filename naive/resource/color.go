@@ -50,4 +50,5 @@ var (
 
 	NotificationBgColor        = color.NRGBA{R: 72, G: 72, B: 77, A: 255}
 	NotificationTextWhiteColor = color.NRGBA{R: 219, G: 219, B: 220, A: 255}
+	ModalBgGrayColor           = color.NRGBA{R: 44, G: 44, B: 50, A: 255}
 )
