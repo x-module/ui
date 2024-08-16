@@ -47,4 +47,7 @@ var (
 	MenuHoveredBgColor  = color.NRGBA{R: 45, G: 45, B: 48, A: 255}
 	MenuSelectedBgColor = color.NRGBA{R: 35, G: 54, B: 51, A: 255}
 	LogTextWhiteColor   = color.NRGBA{R: 202, G: 202, B: 203, A: 255}
+
+	NotificationBgColor        = color.NRGBA{R: 72, G: 72, B: 77, A: 255}
+	NotificationTextWhiteColor = color.NRGBA{R: 219, G: 219, B: 220, A: 255}
 )
