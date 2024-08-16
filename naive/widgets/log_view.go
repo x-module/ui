@@ -1,53 +1,55 @@
 package widgets
 
 import (
-	"encoding/json"
 	"fmt"
+	"github.com/x-module/ui/naive/resource"
+	"github.com/x-module/ui/theme"
+	"strings"
+
 	"gioui.org/font"
 	"gioui.org/layout"
 	"gioui.org/text"
 	"gioui.org/unit"
 	"gioui.org/widget"
 	"gioui.org/widget/material"
-	"github.com/x-module/ui/naive/resource"
-	"github.com/x-module/ui/theme"
-	"strings"
 )
 
-type JsonViewer struct {
+type LogViewer struct {
 	data        string
 	lines       []string
 	selectables []*widget.Selectable
 	list        *widget.List
 }
 
-func NewJsonViewer() *JsonViewer {
-	return &JsonViewer{
+func NewLogViewer(scrollToEnd ...bool) *LogViewer {
+	logView := &LogViewer{
 		list: &widget.List{
 			List: layout.List{
-				Axis: layout.Vertical,
+				Axis:        layout.Vertical,
+				ScrollToEnd: true,
+				Alignment:   layout.Baseline,
 			},
 		},
 	}
+	if len(scrollToEnd) > 0 {
+		logView.list.ScrollToEnd = scrollToEnd[0]
+	}
+	return logView
 }
 
-func (j *JsonViewer) SetData(data any) {
-	// 使用MarshalIndent序列化map，生成格式化的JSON字符串
-	// 第二个参数是每一行输出的前缀（通常为空）
-	// 第三个参数是每一级缩进的字符串，这里使用4个空格作为缩进
-	formattedJSON, _ := json.MarshalIndent(data, "", "    ")
-	jsonData := string(formattedJSON)
-	j.data = jsonData
-	j.lines = strings.Split(jsonData, "\n")
+func (j *LogViewer) SetData(data string) {
+	j.data = data
+	j.lines = strings.Split(data, "\n")
+
 	j.selectables = make([]*widget.Selectable, len(j.lines))
 	for i := range j.selectables {
 		j.selectables[i] = &widget.Selectable{}
 	}
 }
 
-func (j *JsonViewer) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
+func (j *LogViewer) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimensions {
 	border := widget.Border{
-		Color:        resource.DefaultBgGrayColor,
+		Color:        theme.BorderColor,
 		Width:        unit.Dp(1),
 		CornerRadius: unit.Dp(4),
 	}
@@ -60,7 +62,7 @@ func (j *JsonViewer) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimen
 						return layout.Inset{Left: unit.Dp(10)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 							l := material.Label(theme.Material(), theme.TextSize, fmt.Sprintf("%d", i+1))
 							l.Font.Weight = font.Medium
-							l.Color = resource.DefaultTextWhiteColor
+							l.Color = resource.LogTextWhiteColor
 							l.SelectionColor = resource.TextSelectionColor
 							l.Alignment = text.End
 							return l.Layout(gtx)
@@ -70,11 +72,9 @@ func (j *JsonViewer) Layout(gtx layout.Context, theme *theme.Theme) layout.Dimen
 						return layout.Inset{Left: unit.Dp(10)}.Layout(gtx, func(gtx layout.Context) layout.Dimensions {
 							l := material.Label(theme.Material(), theme.TextSize, j.lines[i])
 							l.State = j.selectables[i]
+							l.Color = resource.LogTextWhiteColor
 							l.SelectionColor = resource.TextSelectionColor
 							l.TextSize = resource.DefaultTextSize
-							l.Font.Weight = font.Medium
-							l.Color = resource.DefaultTextWhiteColor
-							l.Alignment = text.End
 							return l.Layout(gtx)
 						})
 					}),
